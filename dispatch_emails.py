@@ -16,8 +16,10 @@ conn.login(usernm,passwd)
 
 # Selecting by Gmail Labels like they are IMAP folders
 # Terminal output for debugging
-print("Autoalarms", conn.select('Dispatch'))
-print("Total", conn.select('Dispatch/Autoalarms'))
+print("Total of", conn.select('Dispatch'), "dispatches found.")
+
+fields =  ['Unit', 'Inc', 'Venue', 'Nature', 'Xsts', 'Loc', 'Common', 'Addtl']
+
 
 #Only trying to parse the emails that are relevant. Selecting by sender and subject - NO Gmail labels here.
 typ, data = conn.search(None, '(FROM "messaging@iamresponding.com" SUBJECT "Company 43")')
