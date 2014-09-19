@@ -1,8 +1,8 @@
 from django.db import models
 
-# Create your models here.
 
-DISPATCH_SOURCES = ((0, 'email'), (1, 'sms'), (3, 'api'))
+
+DISPATCH_SOURCES = ((0, 'Email'), (1, 'SMS'), (3, 'API'), (4, 'CAD'))
 
 
 #pseudocode for accepting future input sources
@@ -14,11 +14,17 @@ class Email(models.Model):
     subject = models.CharField(max_length=100)
     body = models.TextField()
 
+class IncidentManager(models.Manager):
+    def create_incident(self, unit):
+        incident = self.create(unit='43')
+        # do something with the incident.
+        return Incident
 
-#The Dispatch
+#The Unique Dispatch
 class Incident(models.Model):
     #Hardcoded to email sources for now.
-    #source = models.ForeignKey(email)
+    source = models.ForeignKey(Source)
+    call_number = models.IntegerField()
     unit = models.CharField(max_length=20)
     venue = models.CharField(max_length=50)
     mutual_aid = models.BooleanField(default=False)
@@ -29,6 +35,8 @@ class Incident(models.Model):
     nature = models.CharField(max_length=100)
     common = models.CharField(max_length=200)
     additional = models.CharField(max_length=200)
+
+    objects = IncidentManager()
 
 '''
 #Need GeoDjango Integration Here.
