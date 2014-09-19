@@ -15,26 +15,29 @@ class Email(models.Model):
     body = models.TextField()
 
 class IncidentManager(models.Manager):
-    def create_incident(self, unit):
-        incident = self.create(unit='43')
+    def create_incident(self):
+        incident = self.create()
         # do something with the incident.
         return Incident
+
+#keys = set(('Inc', 'Nature', 'XSts', 'Common', 'Addtl', 'Loc', 'Date', 'Unit'))
 
 #The Unique Dispatch
 class Incident(models.Model):
     #Hardcoded to email sources for now.
     source = models.ForeignKey(Source)
     call_number = models.IntegerField()
-    unit = models.CharField(max_length=20)
+    Unit = models.CharField(max_length=20)
     venue = models.CharField(max_length=50)
     mutual_aid = models.BooleanField(default=False)
-    incident = models.CharField(max_length=600)
-    location = models.CharField(max_length=200)
-    interscection = models.CharField(max_length=50)
+    Inc = models.CharField(max_length=600)
+    Loc = models.CharField(max_length=200)
+    XSts = models.CharField(max_length=50)
     dispatch_time = models.DateTimeField('Date and Time of Initial Dispatch')
-    nature = models.CharField(max_length=100)
-    common = models.CharField(max_length=200)
-    additional = models.CharField(max_length=200)
+    Nature = models.CharField(max_length=100)
+    Common = models.CharField(max_length=200)
+    Addtl = models.CharField(max_length=200)
+    Date = models.CharField(max_length=100)
 
     objects = IncidentManager()
 

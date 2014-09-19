@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'dispatch_gmail',
     'gmail',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
