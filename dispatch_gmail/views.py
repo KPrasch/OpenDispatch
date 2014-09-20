@@ -31,7 +31,7 @@ print("Total Incidents Found:", conn.select('Dispatch'))
 typ, data = conn.search(None, '(FROM "messaging@iamresponding.com" SUBJECT "Company 43")')
 
 # Create a set of target strings, and craete a regular expressions pattern to select the text between them.
-keys = set(('Inc', 'Nature', 'XSts', 'Common', 'Addtl', 'Loc', 'Date'))
+keys = set(('Inc', 'Nature', 'XSts', 'Common', 'Addtl', 'Loc', 'Date', 'Time'))
 key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + '):', re.IGNORECASE)
 
 try:
@@ -50,8 +50,9 @@ try:
                   incident = Incident.objects.create(**incident_dict)
                   # Save the Incident to the database.
                   #incident.save()
+                  print "Successfuly created incident # %s:%s." % (incident.id, incident.Inc)
                 except IndexError:
-                  print "No matches found."
+                  print "malformed incident email."
 
 #close the connection and logout.
 finally:

@@ -2,12 +2,12 @@ from django.db import models
 
 
 
-DISPATCH_SOURCES = ((0, 'Email'), (1, 'SMS'), (3, 'API'), (4, 'CAD'))
+#DISPATCH_SOURCES = ((0, 'Email'), (1, 'SMS'), (3, 'API'), (4, 'CAD'))
 
 
 #pseudocode for accepting future input sources
-class Source(models.Model):
-    source = models.IntegerField(default=0, choices=DISPATCH_SOURCES)
+#class Source(models.Model):
+#    source = models.IntegerField(default=0, choices=DISPATCH_SOURCES)
 
 class Email(models.Model):
     sender = models.EmailField(max_length=256)
@@ -20,24 +20,23 @@ class IncidentManager(models.Manager):
         # do something with the incident.
         return Incident
 
-#keys = set(('Inc', 'Nature', 'XSts', 'Common', 'Addtl', 'Loc', 'Date', 'Unit'))
-
 #The Unique Dispatch
 class Incident(models.Model):
     #Hardcoded to email sources for now.
-    source = models.ForeignKey(Source)
-    call_number = models.IntegerField()
-    Unit = models.CharField(max_length=20)
-    venue = models.CharField(max_length=50)
-    mutual_aid = models.BooleanField(default=False)
-    Inc = models.CharField(max_length=600)
-    Loc = models.CharField(max_length=200)
-    XSts = models.CharField(max_length=50)
-    dispatch_time = models.DateTimeField('Date and Time of Initial Dispatch')
-    Nature = models.CharField(max_length=100)
-    Common = models.CharField(max_length=200)
-    Addtl = models.CharField(max_length=200)
-    Date = models.CharField(max_length=100)
+    #source = models.ForeignKey(Source)
+    #call_number = models.IntegerField()
+    Unit = models.CharField(max_length=200, blank=True)
+    venue = models.CharField(max_length=500, blank=True)
+    #mutual_aid = models.BooleanField(default=False)
+    Inc = models.CharField(max_length=600, blank=True)
+    Loc = models.CharField(max_length=200, blank=True)
+    XSts = models.CharField(max_length=500, blank=True)
+    #dispatch_time = models.DateTimeField('Date and Time of Initial Dispatch')
+    Nature = models.CharField(max_length=400, blank=True)
+    Common = models.CharField(max_length=200, blank=True)
+    Addtl = models.CharField(max_length=200, blank=True)
+    Date = models.CharField(max_length=400, blank=True)
+    Time = models.CharField(max_length=100, blank=True)
 
     objects = IncidentManager()
 
