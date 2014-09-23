@@ -24,6 +24,10 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+TEMPLATE_DIRS = (
+    '/home/david/git/dispatch/templates',
+    )
+
 ALLOWED_HOSTS = []
 
 
@@ -38,6 +42,26 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'dispatch_gmail',
     'gmail',
+    'social.apps.django_app.default',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+   'django.contrib.auth.context_processors.auth',
+   'django.core.context_processors.debug',
+   'django.core.context_processors.i18n',
+   'django.core.context_processors.media',
+   'django.core.context_processors.static',
+   'django.core.context_processors.tz',
+   'django.contrib.messages.context_processors.messages',
+   'social.apps.django_app.context_processors.backends',
+   'social.apps.django_app.context_processors.login_redirect',
+)
+
+AUTHENTICATION_BACKENDS = (
+   'social.backends.facebook.FacebookOAuth2',
+   'social.backends.google.GoogleOAuth2',
+   'social.backends.twitter.TwitterOAuth',
+   'django.contrib.auth.backends.ModelBackend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,7 +84,7 @@ WSGI_APPLICATION = 'dispatch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dispatch_db',
+        'NAME': 'test_db1',
         'USER': 'dispatch_db',
         'PASSWORD': 'changethispassword',
         'HOST': ''
@@ -83,5 +107,20 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
+STATIC_ROOT = ''
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+ '/home/david/git/dispatch/static',
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
