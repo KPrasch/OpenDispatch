@@ -1,4 +1,6 @@
 from django.db import models
+from django.forms import ModelForm
+from django.contrib.auth.models import User
 
 
 
@@ -26,7 +28,7 @@ class Incident(models.Model):
     #source = models.ForeignKey(Source)
     #call_number = models.IntegerField()
     Unit = models.CharField(max_length=200, blank=True)
-    venue = models.CharField(max_length=500, blank=True)
+    Venue = models.CharField(max_length=500, blank=True)
     #mutual_aid = models.BooleanField(default=False)
     Inc = models.CharField(max_length=600, blank=True)
     Loc = models.CharField(max_length=200, blank=True)
@@ -37,8 +39,15 @@ class Incident(models.Model):
     Addtl = models.CharField(max_length=200, blank=True)
     Date = models.CharField(max_length=400, blank=True)
     Time = models.CharField(max_length=100, blank=True)
+    recieved = models.CharField(max_length=500)
 
     objects = IncidentManager()
+    class Meta:
+        unique_together = ["Inc", "Loc", "Date", "Addtl", "Common", "Nature", "Time", "recieved"]
+
+class Incident_Form(ModelForm):
+           class Meta:
+               model = Incident
 
 '''
 #Need GeoDjango Integration Here.
