@@ -13,25 +13,26 @@ def dashboard(request):
     context = {'incident_list': incident_list}
     return render(request, 'dashboard.html', context)
 
-
-
 '''
-def extracation_status(payload):
-  if isinstance(payload,str):
-      return render_to_response('index.html', incident_dict)
-  else:
-      return '\n'.join([extract_gmail_incidents(part.get_payload()) for part in payload])
+def extracation_status(request):
+  return pass
 
-def extract_gmail_incidents(request, payload):
+def incident_table(request):
+    incident_list = Incident.objects.all()
 
+    return render_to_response('index.html', incident_dict)
+'''
+
+def extract_gmail_incidents(payload):
+    '''
     This function connects to an individuals gmail inbox, selects emails sent from 911 Dispatch,
     by sender address, and parses dispatch data into one dictionary per incident.
 
     The dictionary is passed to the Incident model and creates instances.
 
-
+    '''
     if isinstance(payload,str):
-        return render_to_response('index.html', incident_dict)
+        return payload
     else:
         return '\n'.join([extract_gmail_incidents(part.get_payload()) for part in payload])
 
@@ -60,6 +61,7 @@ try:
                 msg = email.message_from_string(response_part[1])
                 payload = msg.get_payload()
                 body = extract_gmail_incidents(payload)
+                #pdb.set_trace()
                 try:
                   # Extract the incident text data with regular expressions and create a dictionary for each incident.
                   sent = msg["Date"]
@@ -73,16 +75,9 @@ try:
                 except IndexError:
                   print "malformed incident email."
     # Close the connection and logout.
-    finally:
-        try:
-            conn.close()
-        except:
-            pass
-    conn.logout()
-
-
-def incident_table(request):
-
-
-  return render_to_response('index.html', incident_dict)
-'''
+finally:
+    try:
+        conn.close()
+    except:
+        pass
+conn.logout()

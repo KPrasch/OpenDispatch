@@ -3,11 +3,8 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 
 
-
 #DISPATCH_SOURCES = ((0, 'Email'), (1, 'SMS'), (3, 'API'), (4, 'CAD'))
 
-
-#pseudocode for accepting future input sources
 #class Source(models.Model):
 #    source = models.IntegerField(default=0, choices=DISPATCH_SOURCES)
 
@@ -42,15 +39,37 @@ class Incident(models.Model):
     recieved = models.CharField(max_length=500)
 
     objects = IncidentManager()
+
     class Meta:
-        unique_together = ["Inc", "Loc", "Date", "Addtl", "Common", "Nature", "Time", "recieved"]
+      unique_together = ["Inc", "recieved"]
+
+
+# Under Construction:
+'''
+
+    def clean(self):
+        cleaned_incident_fields = super(Incident, self).clean()
+        loc = cleaned_incident_field.get("Loc")
+        xsts = cleaned_incident_field.get("Xsts")
+        nature = cleaned_incident_field.get("Nature")
+        common = cleaned_incident_field.get("Common")
+
+        addtl = cleaned_incident_field.get("Addtl")
+        addtl_1 = ''.join([i for i in addtl if not i.isdigit()])
+        addtl_2 = re.sub('[^A-Za-z0-9 ]+', '', addtl_1)
+
+        date = cleaned_incident_field.get("Date")
+        time  = cleaned_incident_field.get("Time")\
+
+        return cleaned_incident_fields
+
 
 class Incident_Form(ModelForm):
            class Meta:
                model = Incident
 
-'''
-#Need GeoDjango Integration Here.
+
+# Need GeoDjango Integration Here.
 class Location(models.Model):
     latitude = models.IntegerField()
     longitude = models.IntegerField()
@@ -60,4 +79,5 @@ class Location(models.Model):
     street = models.CharField(max_length=100)
     address_number = models.IntegerField()
     interscection = models.CharField(max_length=100)
+
 '''
