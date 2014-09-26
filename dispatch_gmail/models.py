@@ -12,6 +12,9 @@ class Email(models.Model):
     sender = models.EmailField(max_length=256)
     subject = models.CharField(max_length=100)
     body = models.TextField()
+    datetime_str = models.CharField(max_length=200)
+    msg = models.CharField(max_length=600)
+    payload = models.CharField(max_length=600)
 
 class IncidentManager(models.Manager):
     def create_incident(self):
@@ -36,12 +39,12 @@ class Incident(models.Model):
     Addtl = models.CharField(max_length=200, blank=True)
     Date = models.CharField(max_length=400, blank=True)
     Time = models.CharField(max_length=100, blank=True)
-    recieved = models.CharField(max_length=500)
+    datetime_str = models.CharField(max_length=500)
 
     objects = IncidentManager()
 
     class Meta:
-      unique_together = ["Inc", "recieved"]
+      unique_together = ["Inc", "datetime_str"]
 
 
 # Under Construction:
@@ -53,13 +56,9 @@ class Incident(models.Model):
         xsts = cleaned_incident_field.get("Xsts")
         nature = cleaned_incident_field.get("Nature")
         common = cleaned_incident_field.get("Common")
-
         addtl = cleaned_incident_field.get("Addtl")
-        addtl_1 = ''.join([i for i in addtl if not i.isdigit()])
-        addtl_2 = re.sub('[^A-Za-z0-9 ]+', '', addtl_1)
-
         date = cleaned_incident_field.get("Date")
-        time  = cleaned_incident_field.get("Time")\
+        time  = cleaned_incident_field.get("Time")
 
         return cleaned_incident_fields
 
