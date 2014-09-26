@@ -41,11 +41,7 @@ class Incident(models.Model):
     objects = IncidentManager()
 
     class Meta:
-      unique_together = ["Inc", "recieved"]
-
-
-# Under Construction:
-'''
+      unique_together = ["Inc", "Nature", "Addtl", "recieved"]
 
     def clean(self):
         cleaned_incident_fields = super(Incident, self).clean()
@@ -53,17 +49,14 @@ class Incident(models.Model):
         xsts = cleaned_incident_field.get("Xsts")
         nature = cleaned_incident_field.get("Nature")
         common = cleaned_incident_field.get("Common")
-
         addtl = cleaned_incident_field.get("Addtl")
-        addtl_1 = ''.join([i for i in addtl if not i.isdigit()])
-        addtl_2 = re.sub('[^A-Za-z0-9 ]+', '', addtl_1)
-
         date = cleaned_incident_field.get("Date")
-        time  = cleaned_incident_field.get("Time")\
+        time  = cleaned_incident_field.get("Time")
 
         return cleaned_incident_fields
 
-
+# Under Construction:
+'''
 class Incident_Form(ModelForm):
            class Meta:
                model = Incident

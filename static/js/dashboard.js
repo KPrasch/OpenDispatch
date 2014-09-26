@@ -1,5 +1,6 @@
-$(document).ready(function()
-    {
-        $("#incident_table").tablesorter( {sortList: [[0,0], [1,0]]} );
-    }
-);
+
+$(document).ready(function() {
+    $("#incident_table")
+    .tablesorter({widthFixed: true, widgets: ['zebra'], sortList: [[0,0], [1,0]]});
+
+});

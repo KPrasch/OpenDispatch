@@ -25,7 +25,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 TEMPLATE_DIRS = (
-    '/home/david/git/dispatch/templates',
+    '~/git/dispatch/templates',
     )
 
 ALLOWED_HOSTS = []
@@ -84,10 +84,10 @@ WSGI_APPLICATION = 'dispatch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'test_db1',
+        'NAME': 'test_db2',
         'USER': 'dispatch_db',
         'PASSWORD': 'changethispassword',
-        'HOST': ''
+        'HOST': '127.0.0.1'
     }
 }
 
@@ -114,7 +114,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
- '/home/david/git/dispatch/static',
+ '~/git/dispatch/static',
 )
 
 # List of finder classes that know how to find static files in
