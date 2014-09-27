@@ -8,13 +8,15 @@ from django.contrib.auth.models import User
 #class Source(models.Model):
 #    source = models.IntegerField(default=0, choices=DISPATCH_SOURCES)
 
-class Email(models.Model):
-    sender = models.EmailField(max_length=256)
-    subject = models.CharField(max_length=100)
-    body = models.TextField()
+class GrossHourlyIncidents(models.Model):
+    hour = models.IntegerField()
+    count = models.IntegerField()
+
+class IncidentEmail(models.Model):
     datetime_str = models.CharField(max_length=200)
-    msg = models.CharField(max_length=600)
-    payload = models.CharField(max_length=600)
+    payload = models.CharField(max_length=10000)
+    class Meta:
+      unique_together = ["payload", "datetime_str"]
 
 class IncidentManager(models.Manager):
     def create_incident(self):
@@ -24,8 +26,7 @@ class IncidentManager(models.Manager):
 
 #The Unique Dispatch
 class Incident(models.Model):
-    #Hardcoded to email sources for now.
-    #source = models.ForeignKey(Source)
+    source = models.ForeignKey(IncidentEmail)
     #call_number = models.IntegerField()
     Unit = models.CharField(max_length=200, blank=True)
     Venue = models.CharField(max_length=500, blank=True)
