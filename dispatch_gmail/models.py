@@ -13,8 +13,8 @@ class GrossHourlyIncidents(models.Model):
     count = models.IntegerField()
 
 class IncidentEmail(models.Model):
-    datetime_str = models.CharField(max_length=200)
-    payload = models.CharField(max_length=10000)
+    datetime_str = models.CharField(max_length=10000, blank=True)
+    payload = models.CharField(max_length=10000, blank=True, null=True)
     class Meta:
       unique_together = ["payload", "datetime_str"]
 
@@ -26,7 +26,7 @@ class IncidentManager(models.Manager):
 
 #The Unique Dispatch
 class Incident(models.Model):
-    source = models.ForeignKey(IncidentEmail)
+    #source = models.ForeignKey(IncidentEmail, blank=True)
     #call_number = models.IntegerField()
     Unit = models.CharField(max_length=200, blank=True)
     Venue = models.CharField(max_length=500, blank=True)
@@ -40,7 +40,7 @@ class Incident(models.Model):
     Addtl = models.CharField(max_length=200, blank=True)
     Date = models.CharField(max_length=400, blank=True)
     Time = models.CharField(max_length=100, blank=True)
-    datetime_str = models.CharField(max_length=500)
+    datetime_str = models.DateTimeField()
 
     objects = IncidentManager()
 
