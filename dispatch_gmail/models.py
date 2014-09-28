@@ -8,10 +8,15 @@ from django.contrib.auth.models import User
 #class Source(models.Model):
 #    source = models.IntegerField(default=0, choices=DISPATCH_SOURCES)
 
-class Email(models.Model):
-    sender = models.EmailField(max_length=256)
-    subject = models.CharField(max_length=100)
-    body = models.TextField()
+class GrossHourlyIncidents(models.Model):
+    hour = models.IntegerField()
+    count = models.IntegerField()
+
+class IncidentEmail(models.Model):
+    datetime_str = models.CharField(max_length=10000, blank=True)
+    payload = models.CharField(max_length=10000, blank=True, null=True)
+    class Meta:
+      unique_together = ["payload", "datetime_str"]
 
 class IncidentManager(models.Manager):
     def create_incident(self):
@@ -21,8 +26,7 @@ class IncidentManager(models.Manager):
 
 #The Unique Dispatch
 class Incident(models.Model):
-    #Hardcoded to email sources for now.
-    #source = models.ForeignKey(Source)
+    #source = models.ForeignKey(IncidentEmail, blank=True)
     #call_number = models.IntegerField()
     Unit = models.CharField(max_length=200, blank=True)
     Venue = models.CharField(max_length=500, blank=True)
@@ -36,12 +40,16 @@ class Incident(models.Model):
     Addtl = models.CharField(max_length=200, blank=True)
     Date = models.CharField(max_length=400, blank=True)
     Time = models.CharField(max_length=100, blank=True)
-    recieved = models.CharField(max_length=500)
+    datetime_str = models.DateTimeField()
 
     objects = IncidentManager()
 
     class Meta:
-      unique_together = ["Inc", "Nature", "Addtl", "recieved"]
+      unique_together = ["Inc", "datetime_str"]
+
+
+# Under Construction:
+'''
 
     def clean(self):
         cleaned_incident_fields = super(Incident, self).clean()
@@ -55,8 +63,7 @@ class Incident(models.Model):
 
         return cleaned_incident_fields
 
-# Under Construction:
-'''
+
 class Incident_Form(ModelForm):
            class Meta:
                model = Incident
