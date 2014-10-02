@@ -1,6 +1,9 @@
 from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import User
+import re
+from datetime import datetime
+import pdb
 
 
 #DISPATCH_SOURCES = ((0, 'Email'), (1, 'SMS'), (3, 'API'), (4, 'CAD'))
@@ -13,10 +16,12 @@ class GrossHourlyIncidents(models.Model):
     count = models.IntegerField()
 
 class IncidentEmail(models.Model):
-    datetime_str = models.CharField(max_length=10000, blank=True)
+    datetime = models.DateTimeField(blank=True, null=True)
     payload = models.CharField(max_length=10000, blank=True, null=True)
+
     class Meta:
-      unique_together = ["payload", "datetime_str"]
+      unique_together = ["payload", "datetime"]
+      
 
 class IncidentManager(models.Manager):
     def create_incident(self):
@@ -28,6 +33,7 @@ class IncidentManager(models.Manager):
 class Incident(models.Model):
     #source = models.ForeignKey(IncidentEmail, blank=True)
     #call_number = models.IntegerField()
+    payload = models.CharField(max_length=1000, blank=True)
     Unit = models.CharField(max_length=200, blank=True)
     Venue = models.CharField(max_length=500, blank=True)
     #mutual_aid = models.BooleanField(default=False)
@@ -40,29 +46,34 @@ class Incident(models.Model):
     Addtl = models.CharField(max_length=200, blank=True)
     Date = models.CharField(max_length=400, blank=True)
     Time = models.CharField(max_length=100, blank=True)
-    datetime_str = models.DateTimeField()
-
+    datetime = models.DateTimeField(blank=True, null=True)
     objects = IncidentManager()
 
-    class Meta:
-      unique_together = ["Inc", "datetime_str"]
+
+
+
+
 
 
 # Under Construction:
+
+
+
+
 '''
 
-    def clean(self):
-        cleaned_incident_fields = super(Incident, self).clean()
-        loc = cleaned_incident_field.get("Loc")
-        xsts = cleaned_incident_field.get("Xsts")
-        nature = cleaned_incident_field.get("Nature")
-        common = cleaned_incident_field.get("Common")
-        addtl = cleaned_incident_field.get("Addtl")
-        date = cleaned_incident_field.get("Date")
-        time  = cleaned_incident_field.get("Time")
 
-        return cleaned_incident_fields
 
+    def save(self, *args, **kwargs):
+      #pdb.set_trace()
+      msg = self.payload
+      if self.Venue == '' and bool(re.search("Paltz", msg)) == True:
+          self.Venue = "New Paltz"
+      else:
+        self.Venue
+      if self.Loc == '':
+
+      super(Incident, self).save(*args, **kwargs)
 
 class Incident_Form(ModelForm):
            class Meta:

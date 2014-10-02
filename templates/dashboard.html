@@ -3,6 +3,48 @@
 {% block main %}
 
 <body>
+  <script>
+    $(function () {
+      $('#container').highcharts({
+          title: {
+              text: 'Gross incidents by hour of the day.',
+              x: -20 //center
+          },
+          subtitle: {
+              text: '',
+              x: -20
+          },
+          xAxis: {
+              categories: ['0', '1', '2', '3', '4', '5',
+                  '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17',
+                  '18', '19', '20', '21', '22', '23']
+          },
+          yAxis: {
+              title: {
+                  text: 'Number of Incidents'
+              },
+              plotLines: [{
+                  value: 0,
+                  width: 1,
+                  color: '#808080'
+              }]
+          },
+          tooltip: {
+              valueSuffix: ''
+          },
+          legend: {
+              layout: 'vertical',
+              align: 'right',
+              verticalAlign: 'middle',
+              borderWidth: 0
+          },
+          series: [ {
+              name: 'Incidents',
+              data: {{ x_values }}
+          }]
+      });
+  });
+  </script>
 
   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
@@ -32,6 +74,10 @@
         <h1 class="page-header">Dashboard</h1
 
         <h2 class="sub-header">Incidents</h2>
+        <body>
+
+          <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
         <div id="table-responsive" class="table-responsive">
           <table id="incident_table" class="tablesorter">
             <thead>
@@ -60,7 +106,7 @@
                 <td>{{ incident.Nature }}</td>
                 <td>{{ incident.Common }}</td>
                 <td>{{ incident.Addtl }}</td>
-                <td>{{ incident.recieved }}</td>
+                <td>{{ incident.datetime }}</td>
               </tr>
               {% endfor %}
             </tbody>
