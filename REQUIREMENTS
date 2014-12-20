@@ -1,3 +1,7 @@
+hendrix
 django
 psycopg2
 south
+django-chartit
+simplejson
+python-social-auth
