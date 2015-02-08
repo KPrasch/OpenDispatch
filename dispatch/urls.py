@@ -1,27 +1,30 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from dispatch_gmail import views
-
+from dispatch_twitter import views
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'dispatch_gmail.views.extract_gmail_dispatches', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
+                       
+    #Django admin web interface
+    url(r'^admin/', include(admin.site.urls)),
+                       
+    #Authentication                   
     url(r'^/login/$', 'django.contrib.auth.views.login',
                         {'template_name': 'plus/login.html'}),
-
-    url(r'^admin/', include(admin.site.urls)),
-
     url('', include('social.apps.django_app.urls', namespace='social')),
 
-    url(r'^download-gmail/', 'dispatch_gmail.views.get_incident_emails', name='home'),
-    url(r'^incidents/', 'dispatch_gmail.views.gross_hourly_most_common'),
-    url(r'^parse/', 'dispatch_gmail.views.parse_incident_emails'),
-
+    #Incident db population from gmail
+    url(r'^get-gmail/', 'dispatch_gmail.views.get_incident_emails', name='home'),
+    url(r'^parse-gmail/', 'dispatch_gmail.views.parse_incident_emails'),
+    
+    #Incident db population from twitter
+    url(r'^get-twitter/', 'dispatch_twitter.views.get_twitter_incidents'),
+    url(r'^parse-twitter/', 'dispatch_twitter.views.parse_twitter_incidents'),
+    
+    #Forward facing URLs
     url(r'^$', 'dispatch_gmail.views.dashboard', name='dashboard'),
-
+    url(r'^incidents/', 'dispatch_gmail.views.gross_hourly_most_common'),
 
 )

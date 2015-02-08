@@ -45,7 +45,6 @@ def get_incident_emails(request):
     return render(request, 'dashboard.html')
     #return redirect('parse_incident_emails')
 
-#Needs refactoring to accept any key, and use that key....
 def parse_incident_emails(request):
 
     total = IncidentEmail.objects.all().count()

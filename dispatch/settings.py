@@ -40,11 +40,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dispatch',
     'dispatch_gmail',
+    'dispatch_twitter',
     'gmail',
-    'social.apps.django_app.default',
     'chartit',
     'simplejson',
+    'social.apps.django_app.default',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

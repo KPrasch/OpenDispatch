@@ -1,19 +1,11 @@
-from django.db import models
-from django.forms import ModelForm
-from django.contrib.auth.models import User
-import re
 from datetime import datetime
 import pdb
+import re
 
+from django.contrib.auth.models import User
+from django.db import models
+from django.forms import ModelForm
 
-#DISPATCH_SOURCES = ((0, 'Email'), (1, 'SMS'), (3, 'API'), (4, 'CAD'))
-
-#class Source(models.Model):
-#    source = models.IntegerField(default=0, choices=DISPATCH_SOURCES)
-
-class GrossHourlyIncidents(models.Model):
-    hour = models.IntegerField()
-    count = models.IntegerField()
 
 class IncidentEmail(models.Model):
     datetime = models.DateTimeField(blank=True, null=True)
@@ -22,15 +14,8 @@ class IncidentEmail(models.Model):
     class Meta:
       unique_together = ["payload", "datetime"]
       
-
-class IncidentManager(models.Manager):
-    def create_incident(self):
-        incident = self.create()
-        # do something with the incident.
-        return Incident
-
-#The Unique Dispatch
-class Incident(models.Model):
+#The Unique Dispatch format for Ulster County, NY      
+class UlsterIncident(models.Model):
     #source = models.ForeignKey(IncidentEmail, blank=True)
     #call_number = models.IntegerField()
     payload = models.CharField(max_length=1000, blank=True)
@@ -48,22 +33,9 @@ class Incident(models.Model):
     Time = models.CharField(max_length=100, blank=True)
     datetime = models.DateTimeField(blank=True, null=True)
     objects = IncidentManager()
-
-
-
-
-
-
-
-# Under Construction:
-
-
-
-
+    
+# Under Construction: Save method for gmail incident validation
 '''
-
-
-
     def save(self, *args, **kwargs):
       #pdb.set_trace()
       msg = self.payload
@@ -74,21 +46,4 @@ class Incident(models.Model):
       if self.Loc == '':
 
       super(Incident, self).save(*args, **kwargs)
-
-class Incident_Form(ModelForm):
-           class Meta:
-               model = Incident
-
-
-# Need GeoDjango Integration Here.
-class Location(models.Model):
-    latitude = models.IntegerField()
-    longitude = models.IntegerField()
-    country = 'USA'
-    state = models.IntegerField()
-    city = models.CharField(max_length=100)
-    street = models.CharField(max_length=100)
-    address_number = models.IntegerField()
-    interscection = models.CharField(max_length=100)
-
 '''
