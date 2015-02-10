@@ -16,8 +16,8 @@ urlpatterns = patterns('',
     url('', include('social.apps.django_app.urls', namespace='social')),
 
     #Incident db population from gmail
-    url(r'^get-gmail/', 'dispatch_gmail.views.get_incident_emails', name='home'),
-    url(r'^parse-gmail/', 'dispatch_gmail.views.parse_incident_emails'),
+    url(r'^import_email/', 'dispatch_gmail.views.import_email_incidents'),
+    #url(r'^parse-gmail/', 'dispatch_gmail.views.parse_incident_emails'),
     
     #Incident db population from twitter
     url(r'^get-twitter/', 'dispatch_twitter.views.get_twitter_incidents'),

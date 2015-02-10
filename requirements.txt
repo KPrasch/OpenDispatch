@@ -7,3 +7,4 @@ psycopg2
 django-chartit
 simplejson
 python-social-auth
+django-twitter-api

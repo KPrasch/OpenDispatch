@@ -7,7 +7,7 @@ from django.db import models
 from django.forms import ModelForm
 
 
-class IncidentEmail(models.Model):
+class TwitterIncident(models.Model):
     datetime = models.DateTimeField(blank=True, null=True)
     payload = models.CharField(max_length=10000, blank=True, null=True)
 

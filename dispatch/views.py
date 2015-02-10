@@ -1,16 +1,40 @@
-from django.shortcuts import render, redirect
+from collections import Counter
+from datetime import datetime, timedelta
+import getpass, os, email, sys, gmail, dispatch_gmail, re, time, imaplib, string, pywapi
+import operator
+import pdb
+import urllib
+
+from chartit import DataPool, Chart
+from dispatch.models import UlsterIncident
+from dispatch_gmail.models import IncidentEmail
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from datetime import datetime, timedelta
-from dispatch_gmail.models import IncidentEmail, Incident
-import getpass, os, email, sys, gmail, dispatch_gmail, re, time, imaplib, string, pywapi
-import pdb
-from chartit import DataPool, Chart
 import json as simplejson
-from collections import Counter
-import operator
+import simplejson
 
+
+googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
+
+def get_coordinates(incident_location_data, from_sensor=False):
+    incident_location_data = incident_location_data.encode('utf-8')
+    params = {
+        'address': incident_location_data,
+        'sensor': "true" if from_sensor else "false"
+    }
+    url = googleGeocodeUrl + urllib.urlencode(params)
+    json_response = urllib.urlopen(url)
+    response = simplejson.loads(json_response.read())
+    if response['results']:
+        location = response['results'][0]['geometry']['location']
+        latitude, longitude = location['lat'], location['lng']
+        print incident_location_data, latitude, longitude
+    else:
+        latitude, longitude = None, None
+        print incident_location_data, "Could not generate coordinates for this Incident"
+    return latitude, longitude
 
 def gross_hourly_most_common(request):
   incident_list = Incident.objects.all()
@@ -26,7 +50,6 @@ def gross_hourly_most_common(request):
 
   return render(request, 'dashboard.html', context)
   #pdb.set_trace()
-
 
 def gross_hourly_chart(request):
 

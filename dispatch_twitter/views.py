@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from datetime import datetime, timedelta
-from dispatch_gmail.models import IncidentEmail, Incident
+from dispatch_gmail.models import IncidentEmail
+from dispatch.models import UlsterIncident
 import getpass, os, email, sys, gmail, dispatch_gmail, re, time, imaplib, string, pywapi
 import pdb
 from chartit import DataPool, Chart
@@ -12,7 +13,7 @@ from collections import Counter
 import operator
 
 
-def get_incident_emails(request):
+def get_twitter_incidents(request):
     '''
     This view connects to an individuals gmail inbox, selects emails sent from 911 Dispatch,
     by sender address, and saves the emails to the databsse.
@@ -22,30 +23,24 @@ def get_incident_emails(request):
     conn = imaplib.IMAP4_SSL("imap.gmail.com", 993)
     conn.login(usernm,passwd)
     conn.select('Dispatch')
-
-    # Only trying to parse the emails that are relevant. Selecting by sender and subject.
-    typ, data = conn.search(None, '(FROM "messaging@iamresponding.com" SUBJECT "Company 43")')
-    for num in data[0].split():
-        typ, msg_data = conn.fetch(num, '(RFC822)')
-        for response_part in msg_data:
-              if isinstance(response_part,tuple):
-                  msg = email.message_from_string(response_part[1])
-                  time_stamp = email.utils.parsedate(msg['Date'])
-                  time_int = time.mktime(time_stamp)
-                  received_datetime = datetime.fromtimestamp(time_int)
-                  payload = msg.get_payload(decode=True)
-                  #pdb.set_trace()
-                  incident_email = IncidentEmail.objects.create(datetime = received_datetime, payload = payload)
-                  incident_email.save()
-                  sys.stdout.write("Saved email #%s \r" % incident_email.id)
-                  sys.stdout.flush()
+    
+    msg = email.message_from_string(response_part[1])
+    time_stamp = email.utils.parsedate(msg['Date'])
+    time_int = time.mktime(time_stamp)
+    received_datetime = datetime.fromtimestamp(time_int)
+    payload = msg.get_payload(decode=True)
+    #pdb.set_trace()
+    incident_email = IncidentEmail.objects.create(datetime = received_datetime, payload = payload)
+    incident_email.save()
+    sys.stdout.write("Saved email #%s \r" % incident_email.id)
+    sys.stdout.flush()
 
     print "Done."
     #return '\n'.join([get_incident_emails(part.get_payload()) for part in payload])
     return render(request, 'dashboard.html')
     #return redirect('parse_incident_emails')
 
-def parse_incident_emails(request):
+def parse_twitter_incidents(request):
 
     total = IncidentEmail.objects.all().count()
     print ("Total Email Incidents in db:", total)
@@ -59,16 +54,7 @@ def parse_incident_emails(request):
       key_locations = key_re.split(body)[1:]
       incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
       #pdb.set_trace()
-      if bool(re.search("Paltz", body)) == True:
-        incident_dict.update({"Venue":"New Paltz"})
-      if bool(re.search("43", body)) == True:
-        incident_dict.update({"Unit":"43"})
-      '''
-      #pseudocode
-      if bool(re.search("", Loc))
-        location = {'Common':}.split("AT")[1]
-        incident.dict.update({'Loc':location})
-      '''
+      
       # Create a model instance for each incident.
       incident = Incident.objects.create(payload = body, datetime = sent, **incident_dict)
       # Save the Incident to the database.

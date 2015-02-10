@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -25,7 +24,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 TEMPLATE_DIRS = (
-    '/home/david/git/dispatch/templates',
+    os.path.join(BASE_DIR, 'templates'),
     )
 
 ALLOWED_HOSTS = []
@@ -47,6 +46,10 @@ INSTALLED_APPS = (
     'chartit',
     'simplejson',
     'social.apps.django_app.default',
+    'oauth_tokens',
+    'm2m_history',
+    'taggit',
+    'twitter_api',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -89,10 +92,11 @@ USE_TZ = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'test_db1',
-        'USER': 'dispatch_db',
-        'PASSWORD': 'changethispassword',
-        'HOST': '127.0.0.1'
+        'NAME': 'dispatch_db_dev',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -119,7 +123,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
- '/home/david/git/dispatch/static',
+    os.path.join(BASE_DIR, 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -129,3 +133,10 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+# oauth-tokens settings
+OAUTH_TOKENS_HISTORY = False                                         # to keep in DB expired access tokens
+OAUTH_TOKENS_TWITTER_CLIENT_ID = ''                                # application ID
+OAUTH_TOKENS_TWITTER_CLIENT_SECRET = ''                            # application secret key
+OAUTH_TOKENS_TWITTER_USERNAME = ''                                 # user login
+OAUTH_TOKENS_TWITTER_PASSWORD = ''                                 # user password
