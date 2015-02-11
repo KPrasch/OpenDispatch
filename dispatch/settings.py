@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'm2m_history',
     'taggit',
     'twitter_api',
+    'private',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
