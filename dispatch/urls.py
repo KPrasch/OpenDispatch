@@ -16,12 +16,12 @@ urlpatterns = patterns('',
     url('', include('social.apps.django_app.urls', namespace='social')),
 
     #Incident db population from gmail
-    url(r'^import_email/', 'dispatch_gmail.views.import_email_incidents'),
+    url(r'^import-email/', 'dispatch_gmail.views.import_email_incidents'),
     #url(r'^parse-gmail/', 'dispatch_gmail.views.parse_incident_emails'),
     
     #Incident db population from twitter
-    url(r'^get-twitter/', 'dispatch_twitter.views.get_twitter_incidents'),
-    url(r'^parse-twitter/', 'dispatch_twitter.views.parse_twitter_incidents'),
+    url(r'^import-twitter/', 'dispatch_twitter.views.import_twitter_incidents'),
+    #url(r'^parse-twitter/', 'dispatch_twitter.views.parse_twitter_incidents'),
     
     #Forward facing URLs
     url(r'^$', 'dispatch_gmail.views.dashboard', name='dashboard'),

@@ -134,9 +134,4 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# oauth-tokens settings
-OAUTH_TOKENS_HISTORY = False                                         # to keep in DB expired access tokens
-OAUTH_TOKENS_TWITTER_CLIENT_ID = ''                                # application ID
-OAUTH_TOKENS_TWITTER_CLIENT_SECRET = ''                            # application secret key
-OAUTH_TOKENS_TWITTER_USERNAME = ''                                 # user login
-OAUTH_TOKENS_TWITTER_PASSWORD = ''                                 # user password
+

@@ -13,6 +13,7 @@ from collections import Counter
 import operator
 from dispatch.models import *
 from dispatch.views import get_coordinates
+from dispatch.views import parse_incident
 
 
 def import_email_incidents(request):
@@ -44,23 +45,8 @@ def import_email_incidents(request):
                   incident_email.save()
                   sys.stdout.write("Saved email #%s \r" % incident_email.id)
                   sys.stdout.flush()
-                  parse_incident_email(payload, received_datetime)
+                  parse_incident(payload, received_datetime)
     print "Done."
     #return '\n'.join([get_incident_emails(part.get_payload()) for part in payload])
     return render(request, 'dashboard.html')
     #return redirect('parse_incident_emails')
-
-#Needs refactoring to accept any key, and use that key....User configurable might be the answer. 
-def parse_incident_email(payload, sent):
-    # Create a set of target strings, and craete a regular expressions pattern to select the text between them.
-    keys = set(('Unit', 'Venue', 'Inc', 'Nature', 'XSts', 'Common', 'Addtl', 'Loc', 'Date', 'Time'))
-    key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + '):', re.IGNORECASE)
-    key_locations = key_re.split(payload)[1:]
-    incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
-    location_fields = ['XSts', 'Loc', 'Venue'] 
-    incident_location_data = [incident_dict[x] for x in location_fields]
-    get_loc = get_coordinates(" ".join(incident_location_data))
-    # Create a model instance for each incident.
-    incident = UlsterIncident.objects.create(payload = payload, datetime = sent, lat = get_loc[0], long = get_loc[1], **incident_dict)
-    print "Created incident %s" % incident.id
-    return incident

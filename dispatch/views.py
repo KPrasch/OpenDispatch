@@ -16,9 +16,23 @@ import json as simplejson
 import simplejson
 
 
-googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
+#Needs refactoring to accept any key, and use that key....User configurable might be the answer. 
+def parse_incident(payload, sent):
+    # Create a set of target strings, and craete a regular expressions pattern to select the text between them.
+    keys = set(('Unit', 'Venue', 'Inc', 'Nature', 'XSts', 'Common', 'Addtl', 'Loc', 'Date', 'Time'))
+    key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + '):', re.IGNORECASE)
+    key_locations = key_re.split(payload)[1:]
+    incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
+    location_fields = ['XSts', 'Loc', 'Venue'] 
+    incident_location_data = [incident_dict[x] for x in location_fields]
+    get_loc = get_coordinates(" ".join(incident_location_data))
+    # Create a model instance for each incident.
+    incident = UlsterIncident.objects.create(payload = payload, datetime = sent, lat = get_loc[0], long = get_loc[1], **incident_dict)
+    print "Created incident %s" % incident.id
+    return incident
 
 def get_coordinates(incident_location_data, from_sensor=False):
+    googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
     incident_location_data = incident_location_data.encode('utf-8')
     params = {
         'address': incident_location_data,
