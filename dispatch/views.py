@@ -19,26 +19,37 @@ import dispatch_settings
 
 def import_incidents(source):
     '''
+    Master incident import view.  Used for the initial population of the dispatch database.
+    Incidents must be unique in the databse, or ProgrammingError is raised.
     '''
     if source == 'twitter':
       raw_incident = get_twitter_incidents(dispatch_settings.TWITTER_USERNAME)
     elif source == 'email':
       raw_incident = import_email_incidents(dispatch_settings.EMAIL_USERNAME)
     else:
-      return ValueError("Invalid dispatch source.  Please specify twitter, email or cad.")  
-      
-    normalized_data = normalize_incidnt_data(raw_incident.payload)
-    parse = parse_incident(normalized_data.payload, raw_incident.recieved_datetime)
-    incident_dict = parse.incident_dict
-    geocode = geocode_incident(incident_dict)
-    incident = UlsterIncident.objects.create(datetime = raw_incident.recieved_datetime, lat = geocode[0], long = geocode[1], **incident_dict)
-    incident.save()
-    print "Created Incident %d" % incident.id
-
-    return HttpResponse('200')
+      raise ValueError("Invalid dispatch source.  Please specify twitter, email or cad.")  
+    try:  
+        for incident in list:
+            normalized_data = normalize_incidnt_data(raw_incident.payload)
+            parse = parse_incident(normalized_data.payload, raw_incident.recieved_datetime)
+            incident_dict = parse.incident_dict
+            geocode = geocode_incident(incident_dict)
+            incident = UlsterIncident.objects.create(datetime = raw_incident.recieved_datetime, lat = geocode[0], long = geocode[1], **incident_dict)
+            incident.save()
+            print "Created Incident %d" % incident.id
+        return HttpResponse('200')
+    
+    except ProgrammingError:
+        pass
 
 def get_current_weather(request):
-    pass
+    weather_com_result = pywapi.get_weather_from_weather_com(dispatch_settings.LOCALE_ZIP)
+    yahoo_result = pywapi.get_weather_from_yahoo(dispatch_settings.LOCALE_ZIP)
+    noaa_result = pywapi.get_weather_from_noaa(dispatch_settings.NOAA_STATION_CALL_SIGN)
+    
+    print "Weather.com says: It is " + string.lower(weather_com_result['current_conditions']['text']) + " and " + weather_com_result['current_conditions']['temperature'] + "C now in New York.\n\n"
+    print "Yahoo says: It is " + string.lower(yahoo_result['condition']['text']) + " and " + yahoo_result['condition']['temp'] + "C now in New York.\n\n"
+    print "NOAA says: It is " + string.lower(noaa_result['weather']) + " and " + noaa_result['temp_c'] + "C now in New York.\n"
 
 def get_historical_weather(request):
     pass
@@ -62,20 +73,23 @@ def parse_incident(payload, sent):
     # Create a model instance for each incident.
     return incident_dict
 
+def get_zipcode():
+    pass
+
 def get_coordinates(incident_dict, from_sensor=False):
     '''
     Uses the unauthenticated Google Maps API V3.  using passed incident dictionary,
     gather relevant location text and return a latitude and logitude for an incident. 
     '''
-    googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
+    #Gather the required search text from the incident dict.
     location_fields = dispatch_settings.LOCATION_FIELDS
-    incident_location_data = [incident_dict[x] for x in location_fields]
-    incident_location_data = " ".join(incident_location_data).LOWER  + dispatch_settings.LOCALE_STATE
-    
-    #Back to unicode
-    incident_location_data = incident_location_data.encode('utf-8')
+    incident_location_list = [incident_dict[x] for x in location_fields]
+    incident_location_string = string.lower(" ".join(incident_location_list)) + dispatch_settings.LOCALE_STATE.encode('utf-8')
+      
+    #Now lookups the incident's coordinates.
+    googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
     params = {
-        'address': incident_location_data,
+        'address': incident_location_string,
         'sensor': "true" if from_sensor else "false"
     }
     url = googleGeocodeUrl + urllib.urlencode(params)

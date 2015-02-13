@@ -28,21 +28,26 @@ class RawIncident(models.Model):
     
 #The Unique Dispatch format for Ulster County, NY      
 class UlsterIncident(models.Model):
-    #source = models.ForeignKey(IncidentEmail, blank=True)
-    #call_number = models.IntegerField()
+    owner = models.ForeignKey(User)
+    source = models.ForeignKey(RawIncident)
     Unit = models.CharField(max_length=200, blank=True)
     Venue = models.CharField(max_length=500, blank=True)
-    #mutual_aid = models.BooleanField(default=False)
     Inc = models.CharField(max_length=600, blank=True)
     Loc = models.CharField(max_length=200, blank=True)
     lat = models.DecimalField(max_digits=50, decimal_places=1, null= True, blank=True)
     long = models.DecimalField(max_digits=50, decimal_places=1, null= True, blank=True)
     XSts = models.CharField(max_length=500, blank=True)
-    #dispatch_time = models.DateTimeField('Date and Time of Initial Dispatch')
     Nature = models.CharField(max_length=400, blank=True)
     Common = models.CharField(max_length=200, blank=True)
     Addtl = models.CharField(max_length=200, blank=True)
-    Date = models.CharField(max_length=400, blank=True)
-    Time = models.CharField(max_length=100, blank=True)
-    datetime = models.DateTimeField(blank=True, null=True)
+    #zipcode= modelsIntegerField()
+    dispatch_time = models.DateTimeField(blank=True, null=True)
+    recieved_time = models.DateTimeField(blank=True, null=True)
+    created_time = models.DateTimeField(auto_add_now=True)
+    #weather_status = IntegerField()
     objects = IncidentManager()
+    
+    class Meta:
+	  order_by = ["dispatch_time"]
+    
+

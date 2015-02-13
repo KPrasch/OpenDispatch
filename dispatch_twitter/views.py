@@ -20,18 +20,16 @@ from private import local_settings
 
 def get_twitter_incidents(twitter_username):
     '''
-    Creates incidents from a twitter feed -
-    given that the status of each status is a sting in dictionary format
+    Gathers statuses from a twitter feed.
+    
+    We expect that the status of each status is a sting in dictionary format
     containing the details of a 911 incident.
     
-    Using application only authentication from the private module,
+    Using application only authentication from the private module's tokens,
     attempt to retrieve as many statuses from one public twitter user as possible,
     using the public Twitter REST API.
     
-    Then create a datetime object, save the raw data, normalize it, parse it, and geocode it
-    from the unauthenticated Google Maps API V3.
-    
-    Save each incident to the database.
+    Save each status to the database along with it's publish time..
     '''
     api = TwitterAPI(settings.TWITTER_TOKEN_1, settings.TWITTER_TOKEN_2, settings.TWITTER_TOKEN_3, settings.TWITTER_TOKEN_4)
     r = api.request('statuses/user_timeline', {'screen_name':'%s' % twitter_username, \
@@ -55,4 +53,4 @@ def get_twitter_incidents(twitter_username):
         raw_incident.save()
         sys.stdout.write("Saved raw unicode twitter dispatch %s \r" % raw_incident.id)
         sys.stdout.flush()
-    return payload, recieved_datetime
+    return payload, recieved_datetime, r
