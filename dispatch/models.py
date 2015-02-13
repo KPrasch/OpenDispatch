@@ -6,6 +6,7 @@ from django.db import models
 from django.forms import ModelForm
 
 
+
 class GrossHourlyIncidents(models.Model):
     hour = models.IntegerField()
     count = models.IntegerField()
@@ -16,11 +17,19 @@ class IncidentManager(models.Manager):
         # do something with the incident.
         return Incident
     
+class RawIncident(models.Model):
+    datetime = models.DateTimeField(blank=True, null=True)
+    payload = models.CharField(max_length=10000, blank=True, null=True)
+
+    class Meta:
+      unique_together = ["payload", "datetime"]
+      order_by = ["datetime"]
+    
+    
 #The Unique Dispatch format for Ulster County, NY      
 class UlsterIncident(models.Model):
     #source = models.ForeignKey(IncidentEmail, blank=True)
     #call_number = models.IntegerField()
-    payload = models.CharField(max_length=1000, blank=True)
     Unit = models.CharField(max_length=200, blank=True)
     Venue = models.CharField(max_length=500, blank=True)
     #mutual_aid = models.BooleanField(default=False)
