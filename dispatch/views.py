@@ -17,39 +17,48 @@ import simplejson
 import dispatch_settings
 
 
-def import_incidents(source):
+def import_incidents(request, source):
     '''
     Master incident import view.  Used for the initial population of the dispatch database.
     Incidents must be unique in the databse, or ProgrammingError is raised.
     '''
     if source == 'twitter':
-      raw_incident = get_twitter_incidents(dispatch_settings.TWITTER_USERNAME)
+      get_twitter_incidents(dispatch_settings.TWITTER_USERNAME)
     elif source == 'email':
-      raw_incident = import_email_incidents(dispatch_settings.EMAIL_USERNAME)
+      get_email_incidents(dispatch_settings.EMAIL_USERNAME)
     else:
       raise ValueError("Invalid dispatch source.  Please specify twitter, email or cad.")  
+
+def process_import(incident_str, recieved_datetime):
+    '''
+    '''
     try:  
-        for incident in list:
-            normalized_data = normalize_incidnt_data(raw_incident.payload)
-            parse = parse_incident(normalized_data.payload, raw_incident.recieved_datetime)
-            incident_dict = parse.incident_dict
-            geocode = geocode_incident(incident_dict)
-            incident = UlsterIncident.objects.create(datetime = raw_incident.recieved_datetime, lat = geocode[0], long = geocode[1], **incident_dict)
-            incident.save()
-            print "Created Incident %d" % incident.id
+        normalized_data = normalize_incidnt_data(incident_str)
+        parse = parse_incident(normalized_data.payload)
+        incident_dict = parse.incident_dict
+        loc_str = incident_location_string(incident_dict)
+        geocode = get_coordinates(loc_str.incident_location_string)
+        lat = geocode[0]; lng = geocode[1]
+        for key,value in incident_dict:
+            incident_data = IncidentData.objects.create(**locals())
+            incident_data.save()
+        incident = Incident.objects.create(**locals())
+        incident.save()
+        print "Created Incident %d" % incident.id
         return HttpResponse('200')
     
     except ProgrammingError:
         pass
 
-def get_current_weather(request):
-    weather_com_result = pywapi.get_weather_from_weather_com(dispatch_settings.LOCALE_ZIP)
-    yahoo_result = pywapi.get_weather_from_yahoo(dispatch_settings.LOCALE_ZIP)
+def get_current_weather(zip):
+    '''
+    '''
+    #Slightly more lacal.
+    weather_com_result = pywapi.get_weather_from_weather_com(zip)
+    yahoo_result = pywapi.get_weather_from_yahoo(zip)
+    #Gather the bulk of the weather data from NOAA.
     noaa_result = pywapi.get_weather_from_noaa(dispatch_settings.NOAA_STATION_CALL_SIGN)
     
-    print "Weather.com says: It is " + string.lower(weather_com_result['current_conditions']['text']) + " and " + weather_com_result['current_conditions']['temperature'] + "C now in New York.\n\n"
-    print "Yahoo says: It is " + string.lower(yahoo_result['condition']['text']) + " and " + yahoo_result['condition']['temp'] + "C now in New York.\n\n"
-    print "NOAA says: It is " + string.lower(noaa_result['weather']) + " and " + noaa_result['temp_c'] + "C now in New York.\n"
 
 def get_historical_weather(request):
     pass
@@ -60,6 +69,7 @@ def normalize_incidnt_data(payload):
     '''
     decoded_payload =  unicodedata.normalize('NFKD', payload).encode('ascii', 'ignore') 
     payload = decoded_payload.replace('\n', '').replace('\r', '')
+    
     return payload
     
 def parse_incident(payload, sent):
@@ -70,21 +80,26 @@ def parse_incident(payload, sent):
     key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + ')%r' % dispatch_settings.DELINIATER, re.IGNORECASE)
     key_locations = key_re.split(payload)[1:]
     incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
-    # Create a model instance for each incident.
+    
     return incident_dict
 
 def get_zipcode():
     pass
+
+def compile_incident_location_string(incident_dict):
+    #Gather the required search text from the incident dict.
+    location_fields = dispatch_settings.LOCATION_FIELDS
+    incident_location_list = [incident_dict[x] for x in location_fields]
+    incident_location_string = string.lower(" ".join(incident_location_list)) + dispatch_settings.LOCALE_STATE.encode('utf-8')
+    
+    return incident_location_string
 
 def get_coordinates(incident_dict, from_sensor=False):
     '''
     Uses the unauthenticated Google Maps API V3.  using passed incident dictionary,
     gather relevant location text and return a latitude and logitude for an incident. 
     '''
-    #Gather the required search text from the incident dict.
-    location_fields = dispatch_settings.LOCATION_FIELDS
-    incident_location_list = [incident_dict[x] for x in location_fields]
-    incident_location_string = string.lower(" ".join(incident_location_list)) + dispatch_settings.LOCALE_STATE.encode('utf-8')
+
       
     #Now lookups the incident's coordinates.
     googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
@@ -102,6 +117,7 @@ def get_coordinates(incident_dict, from_sensor=False):
     else:
         latitude, longitude = None, None
         print incident_location_data, "Could not generate coordinates for this Incident"
+        
     return latitude, longitude
 
 def gross_hourly_most_common(request):

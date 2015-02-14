@@ -49,8 +49,6 @@ def get_twitter_incidents(twitter_username):
     for status in r:
         received_datetime = datetime.strptime(status["created_at"], "%a %b %d %H:%M:%S +0000 %Y")
         payload = status["text"]
-        raw_incident = RawIncident.objects.create(datetime = received_datetime, payload = payload)
-        raw_incident.save()
-        sys.stdout.write("Saved raw unicode twitter dispatch %s \r" % raw_incident.id)
-        sys.stdout.flush()
-    return payload, recieved_datetime, r
+        process_import(payload, recieved_datetime)
+        
+    return r
