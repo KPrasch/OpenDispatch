@@ -48,7 +48,7 @@ def get_twitter_incidents(twitter_username):
     
     for status in r:
         received_datetime = datetime.strptime(status["created_at"], "%a %b %d %H:%M:%S +0000 %Y")
-        payload = status["text"]
-        process_import(payload, recieved_datetime)
+        status = status["text"]
+        process_import(status, recieved_datetime)
         
     return r
