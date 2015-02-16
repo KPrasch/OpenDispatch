@@ -1,0 +1,36 @@
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  <div id="table-responsive" class="table-responsive">
+    <table id="incident_table" class="tablesorter">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Unit</th>
+          <th>Venue</th>
+          <th>Incident</th>
+          <th>Location</th>
+          <th>Intersections</th>
+          <th>Nature</th>
+          <th>Common</th>
+          <th>Addditional</th>
+          <th>Recieved</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for incident in incident_list %}
+        <tr>
+          <td>{{ incident.id }}</td>
+          <td>{{ incident.Unit }}</td>
+          <td>{{ incident.Venue }}</td>
+          <td>{{ incident.Inc }}</td>
+          <td>{{ incident.Loc }}</td>
+          <td>{{ incident.Xsts }}</td>
+          <td>{{ incident.Nature }}</td>
+          <td>{{ incident.Common }}</td>
+          <td>{{ incident.Addtl }}</td>
+          <td>{{ incident.datetime }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

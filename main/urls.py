@@ -7,9 +7,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
                        
-    #Django admin web interface
-    url(r'^admin/', include(admin.site.urls)),
-                       
     #Authentication                   
     url(r'^/login/$', 'django.contrib.auth.views.login',
                         {'template_name': 'plus/login.html'}),
@@ -24,7 +21,7 @@ urlpatterns = patterns('',
     #url(r'^parse-twitter/', 'dispatch_twitter.views.parse_twitter_incidents'),
     
     #Forward facing URLs
-    url(r'^$', 'dispatch_gmail.views.dashboard', name='dashboard'),
+    url(r'^$', 'main.views.main', name='home'),
     url(r'^incidents/', 'dispatch_gmail.views.gross_hourly_most_common'),
 
 )
