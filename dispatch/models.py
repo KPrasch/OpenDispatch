@@ -6,7 +6,6 @@ from django.db import models
 from django.forms import ModelForm
 
 
-
 class GrossHourlyIncidents(models.Model):
     hour = models.IntegerField()
     count = models.IntegerField()
@@ -23,7 +22,7 @@ class RawIncident(models.Model):
 
     class Meta:
       unique_together = ["payload", "datetime"]
-      order_by = ["datetime"]
+      ordering = ["datetime"]
     
     
 #The Unique Dispatch format for Ulster County, NY      
@@ -43,11 +42,11 @@ class UlsterIncident(models.Model):
     #zipcode= modelsIntegerField()
     dispatch_time = models.DateTimeField(blank=True, null=True)
     recieved_time = models.DateTimeField(blank=True, null=True)
-    created_time = models.DateTimeField(auto_add_now=True)
+    created_time = models.DateTimeField(auto_now_add =True)
     #weather_status = IntegerField()
     objects = IncidentManager()
     
     class Meta:
-	  order_by = ["dispatch_time"]
+	  ordering = ["dispatch_time"]
     
 
