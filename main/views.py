@@ -21,7 +21,6 @@ import simplejson
 def import_incidents(request, source):
     '''
     Master incident import view.  Used for the initial population of the dispatch database.
-    Incidents must be unique in the databse, or ProgrammingError is raised.
     '''
     if source == 'twitter':
       get_twitter_incidents(dispatch_settings.TWITTER_USERNAME)
@@ -35,6 +34,7 @@ def import_incidents(request, source):
 
 def process_import(incident_str, recieved_datetime):
     '''
+    Manages the overall process of importing incidents.
     '''
     normalize = normalize_incidnt_data(incident_str)
     parse = parse_incident(normalize.payload)
@@ -77,4 +77,10 @@ def parse_incident(payload, sent):
     incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
     
     return incident_dict
+
+def hydraulic_calculations(*args, **kwargs):
+    '''
+    perform fire flow mathematics
+    '''
+    pass
 

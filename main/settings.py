@@ -39,9 +39,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'dispatch',
-    'dispatch_gmail',
-    'dispatch_twitter',
+    'main',
+    'import',
+    'mapping',
+    'charts',
+    'comm',
+    'weather',
     'gmail',
     'chartit',
     'simplejson',
@@ -50,7 +53,7 @@ INSTALLED_APPS = (
     'm2m_history',
     'taggit',
     'twitter_api',
-    'private',
+    'private',  
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

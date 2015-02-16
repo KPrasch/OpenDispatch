@@ -8,6 +8,8 @@ from gi.overrides.GLib import Source
 from numpy.distutils.exec_command import temp_file_name
 from reportlab.lib.colors import snow
 from PIL.ImageDraw import floodfill
+from gettext import lngettext
+from openshot.uploads.youtube.gdata.youtube import Company
 
     
 class Incident(models.Model):
@@ -62,46 +64,33 @@ class IncidentData(models.Model):
     def incident(self):
         return self.incident.id
     
-    
-class IncidentWeatherData(models.Model):
-    incident = models.ForeignKey(Incident)
-    observation_time
-    observation_loc
-    observation_lat
-    observation_lng
-    
-#class IncidentHazardCondition(models.Model):
+#class FixedFireApplicance(models.Model):
 
-#class IncidentExistingWeatherCondition(models.Model):
-    
-#class IncidentFutureConditions(models.Model):
+NFPA_class = ['1', 'Class A', '2', 'Class A', '3', 'Class A', '4', 'Class A', '5', 'Class A', ]
+paint_color = []
 
-class IncidentTemp(models.Model):
-    incident_weather_data = models.ForeignKey(IncidentWeatherData)
-    temp_f = models.DecimalField()
-    temp_c = models.DecimalField()
+class Hydrant(models.Model):
+    lat = models.DecimalField()
+    lng = models.DecimalField()
+    street_address = models.CharField()
+    NFPA_class = models.IntegerField()
+    paint_color = models.IntegerField()
+    wet_or_dry = models.BooleanField
+    main_size_in = models.DecimalField()
+    sm_discharge_in = models.DecimalField()
+    lg_discharge_in = models.DecimalField()
+    thread_type = models.IntegerField()
+    flow_test_date = models.DateTimeField(blank=True, null=True)
+    exp_gpm = models.IntegerField()
+    static_pressure = models.DecimalField()
+    resid_pressure = models.DecimalField()
+    
+    def get_coordinates(self):
+      geo_str = " ".join(self.lat, self.lng)
+      return geo_str
 
-class IncidentWind(models.Model):
-    incident_weather_data = models.ForeignKey(IncidentWeatherData)
-    wind_speed_mph = models.DecimalField()
-    wind_heading = models.IntegerField()
-    wind_chill_f = models.IntegerField()
-    wind_chill_c = models.IntegerField()
-    wind_gust_mph = models.DecimalField()
     
-class IncidentPercipitation(models.Model):
-    incident_weather_data = models.ForeignKey(IncidentWeatherData)
-    rain
-    snow
-    mixture
-    
-    
-class IncidentDewPoint(models.Model):
-    incident_weather_data = models.ForeignKey(IncidentWeatherData)
 
-class IncidentPressure(models.Model):
-    incident_weather_data = models.ForeignKey(IncidentWeatherData)
-    pressure_mb
 
 
 
