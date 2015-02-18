@@ -60,17 +60,20 @@ class District(models.Model):
     zip = models.ManytoManyField(Zipcode)
     objects = models.GeoManager()
     
-class ResponseArea(models.Model):
+class PrimaryResponseArea(models.Model):
     district = models.ForeignKey(District)
     objects = models.GeoManager()
     
 class TargetHazard(models.Model):
-    response_area = models.ForeignKey(ResponseArea)
+    response_area = models.ForeignKey(PrimaryResponseArea)
+    pts_of_interest = models.MultiPointField()
+    description = models.CharField()
+    hazmat = models.IntegerField()
     objects = models.GeoManager()
     
 #Points in Areas
 class FixedLocation(models.Model):
-    company = models.ForeignKey(ResponseArea)
+    company = models.ForeignKey(PrimaryResponseArea)
     location = models.PointField()
     lat = models.FloatField()
     lng = models.FloatField()
@@ -160,7 +163,7 @@ class Agency(models.Model):
 class FireHouse(models.Model):
     structure = models.OnetoOneField(Structure)
     name = models.CharField()
-    response_area = models.ForeignKey(ResponseArea)
+    primary_response_area = models.ForeignKey(ResponseArea)
     objects = models.GeoManager()
     
 #Potential fire appliances to map
@@ -213,9 +216,9 @@ class DraftSite(models.Model):
 class Apparatus(models.Model):
     firehouse = models.ForiegnKey(FireHouse)
     type = models.CharField()
-    capacity
+    water_capacity
     
     objects = models.GeoManager()
     
-    
+
       
