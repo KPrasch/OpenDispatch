@@ -1,4 +1,3 @@
-settings.py
 secret-settings.py
 *.pyc
 __pycache__/

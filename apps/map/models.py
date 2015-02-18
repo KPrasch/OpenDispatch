@@ -217,7 +217,6 @@ class Apparatus(models.Model):
     firehouse = models.ForiegnKey(FireHouse)
     type = models.CharField()
     water_capacity
-    
     objects = models.GeoManager()
     
 
