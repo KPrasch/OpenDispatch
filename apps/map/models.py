@@ -46,8 +46,8 @@ class State(models.Model):
 class County(models.Model):
     state = models.ForeignKey(State)
     owner = models.ForeignKey(User)
-    world = models.ForeignKey(WorldBoundry)
-    area = GeometryField()
+    poly = models.PolygonField()
+    objects = models.GeoManager()
     
 class Zipcode(models.Model):
     county = models.ForiegnKey(County)
@@ -56,50 +56,67 @@ class Zipcode(models.Model):
     objects = models.GeoManager()
 
 class District(models.Model):
-    area = models.ForeignKey(Area)
     zip = models.ManytoManyField(Zipcode)
+    poly = models.PolygonField()
     objects = models.GeoManager()
     
 class PrimaryResponseArea(models.Model):
     district = models.ForeignKey(District)
+    poly = models.PolygonField()
     objects = models.GeoManager()
-    
+
+#Areas of note within a Response Area
 class TargetHazard(models.Model):
     response_area = models.ForeignKey(PrimaryResponseArea)
+    poly = models.PolygonField()
     pts_of_interest = models.MultiPointField()
     description = models.CharField()
     hazmat = models.IntegerField()
+    objects = models.GeoManager()
+
+class HeliSpot(models.Model):
+    primary_response_area = models.ForeignKey(PrimaryResponseArea)
+    poly = models.PolygonField()
+    pts_of_interest = models.MultiPointField()
+    description = models.CharField()
     objects = models.GeoManager()
     
 #Points in Areas
 class FixedLocation(models.Model):
     company = models.ForeignKey(PrimaryResponseArea)
-    location = models.PointField()
-    lat = models.FloatField()
-    lng = models.FloatField()
+    location = models.PointField(srid=4326)
     street_address = models.CharField()
-    district = models.ForeignKey(District)
     is_point = models.BooleanField(default=True)
     objects = models.GeoManager()
     
+    def __unicode__(self):
+        return '%s %s %s' % (self.name, self.geometry.x, self.geometry.y)
+    
     def nearest_hydrants(self):
+        pass
+    
+    def nearest_agency(self):
         pass
     
     def nearest_firehouse(self):
         pass
     
+    def nearest_hazards(self):
+        pass
+    
+    def nearest_helispot(self):
+        pass
+    
 class Incident(models.Model):
     owner = models.ForeignKey(User)
     payload = models.CharField(max_length=10000, blank=True, null=True)
-    lng = models.FloatField()
-    lat = models.FloatField()
-    zipcode= modelsIntegerField()
+    location = ForeignKey(FixedLocation)
     is_active = models.BoleanField(default=False)
     annual_call_number = models.IntegerField()
     dispatch_time = models.DateTimeField(blank=True, null=True)
     recieved_time = models.DateTimeField(blank=True, null=True)
     created_time = models.DateTimeField(auto_add_now=True)
-    #weather_status = IntegerField()
+    weather_status = CharField(max_length=10000, blank=True, null=True)
     
     class Meta:
       unique_together = ["payload", "datetime"]
@@ -107,10 +124,6 @@ class Incident(models.Model):
     
     def raw(self):
         return self.payload
-    
-    def geoloc(self):
-        geo_loc = " ".join(self.lat, self.lng)
-        return geo_loc
    
     def recieved_delay(self):
         if self.dispatch_time != self.recieved_time:
@@ -142,18 +155,28 @@ class IncidentData(models.Model):
     
     def incident(self):
         return self.incident.id
+    
+CONSTRUCTION_CLASS = (
+    ('1', 'Fire Resistive'),
+    ('2', 'Non Combustible'),
+    ('3', 'Ordinary'),
+    ('4', 'Mill'),
+    ('5', 'Wood Frame'),
+)
 
 class Structure(models.Model):
     location = models.ForeignKey(FixedLocation)  
+    construction = models.IntegerField(choices=CONSTRUCTION_CLASS)
     stories = models.IntegerField()
     sq_ft = models.IntegerField()
     access_street = models.CharField()
     is_commercial = models.BoleanField()
-    is_residential = models.BoleanField
-    has_sprinklers = models.BooleanField
+    is_residential = models.BoleanField()
+    has_sprinklers = models.BooleanField()
     fd_conn_loc = models.CharField()
     has_hazmat = models.BoleanField()
     has_preplan = models.BooleanField()
+    preplan = models.TextField()
     objects = models.GeoManager()
     
 class Agency(models.Model):
@@ -204,10 +227,9 @@ class Hydrant(models.Model):
     flow_pressure = models.FloatField()
     resid_pressure = models.FloatField()
     objects = models.GeoManager()
-    
-    def get_coordinates(self):
-      geo_str = " ".join(self.lat, self.lng)
-      return geo_str
+  
+    def info(self):
+        return info
   
 class DraftSite(models.Model):
     location = ForeignKey(FixedLocation) 
@@ -215,9 +237,21 @@ class DraftSite(models.Model):
     
 class Apparatus(models.Model):
     firehouse = models.ForiegnKey(FireHouse)
+    location = models.PonintField(srid=4326)
     type = models.CharField()
-    water_capacity
+    unit = models.CharField()
+    out_of_service = models.BoleanField()
+    availible = models.BoleanField()
     objects = models.GeoManager()
     
+class Equiptment(models.Model):
+    apparatus = models.ForeignKey(Apparatus)
+    name = models.CharField()
+    out_of_service = models.BoleanField()
+    location = models.CharField()
+    
+    
+    
+    
 
-      
+    
