@@ -1,1 +1,13 @@
+PostGIS setup:
 
+more details can be found here:
+https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/geolibs/
+
+$ sudo apt-get install binutils libproj-dev gdal-bin python-gdal gdal-bin libgeoip1
+$ wget http://download.osgeo.org/geos/geos-3.3.8.tar.bz2
+$ tar xjf geos-3.3.8.tar.bz2
+$ cd geos-3.3.8
+$ ./configure
+$ make
+$ sudo make install
+$ cd ..
