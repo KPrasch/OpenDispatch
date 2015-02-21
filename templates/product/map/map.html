@@ -15,21 +15,21 @@ function initialize() {
     });
 }
 
-{% for waypoint in waypoints %}
-waypointByID[{{waypoint.id}}] = {
-    name: "{{waypoint.name}}",
-    lat: {{waypoint.geometry.y}},
-    lng: {{waypoint.geometry.x}}
+{% for incident in incidents %}
+waypointByID[{{incident.id}}] = {
+    name: "{{incident.name}}",
+    lat: {{incident.geometry.y}},
+    lng: {{incident.geometry.x}}
 };
 {% endfor %}
 
 $(document).ready(function () {
-    function activateWaypoints() {
-        // Add waypoint click handler
-        $('.waypoint').each(function () {
+    function displayIncidents() {
+        // Add incident click handler
+        $('.incident').each(function () {
             $(this).click(function() {
-                var waypoint = waypointByID[this.id];
-                var center = new google.maps.LatLng(waypoint.lat, waypoint.lng);
+                var incident = waypointByID[this.id];
+                var center = new google.maps.LatLng(incident.lat, incident.lng);
                 if (marker) marker.setMap();
                 marker = new google.maps.Marker({map: map, position: center});
                 map.panTo(center);
@@ -39,7 +39,7 @@ $(document).ready(function () {
             );
         });
     }
-    activateWaypoints();
+    displayIncidents();
 });
 </script>
 <style>
@@ -60,6 +60,6 @@ $(document).ready(function () {
 
 {% for waypoint in waypoints %}
     <div id={{waypoint.id}} class='waypoint linkOFF'>
-        {{waypoint.name}} ({{waypoint.geometry.y}}, {{waypoint.geometry.x}})
+        {{incident.name}} ({{incident.geometry.y}}, {{incident.geometry.x}})
     </div>
 {% endfor %}

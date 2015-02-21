@@ -11,13 +11,12 @@ urlpatterns = patterns('',
     url(r'^$', 'main.views.main', name='home'),
                        
     #Authentication                   
-    url(r'^/login/$', 'django.contrib.auth.views.login',
-                        {'template_name': 'plus/login.html'}),
-    url('', include('social.apps.django_app.urls', namespace='social')),
-    url(r'^/logout/$', 'django.contrib.auth.views.logout'),
+    url(r'^/accounts/login/$', 'dispatch.views.login'),
+    url(r'^/accounts/logout/$', 'dispatch.views.logout'),
+    url(r'^/accounts/invalid/$', 'dispatch.views.invalid_login'),
     
     #User Interface
-    url(r'^dashboard', 'dispatch.views.dasboardView', name='dashboard'),
+    url(r'^/dashboard', 'dispatch.views.dasboardView', name='dashboard'),
     url(r'^settings', 'dispatch.views.settingsView', name='settings'),
     url(r'^incidents', 'dispatch.views.incidentsView', name='incidents'),
     url(r'^map', 'map.views.mapView', name='map'),

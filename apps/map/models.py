@@ -4,7 +4,8 @@ import re
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.db import models
-
+from django.contrib.gis.geos import *
+from django.contrib.gis.measure import D
 
 #Areas
 class WorldBorder(models.Model):
@@ -83,30 +84,28 @@ class HeliSpot(models.Model):
     
 #Points in Areas
 class FixedLocation(models.Model):
-    company = models.ForeignKey(PrimaryResponseArea)
+    response_area = models.ForeignKey(PrimaryResponseArea)
     location = models.PointField(srid=4326)
     street_address = models.CharField()
-    is_point = models.BooleanField(default=True)
+    lat = models.FloatField()
+    lng = models. FloatField()
     objects = models.GeoManager()
-    
+
+    def save(self, *args, **kwargs):
+        self.lat  = self.point.y
+        self.lng = self.point.x   
+        super(FixedLocation, self).save(*args, **kwargs) 
+        
     def __unicode__(self):
         return '%s %s %s' % (self.name, self.geometry.x, self.geometry.y)
     
-    def nearest_hydrants(self):
-        pass
-    
-    def nearest_agency(self):
-        pass
-    
-    def nearest_firehouse(self):
-        pass
-    
-    def nearest_hazards(self):
-        pass
-    
-    def nearest_helispot(self):
-        pass
-    
+    def nearest_points(self):
+        input_point = self.location
+        distance = 2000 
+        points = FixedLocation.objects.filter(location__distance_lte=(input_point, D(m=distance)))
+        nearest_points = points.distance(input_point).order_by('distance')
+        return nearest_points
+
 class Incident(models.Model):
     owner = models.ForeignKey(User)
     payload = models.CharField(max_length=10000, blank=True, null=True)
@@ -117,11 +116,11 @@ class Incident(models.Model):
     recieved_time = models.DateTimeField(blank=True, null=True)
     created_time = models.DateTimeField(auto_add_now=True)
     weather_status = CharField(max_length=10000, blank=True, null=True)
-    
+
     class Meta:
       unique_together = ["payload", "datetime"]
-      ordering = ["datetime"]
-    
+      ordering = ["datetime"] 
+        
     def raw(self):
         return self.payload
    
@@ -178,10 +177,6 @@ class Structure(models.Model):
     has_preplan = models.BooleanField()
     preplan = models.TextField()
     objects = models.GeoManager()
-    
-class Agency(models.Model):
-    owner = models.ForeignKey(User)
-    name = models.CharField()
      
 class FireHouse(models.Model):
     structure = models.OnetoOneField(Structure)
@@ -243,15 +238,4 @@ class Apparatus(models.Model):
     out_of_service = models.BoleanField()
     availible = models.BoleanField()
     objects = models.GeoManager()
-    
-class Equiptment(models.Model):
-    apparatus = models.ForeignKey(Apparatus)
-    name = models.CharField()
-    out_of_service = models.BoleanField()
-    location = models.CharField()
-    
-    
-    
-    
-
     
