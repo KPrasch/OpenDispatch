@@ -1,21 +1,19 @@
 from collections import Counter
 from datetime import datetime, timedelta
-import getpass, os, email, sys, gmail, dispatch_gmail, re, time, imaplib, string, pywapi
+import getpass, os, email, sys, gmail, re, time, imaplib, string, pywapi
 import operator
 import unicodedata
 
 from TwitterAPI import TwitterAPI
 from chartit import DataPool, Chart
-from dispatch.models import UlsterIncident
+from map.models import Incident
 from dispatch.views import *
-from dispatch_gmail.models import IncidentEmail
-from dispatch_twitter.models import TwitterIncident
+from collect.email.models import IncidentEmail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import json as simplejson
-from private import local_settings
 
 
 def get_twitter_incidents(twitter_username):

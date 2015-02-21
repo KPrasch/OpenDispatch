@@ -1,11 +1,12 @@
 # Import django modules
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
+from map.models import *
 
 
 def map(request):
     'Display map'
-    incidents = Incident.objects.order_by('received_datetime')
+    incidents = Incident.objects.order_by('received_time')
     return render_to_response('product/map/map.html', {
         'incidents': incidents,
         'content': render_to_string('product/map/map.html', {'incidents': incidents}),

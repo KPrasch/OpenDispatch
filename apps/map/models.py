@@ -179,13 +179,13 @@ class Incident(models.Model):
     is_active = models.BooleanField(default=False)
     annual_call_number = models.IntegerField()
     dispatch_time = models.DateTimeField(blank=True, null=True)
-    recieved_time = models.DateTimeField(blank=True, null=True)
+    received_time = models.DateTimeField(blank=True, null=True)
     created_time = models.DateTimeField(auto_now_add=True)
     weather_status = models.CharField(max_length=10000, blank=True, null=True)
 
     class Meta:
-      unique_together = ["payload", "recieved_time"]
-      ordering = ["recieved_time"] 
+      unique_together = ["payload", "received_time"]
+      ordering = ["received_time"] 
         
     def __unicode__(self):
         return self.payload

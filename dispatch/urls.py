@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     url(r'^dashboard', 'dispatch.views.dasboardView', name='dashboard'),
     url(r'^settings', 'dispatch.views.settingsView', name='settings'),
     url(r'^incidents', 'dispatch.views.incidentsView', name='incidents'),
-    url(r'^map', 'map.views.mapView', name='map'),
+    url(r'^map', 'map.views.map', name='map'),
     url(r'^chart', 'chart.views.chartView', name='chart'),
     url(r'^board', 'respond.views.respondView', name='board'),
 
