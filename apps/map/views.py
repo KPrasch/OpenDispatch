@@ -1,8 +1,7 @@
 # Import django modules
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-# Import custom modules
-from dispatch.map.models import Incident
+
 
 def map(request):
     'Display map'

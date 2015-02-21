@@ -1,4 +1,4 @@
-from django.conrib import auth
+from django.contrib import auth
 from django.core.context_processors import csrf
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -41,5 +41,7 @@ def FireResponse(request):
         pass
     
     pass
+
+
 
     

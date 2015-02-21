@@ -3,17 +3,15 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from datetime import datetime, timedelta
-from dispatch.models import UlsterIncident
-from dispatch_gmail.models import IncidentEmail
-import getpass, os, email, sys, gmail, dispatch_gmail, re, time, imaplib, string, pywapi
-import pdb
+from map.models import Incident
+from collect.email.models import IncidentEmail
+import getpass, os, email, sys, gmail, re, time, imaplib, string, pywapi
 from chartit import DataPool, Chart
 import json as simplejson
 from collections import Counter
 import operator
 from dispatch.models import *
-from dispatch.views import get_coordinates
-from dispatch.views import parse_incident
+from map.views import get_coordinates
 
 
 def import_email_incidents(request):

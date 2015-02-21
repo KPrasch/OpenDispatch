@@ -1,14 +1,13 @@
 from collections import Counter
 from datetime import datetime, timedelta
-import getpass, os, email, sys, gmail, dispatch_gmail, re, time, imaplib, string, pywapi
+import getpass, os, email, sys, gmail, re, time, imaplib, string, pywapi
 from httplib import HTTPResponse
 import operator
-import pdb
 import urllib
 
 from chartit import DataPool, Chart
-from dispatch.models import UlsterIncident
-from dispatch_gmail.models import IncidentEmail
+from map.models import Incident
+from collect.email.models import IncidentEmail
 import dispatch_settings
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -16,6 +15,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import json as simplejson
 import simplejson
+
 
 def incident_listener(request, source):
     pass
@@ -79,3 +79,10 @@ def normalize_incident_data(payload):
     payload = decoded_payload.replace('\n', '').replace('\r', '')
     
     return payload
+
+def hippa_filter(payload):
+    '''removes sensitive data early on'''
+    pass
+    
+    
+    

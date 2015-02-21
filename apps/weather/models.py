@@ -1,3 +1,4 @@
+'''
 class IncidentWeatherData(models.Model):
     incident = models.ForeignKey(Incident)
     observation_time
@@ -36,3 +37,4 @@ class IncidentDewPoint(models.Model):
 class IncidentPressure(models.Model):
     incident_weather_data = models.ForeignKey(IncidentWeatherData)
     pressure_mb
+'''
