@@ -80,13 +80,13 @@ USE_TZ = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dispatch_db_dev',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+         'NAME': 'postgres',
+         'USER': 'docker',
+         'PASSWORD':'docker',
+         'HOST':'172.17.0.22',
+         'PORT': '5432',
+     }
 }
 
 # Internationalization
