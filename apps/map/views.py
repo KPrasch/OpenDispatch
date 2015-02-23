@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from map.models import *
 
 
-def map(request):
+def mapView(request):
     'Display map'
     incidents = Incident.objects.order_by('received_time')
     return render_to_response('app/map/map.html', {
@@ -28,9 +28,9 @@ def compile_incident_location_string(incident_dict):
     
     return incident_location_string
 
-def get_coordinates(incident_dict, from_sensor=False):
+def geocode(incident_location_string, from_sensor=False):
     '''
-    Uses the unauthenticated Google Maps API V3.  using passed incident string, return a latitude and logitude for an incident. 
+    Uses the unauthenticated Google Maps API V3.  using passed incident location string, return a latitude and logitude for an incident. 
     '''
     googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
     params = {
@@ -43,7 +43,7 @@ def get_coordinates(incident_dict, from_sensor=False):
     if response['results']:
         location = response['results'][0]['geometry']['location']
         latitude, longitude = location['lat'], location['lng']
-        print incident_location_data, latitude, longitude
+        print incident_location_string, latitude, longitude
     else:
         latitude, longitude = None, None
         print incident_location_data, "Could not generate coordinates for this Incident"

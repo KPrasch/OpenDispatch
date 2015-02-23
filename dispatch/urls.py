@@ -8,7 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        
     #Forward facing URLs
-    url(r'^$', 'main.views.main', name='home'),
+    url(r'^$', 'public.views.main', name='home'),
                        
     #Authentication                   
     url(r'^/accounts/login/$', 'dispatch.views.login'),
@@ -16,16 +16,15 @@ urlpatterns = patterns('',
     url(r'^/accounts/invalid/$', 'dispatch.views.invalid_login'),
     
     #User Interface
-    url(r'^dashboard', 'dispatch.views.dasboardView', name='dashboard'),
-    url(r'^settings', 'dispatch.views.settingsView', name='settings'),
-    url(r'^incidents', 'dispatch.views.incidentsView', name='incidents'),
-    url(r'^map', 'map.views.map', name='map'),
-    url(r'^chart', 'chart.views.chartView', name='chart'),
-    url(r'^board', 'respond.views.respondView', name='board'),
+    url(r'^dashboard/$', 'dispatch.views.dashboard', name='dashboard'),
+    url(r'^settings/$', 'dispatch.views.settingsView', name='settings'),
+    url(r'^incidents/$', 'dispatch.views.incidentsView', name='incidents'),
+    url(r'^map/$', 'map.views.map', name='mapView'),
+    url(r'^chart/$', 'chart.views.chartView', name='chart'),
+    url(r'^board/$', 'respond.views.respondView', name='board'),
 
     #Incident db population
-    #url(r'^import-email/', 'dispatch_gmail.views.import_email_incidents'),
-    #url(r'^import-twitter/', 'dispatch_twitter.views.import_twitter_incidents'),
+    url(r'^import/(?P<source>\w{0,50}/$', 'collect.views.import_incidents'),
 
 
 )

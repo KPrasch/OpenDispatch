@@ -6,7 +6,6 @@ import operator
 import urllib
 
 from chartit import DataPool, Chart
-from map.models import Incident
 from collect.email.models import IncidentEmail
 import dispatch_settings
 from django.http import HttpResponse
@@ -14,6 +13,9 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import json as simplejson
+from map.models import Incident
+from private.dispatch_settings import KEYS, DELINIATOR
+from private.secret_settings import TWITTER_USERNME, EMAIL_USERAME
 import simplejson
 
 
@@ -22,13 +24,13 @@ def incident_listener(request, source):
     
 def parse_incident(payload, sent):
     '''
-    Take an incident string and make a dictionary. Needs refactor for the alternate schema.
+    Using configurable incident data fields, parse the data into incident models with all of the information required.
     '''
-    broken = payload.split(':')
-    key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + ')%r' % dispatch_settings.DELINIATER, re.IGNORECASE)
+    keys = set(KEYS)
+    key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + ')%r' % DELINIATER, re.IGNORECASE)
     key_locations = key_re.split(payload)[1:]
     incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
-    
+    # Create a model instance for each incident.
     return incident_dict
 
 def import_incidents(request, source):
@@ -36,25 +38,25 @@ def import_incidents(request, source):
     Master incident import view.  Used for the initial population of the dispatch database.
     '''
     if source == 'twitter':
-      get_twitter_incidents(dispatch_settings.TWITTER_USERNAME)
+      get_twitter_incidents(request, TWITTER_USERNAME)
       return HTTPResponse(status=200)
     elif source == 'email':
-      get_email_incidents(dispatch_settings.EMAIL_USERNAME)
+      get_email_incidents(request, EMAIL_USERNAME)
       return HTTPResponse(status=200)
     else:
       raise ValueError("Invalid dispatch source.  Please specify twitter, email or cad.")  
   
 
-def process_import(incident_str, recieved_datetime):
+def process_import(incident_str, received_datetime):
     '''
     Manages the overall process of importing incidents.
     '''
     normalize = normalize_incidnt_data(incident_str)
     parse = parse_incident(normalize.payload)
     incident_dict = parse.incident_dict
-    loc_str = incident_location_string(incident_dict)
+    loc_str = compile_incident_location_string(incident_dict)
     geocode = get_coordinates(loc_str.incident_location_string)
-    lat = geocode[0]; lng = geocode[1]
+    lat = geocode.latitude; lng = geocode.longitude
     
     try: 
         incident = Incident.objects.create(recieved_datetime = recieved_datetime, lat = lat, lng = lng)

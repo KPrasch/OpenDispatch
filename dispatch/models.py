@@ -13,3 +13,5 @@ class Agency(models.Model):
     
 class Dispatch(models.Model):
     owner = models.ForeignKey(UserProfile)
+    fields = config.dispatch_settings.KEYS
+    

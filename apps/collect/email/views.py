@@ -1,20 +1,21 @@
-from django.shortcuts import render, redirect
+from collections import Counter
+from datetime import datetime, timedelta
+import getpass, os, email, sys, gmail, re, time, imaplib, string, pywapi
+import operator
+
+from chartit import DataPool, Chart
+from collect.email.models import IncidentEmail
+from dispatch.models import *
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from datetime import datetime, timedelta
-from map.models import Incident
-from collect.email.models import IncidentEmail
-import getpass, os, email, sys, gmail, re, time, imaplib, string, pywapi
-from chartit import DataPool, Chart
 import json as simplejson
-from collections import Counter
-import operator
-from dispatch.models import *
+from map.models import Incident
 from map.views import get_coordinates
 
 
-def import_email_incidents(request):
+def import_email_incidents(request, username):
     '''
     This view connects to an individuals gmail inbox, selects emails sent from 911 Dispatch,
     by sender address, and saves the emails to the databsse.
@@ -38,13 +39,6 @@ def import_email_incidents(request):
                   time_int = time.mktime(time_stamp)
                   received_datetime = datetime.fromtimestamp(time_int)
                   payload = msg.get_payload(decode=True)
-                  #pdb.set_trace()
-                  incident_email = IncidentEmail.objects.create(datetime = received_datetime, payload = payload)
-                  incident_email.save()
-                  sys.stdout.write("Saved email #%s \r" % incident_email.id)
-                  sys.stdout.flush()
-                  parse_incident(payload, received_datetime)
-    print "Done."
-    #return '\n'.join([get_incident_emails(part.get_payload()) for part in payload])
-    return render(request, 'dashboard.html')
-    #return redirect('parse_incident_emails')
+                  process_import(payload, received_datetime)
+                  
+    return HttpResponse(status=201)

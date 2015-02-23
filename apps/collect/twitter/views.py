@@ -49,4 +49,4 @@ def get_twitter_incidents(twitter_username):
         status = status["text"]
         process_import(status, recieved_datetime)
         
-    return r
+    return HttpResponse(status=201)
