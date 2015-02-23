@@ -37,7 +37,7 @@
 <script>
 L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
   var map = L.mapbox.map('map', 'examples.map-i86nkdio')
-      .setView([38.89399, -77.03659], 17);
+      .setView([41.7480 , -74.0840], 14);
 
   L.control.locate().addTo(map);
   var featureGroup = L.featureGroup().addTo(map);
@@ -53,19 +53,9 @@ L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmp
   };
 
   var circle_one = L.circle([38.89415, -77.03738], 20, circle_options).addTo(featureGroup);
-  var circle_two = L.circle([38.89415, -77.03578], 20, circle_options).addTo(featureGroup);
 
   // Create array of lat,lon points
   var line_points = [
-      [38.893596444352134, -77.0381498336792],
-      [38.89337933372204, -77.03792452812195],
-      [38.89316222242831, -77.03761339187622],
-      [38.893028615148424, -77.03731298446655],
-      [38.892920059048464, -77.03691601753235],
-      [38.892903358095296, -77.03637957572937],
-      [38.89301191422077, -77.03592896461487],
-      [38.89316222242831, -77.03549981117249],
-      [38.89340438498248, -77.03514575958252],
       [38.893596444352134, -77.0349633693695]
   ];
 
@@ -85,8 +75,9 @@ L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmp
       featureGroup: featureGroup
     }
   }).addTo(map);
-  
-  L.marker([38.9206, -77.0357]).bindLabel('Meridian Hill Park').addTo(map);
+  {% for point in points %}
+  L.marker([{{point.lat}},{{point.lng}}]).bindLabel({{point.id}}).addTo(map);
+  {% endfor %}
     var layers = {
       Streets: L.mapbox.tileLayer('examples.map-i87786ca'),
       Outdoors: L.mapbox.tileLayer('examples.ik7djhcc'),

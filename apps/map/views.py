@@ -7,14 +7,15 @@ from django.template.loader import render_to_string
 from map.models import *
 from private.dispatch_settings import LOCATION_FIELDS, LOCALE_STATE
 import simplejson
+from map.models import FixedLocation
 
 
 def mapView(request):
     'Display map'
-    incidents = Incident.objects.order_by('received_time')
+    points = FixedLocation.objects.all()
     return render_to_response('app/map/map.html', {
-        'incidents': incidents,
-        'content': render_to_string('app/map/map.html', {'incidents': incidents}),
+        'points': points,
+        'content': render_to_string('app/map/map.html', {'points': points}),
     })
 
 def get_zipcode():
