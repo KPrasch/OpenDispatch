@@ -27,10 +27,13 @@ def parse_incident(payload):
     '''
     Using configurable incident data fields, parse the data into incident models with all of the information required.
     '''
-    keys = set(KEYS)
-    key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + '):', re.IGNORECASE)
-    key_locations = key_re.split(payload)[1:]
-    incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
+    try:
+        keys = set(KEYS)
+        key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + '):', re.IGNORECASE)
+        key_locations = key_re.split(payload)[1:]
+        incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
+    except TypeError:
+        import pdb; pdb.set_trace()
     
     return incident_dict
 
@@ -55,7 +58,10 @@ def normalize_incident_data(payload):
     '''
     Converts unicode data to a python string.
     '''
-    payload = payload.replace('\n', '').replace('\r', '')
+    try:
+        payload = payload.replace('\n', '').replace('\r', '')
+    except AttributeError:
+        pass
     try:
         payload =  unicodedata.normalize('NFKD', payload).encode('ascii', 'ignore') 
     except TypeError:
@@ -78,19 +84,26 @@ def process_import(incident_str, received_datetime):
     loc_str = compile_incident_location_string(incident_dict)
     geo = geocode(loc_str)
     lat = geo[0]; lng = geo[1]
-    fixed_loc = FixedLocation.objects.create(lat = lat, lng = lng, street_address=loc_str)
-    try:
-        incident = Incident.objects.create(payload=incident_str, location=fixed_loc, received_time = received_datetime)
-        for key, value in incident_dict.iteritems():
-            incident_data = IncidentData.objects.create(incident=incident, key=key, value=value)
-            incident_data.save()
-        incident.save()
-        print "Created %d" % incident.id
-        return HttpResponse(status=201)
     
-    except IntegrityError:
-        print "This dispatch already appears in the database. Skipping..."
+    if lat or lng == None:
+        #import pdb; pdb.set_trace()
+        #fixed_loc = FixedLocation.objects.create(lat = '', lng = '', street_address=loc_str)
         pass
+    
+    else:    
+        fixed_loc = FixedLocation.objects.create(lat = lat, lng = lng, street_address=loc_str)
+        try:
+            incident = Incident.objects.create(payload=incident_str, location=fixed_loc, received_time = received_datetime)
+            for key, value in incident_dict.iteritems():
+                incident_data = IncidentData.objects.create(incident=incident, key=key, value=value)
+                incident_data.save()
+            incident.save()
+            print "Created %d" % incident.id
+            return HttpResponse(status=201)
+        
+        except IntegrityError:
+            print "This dispatch already appears in the database. Skipping..."
+            pass
 
 def get_email_incidents(request, username):
     '''

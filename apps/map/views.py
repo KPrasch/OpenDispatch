@@ -34,7 +34,7 @@ def compile_incident_location_string(incident_dict):
         if incident_dict.has_key(key):
             loc_string+=str(incident_dict[key]) + ' '
         else:
-            print "%s not found in this dictionary"
+            print "%s not found in this dictionary" % key
             pass
     
     incident_location_string = (string.lower(loc_string) + " " + LOCALE_STATE).encode('utf-8')
@@ -53,12 +53,14 @@ def geocode(incident_location_string, from_sensor=False):
     url = googleGeocodeUrl + urllib.urlencode(params)
     json_response = urllib.urlopen(url)
     response = simplejson.loads(json_response.read())
-    if response['results']:
+    import pdb; pdb.set_trace()
+    if response['status'] == 'OVER_QUERY_LIMIT':
+        raise Exception("Over API Limit")
+    elif response['results']:
         location = response['results'][0]['geometry']['location']
         latitude, longitude = location['lat'], location['lng']
         print incident_location_string, latitude, longitude
-    else:
-        latitude, longitude = None, None
+    else:    
         print incident_location_string, "Could not generate coordinates for this Incident"
         
     return latitude, longitude
