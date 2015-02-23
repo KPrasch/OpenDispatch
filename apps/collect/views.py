@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import json as simplejson
-from map.models import Incident
+from map.models import Incident, FixedLocation, IncidentData
 from map.views import compile_incident_location_string, geocode
 from private.dispatch_settings import KEYS, DELINIATERS
 from private.secret_settings import TWITTER_USERNAME, EMAIL_USERNAME
@@ -50,9 +50,6 @@ def import_incidents(request, source):
     else:
       raise ValueError("Invalid dispatch source.  Please specify twitter, email or cad.")  
   
-
-
-
 def normalize_incident_data(payload):
     '''
     Converts unicode data to a python string.
@@ -61,6 +58,7 @@ def normalize_incident_data(payload):
     try:
         payload =  unicodedata.normalize('NFKD', payload).encode('ascii', 'ignore') 
     except TypeError:
+        #If this isn't unicode, and already a string
         pass
     
     return payload
@@ -79,13 +77,14 @@ def process_import(incident_str, received_datetime):
     loc_str = compile_incident_location_string(incident_dict)
     geo = geocode(loc_str)
     lat = geo[0]; lng = geo[1]
-    #import pdb; pdb.set_trace()
-    incident = Incident.objects.create(recieved_datetime = recieved_datetime, lat = lat, lng = lng)
-    for key,value in incident_dict:
+    fixed_loc = FixedLocation.objects.create(lat = lat, lng = lng, street_address=loc_str)
+    incident = Incident.objects.create(payload=incident_str, location=fixed_loc, received_time = received_datetime)
+    incident.save()
+    for key, value in incident_dict.iteritems():
         incident_data = IncidentData.objects.create(incident=incident, key=key, value=value)
         incident_data.save()
-    incident.save()
-    print incident.id
+    
+    print "Created %d" % incident.id
     
     return HttpResponse(status=201)
 

@@ -3,10 +3,8 @@ import re
 
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.gis.db import models
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D
-from django.db import models
 from django.db import models
 from django.contrib.gis.db import models
 
@@ -151,15 +149,14 @@ class HeliSpot(models.Model):
 #Points in Areas
 class FixedLocation(InheritanceCastModel):
     #response_area = models.ForeignKey(PrimaryResponseArea)
-    location = models.PointField(srid=4326)
+    location = models.PointField(geography=True)
     street_address = models.CharField(max_length=200)
     lat = models.FloatField()
     lng = models. FloatField()
     objects = models.GeoManager()
 
     def save(self, *args, **kwargs):
-        self.lat  = self.point.y
-        self.lng = self.point.x   
+        self.location = Point(self.lat, self.lng)
         super(FixedLocation, self).save(*args, **kwargs) 
         
     def __unicode__(self):
@@ -173,13 +170,13 @@ class FixedLocation(InheritanceCastModel):
         return nearest_points
 
 class Incident(models.Model):
-    owner = models.ForeignKey(User)
+    #owner = models.ForeignKey(User)
     payload = models.CharField(max_length=10000, blank=True, null=True)
     location = models.ForeignKey(FixedLocation)
     is_active = models.BooleanField(default=False)
-    annual_call_number = models.IntegerField()
+    annual_call_number = models.IntegerField(blank=True, null=True)
     dispatch_time = models.DateTimeField(blank=True, null=True)
-    received_time = models.DateTimeField(blank=True, null=True)
+    received_time = models.DateTimeField()
     created_time = models.DateTimeField(auto_now_add=True)
     weather_status = models.CharField(max_length=10000, blank=True, null=True)
 

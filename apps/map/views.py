@@ -28,8 +28,15 @@ def compile_incident_location_string(incident_dict):
     Gather the required search text from the incident dict.
     '''
     location_fields = LOCATION_FIELDS
-    incident_location_list = [incident_dict[x] for x in location_fields]
-    incident_location_string = string.lower(" ".join(incident_location_list)) + " " + LOCALE_STATE.encode('utf-8')
+    loc_string = ''
+    for key in location_fields:
+        if incident_dict.has_key(key):
+            loc_string+=str(incident_dict[key]) + ' '
+        else:
+            print "%s not found in this dictionary"
+            pass
+    
+    incident_location_string = (string.lower(loc_string) + " " + LOCALE_STATE).encode('utf-8')
     
     return incident_location_string
 

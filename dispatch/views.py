@@ -24,6 +24,9 @@ def logout(request):
     auth.logout(request)
     return render_to_response('accounts/logout')
 
+def classify_incident_data(key, value):
+    classification = ''
+    return classification
 
 def Dispatch(request, source):
     owner = models.ForeignKey(UserProfile)
