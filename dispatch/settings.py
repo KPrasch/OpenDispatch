@@ -81,10 +81,10 @@ USE_TZ = True
 DATABASES = {
     'default': {
          'ENGINE': 'django.contrib.gis.db.backends.postgis',
-         'NAME': 'postgres',
+         'NAME': 'gis',
          'USER': 'docker',
          'PASSWORD':'docker',
-         'HOST':'172.17.0.22',
+         'HOST':'172.17.0.3',
          'PORT': '5432',
      }
 }

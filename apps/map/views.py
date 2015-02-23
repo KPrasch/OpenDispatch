@@ -1,7 +1,12 @@
 # Import django modules
+import string
+import urllib
+
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from map.models import *
+from private.dispatch_settings import LOCATION_FIELDS, LOCALE_STATE
+import simplejson
 
 
 def mapView(request):
@@ -22,9 +27,9 @@ def compile_incident_location_string(incident_dict):
     '''
     Gather the required search text from the incident dict.
     '''
-    location_fields = dispatch_settings.LOCATION_FIELDS
+    location_fields = LOCATION_FIELDS
     incident_location_list = [incident_dict[x] for x in location_fields]
-    incident_location_string = string.lower(" ".join(incident_location_list)) + dispatch_settings.LOCALE_STATE.encode('utf-8')
+    incident_location_string = string.lower(" ".join(incident_location_list)) + " " + LOCALE_STATE.encode('utf-8')
     
     return incident_location_string
 
@@ -46,6 +51,6 @@ def geocode(incident_location_string, from_sensor=False):
         print incident_location_string, latitude, longitude
     else:
         latitude, longitude = None, None
-        print incident_location_data, "Could not generate coordinates for this Incident"
+        print incident_location_string, "Could not generate coordinates for this Incident"
         
     return latitude, longitude

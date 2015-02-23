@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from collect.email import views
-from collect.twitter import views
+
 
 admin.autodiscover()
 
@@ -19,12 +18,12 @@ urlpatterns = patterns('',
     url(r'^dashboard/$', 'dispatch.views.dashboard', name='dashboard'),
     url(r'^settings/$', 'dispatch.views.settingsView', name='settings'),
     url(r'^incidents/$', 'dispatch.views.incidentsView', name='incidents'),
-    url(r'^map/$', 'map.views.map', name='mapView'),
+    url(r'^map/$', 'map.views.mapView', name='mapView'),
     url(r'^chart/$', 'chart.views.chartView', name='chart'),
     url(r'^board/$', 'respond.views.respondView', name='board'),
 
     #Incident db population
-    url(r'^import/(?P<source>\w{0,50}/$', 'collect.views.import_incidents'),
+    url(r'^import/(?P<source>\w{0,50})/$', 'collect.views.import_incidents'),
 
 
 )
