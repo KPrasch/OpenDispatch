@@ -1,0 +1,15 @@
+twisted
+cryptography
+service_identity
+hendrix
+
+django
+psycopg2
+django-chartit
+simplejson
+python-social-auth
+django-twitter-api
+
+
+#Should come last because of installation errors, and repo deprication.
+pywapi

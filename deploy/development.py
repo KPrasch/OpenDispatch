@@ -1,7 +1,19 @@
+"""
+Django settings for dispatch project.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/1.6/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/1.6/ref/settings/
+"""
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os, sys
+import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ')28ie2!(un$18stt4zj6!&-m-8m@gb5b()1!enkkoy**kbxcx&'
@@ -17,7 +29,9 @@ TEMPLATE_DIRS = (
 
 ALLOWED_HOSTS = []
 
+
 # Application definition
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -25,10 +39,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',
-    'collect',
-    'map',
-    'chart',
+    'main',
+    'import',
+    'mapping',
+    'charts',
+    'comm',
     'weather',
     'gmail',
     'chartit',
@@ -80,13 +95,13 @@ USE_TZ = True
 
 DATABASES = {
     'default': {
-         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-         'NAME': 'gis',
-         'USER': 'docker',
-         'PASSWORD':'docker',
-         'HOST':'172.17.0.7',
-         'PORT': '5432',
-     }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dispatch_db_dev',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 # Internationalization
@@ -122,4 +137,5 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
 
