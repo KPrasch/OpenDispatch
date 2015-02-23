@@ -84,7 +84,7 @@ DATABASES = {
          'NAME': 'gis',
          'USER': 'docker',
          'PASSWORD':'docker',
-         'HOST':'172.17.0.5',
+         'HOST':'172.17.0.7',
          'PORT': '5432',
      }
 }

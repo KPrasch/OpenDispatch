@@ -7,6 +7,7 @@ import unicodedata
 import urllib
 
 from chartit import DataPool, Chart
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.shortcuts import render_to_response
@@ -78,15 +79,18 @@ def process_import(incident_str, received_datetime):
     geo = geocode(loc_str)
     lat = geo[0]; lng = geo[1]
     fixed_loc = FixedLocation.objects.create(lat = lat, lng = lng, street_address=loc_str)
-    incident = Incident.objects.create(payload=incident_str, location=fixed_loc, received_time = received_datetime)
-    incident.save()
-    for key, value in incident_dict.iteritems():
-        incident_data = IncidentData.objects.create(incident=incident, key=key, value=value)
-        incident_data.save()
+    try:
+        incident = Incident.objects.create(payload=incident_str, location=fixed_loc, received_time = received_datetime)
+        for key, value in incident_dict.iteritems():
+            incident_data = IncidentData.objects.create(incident=incident, key=key, value=value)
+            incident_data.save()
+        incident.save()
+        print "Created %d" % incident.id
+        return HttpResponse(status=201)
     
-    print "Created %d" % incident.id
-    
-    return HttpResponse(status=201)
+    except IntegrityError:
+        print "This dispatch already appears in the database. Skipping..."
+        pass
 
 def get_email_incidents(request, username):
     '''

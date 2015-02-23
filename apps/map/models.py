@@ -184,7 +184,7 @@ class Incident(models.Model):
       unique_together = ["payload", "received_time"]
       ordering = ["received_time"] 
         
-    def __unicode__(self):
+    def raw(self):
         return self.payload
    
     def recieved_delay(self):
@@ -215,7 +215,7 @@ class IncidentData(models.Model):
     key = models.CharField(max_length=200, blank=True)
     value = models.CharField(max_length=200, blank=True)
     
-    def incident(self):
+    def raw(self):
         return self.incident.id
     
 CONSTRUCTION_CLASS = (
