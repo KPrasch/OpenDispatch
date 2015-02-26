@@ -84,7 +84,7 @@ DATABASES = {
          'NAME': 'gis',
          'USER': 'docker',
          'PASSWORD':'docker',
-         'HOST':'172.17.0.3',
+         'HOST':'172.17.0.9',
          'PORT': '5432',
      }
 }
@@ -105,7 +105,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-STATIC_ROOT = ''
+HENDRIX_CHILD_RESOURCES = (
+    'hendrix.contrib.resources.static.DefaultDjangoStaticResource',
+
+    # uncomment if you would like to serve the django admin static files
+    'hendrix.contrib.resources.static.DjangoAdminStaticResource',
+)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (

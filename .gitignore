@@ -1,13 +1,14 @@
+staticfiles/
 secret-settings.py
 secret_settings.py
-dispatch_settings.py
+private/dispatch_settings.py
 *.pydev
 *.project
 *.pyc
 __pycache__/
 *.py[cod]
 *private/*
-private/
+/private/*
 env/
 pip-log.txt
 pip-delete-this-directory.txt

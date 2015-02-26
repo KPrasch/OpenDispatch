@@ -146,10 +146,14 @@ class HeliSpot(models.Model):
     def __unicode__(self):
         return self.name
     
+FIXED_LOCATIONS = []
+    
+    
 #Points in Areas
-class FixedLocation(InheritanceCastModel):
+class FixedLocation(models.Model):
     #response_area = models.ForeignKey(PrimaryResponseArea)
-    location = models.PointField(geography=True)
+    type = models.IntegerField(choices = FIXED_LOCATIONS, blank=True, null=True)
+    location = models.PointField()
     street_address = models.CharField(max_length=200)
     lat = models.FloatField()
     lng = models. FloatField()
@@ -160,7 +164,7 @@ class FixedLocation(InheritanceCastModel):
         super(FixedLocation, self).save(*args, **kwargs) 
         
     def __unicode__(self):
-        return '%s %s %s %r' % (self.name, self.geometry.x, self.geometry.y, self.cast())
+        return '%s %d %d %r' % (self.street_address, self.location.x, self.location.y, self.location)
     
     def nearest_points(self):
         input_point = self.location
@@ -186,6 +190,14 @@ class Incident(models.Model):
         
     def raw(self):
         return self.payload
+    
+    def time_str(self):
+        return str(self.received_time)
+    
+    def loc(self):
+        fixed_loc = self.location
+        lat = self.location.location.x; lng = self.location.location.y
+        return lat, lng
    
     def recieved_delay(self):
         if self.dispatch_time != self.recieved_time:

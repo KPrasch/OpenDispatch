@@ -27,13 +27,14 @@ def parse_incident(payload):
     '''
     Using configurable incident data fields, parse the data into incident models with all of the information required.
     '''
-    try:
+    if payload == None:
+        print "Parser got payload: None."
+        incident_dict = None
+    else:
         keys = set(KEYS)
         key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + '):', re.IGNORECASE)
         key_locations = key_re.split(payload)[1:]
         incident_dict = {k: v.strip() for k,v in zip(key_locations[::2], key_locations[1::2])}
-    except TypeError:
-        import pdb; pdb.set_trace()
     
     return incident_dict
 
@@ -78,19 +79,22 @@ def process_import(incident_str, received_datetime):
     '''
     Manages the overall process of importing incidents.
     '''
+    if incident_str == '':
+        raise ValueError ("No Incident data provided %r") % incident_str
+    
     normalize = normalize_incident_data(incident_str)
     parse = parse_incident(normalize)
     incident_dict = parse
-    loc_str = compile_incident_location_string(incident_dict)
-    geo = geocode(loc_str)
-    lat = geo[0]; lng = geo[1]
-    
-    if lat or lng == None:
-        #import pdb; pdb.set_trace()
-        #fixed_loc = FixedLocation.objects.create(lat = '', lng = '', street_address=loc_str)
+    if incident_dict == None:
         pass
-    
-    else:    
+    loc_str = compile_incident_location_string(incident_dict)
+    if loc_str == '': 
+        raise ValueError
+    geo = geocode(loc_str)
+    if geo[0] == None:
+        raise ValueError
+    else:
+        lat = geo[0]; lng = geo[1]    
         fixed_loc = FixedLocation.objects.create(lat = lat, lng = lng, street_address=loc_str)
         try:
             incident = Incident.objects.create(payload=incident_str, location=fixed_loc, received_time = received_datetime)
