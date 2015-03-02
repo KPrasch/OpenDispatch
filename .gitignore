@@ -22,3 +22,6 @@ coverage.xml
 *.log
 docs/_build/
 
+private/dispatch_settings.py
+dispatch_settings.py
+dispatch_settings
