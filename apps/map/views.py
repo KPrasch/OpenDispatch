@@ -4,7 +4,7 @@ import urllib
 
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from private.dispatch_settings import LOCATION_FIELDS, LOCALE_STATE, LOCALE_ZIPS
+from private.dispatch_settings import LOCATION_FIELDS, LOCALE_STATE, LOCALE_COUNTY
 import simplejson
 from map.models import Incident
 
@@ -41,7 +41,7 @@ def compile_incident_location_string(incident_dict):
             print "%s not found in this dictionary" % key
             pass
     
-    incident_location_string = (string.lower(loc_string) + " " + LOCALE_STATE + " " + LOCALE_ZIPS[0]).encode('utf-8')
+    incident_location_string = (string.lower(loc_string) + " " + LOCALE_STATE + " " + LOCALE_COUNTY).encode('utf-8')
     
     return incident_location_string
 

@@ -72,7 +72,7 @@ L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmp
   }).addTo(map);
   
   {% for i in incidents %}
-  var marker{{i.id}} = L.marker([{{i.location.location.x}},{{i.location.location.y}}], {time: "{{i.time_str}}"}).bindLabel("System ID#{{i.id}}, {{i.received_time}}");
+  var marker{{i.id}} = L.marker([{{i.location.location.x}},{{i.location.location.y}}], {time: "{{i.time_str}}"}).bindLabel("System ID#{{i.id}}, {{i.raw}}");
   {% endfor %}
     
   var layers = L.control.layers({

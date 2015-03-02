@@ -6,6 +6,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D
 from django.db import models
+from ast import literal_eval
+
+#This must come last.
 from django.contrib.gis.db import models
 
 
@@ -189,7 +192,7 @@ class Incident(models.Model):
       ordering = ["received_time"] 
         
     def raw(self):
-        return self.payload
+        return (literal_eval('%s' % self.payload))
     
     def time_str(self):
         return str(self.received_time)

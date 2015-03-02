@@ -16,12 +16,20 @@ import json as simplejson
 from map.models import Incident, FixedLocation, IncidentData
 from map.views import compile_incident_location_string, geocode
 from private.dispatch_settings import KEYS, DELINIATERS
+from private.secret_settings import TWITTER_TOKEN_1, TWITTER_TOKEN_2, TWITTER_TOKEN_3, TWITTER_TOKEN_4
 from private.secret_settings import TWITTER_USERNAME, EMAIL_USERNAME
 import simplejson
+from TwitterAPI import TwitterAPI 
 
-
+'''
 def incident_listener(request, source):
+    #most_recent_time = Incident.objects.get()
+    first = Incidentobjects.all()[0]
+    get the most recent dispactch datetime
+    if they are equal pass
+    if they are not equal than download the new dispatch and process it.
     pass
+'''
     
 def parse_incident(payload):
     '''
@@ -43,7 +51,7 @@ def import_incidents(request, source):
     Master incident import view.  Used for the initial population of the dispatch database.
     '''
     if source == 'twitter':
-      get_twitter_incidents(request, TWITTER_USERNAME)
+      get_twitter_incidents(TWITTER_USERNAME)
       
       return HTTPResponse(status=200)
   
@@ -140,7 +148,7 @@ def get_email_incidents(request, username):
 
 def get_twitter_incidents(twitter_username):
     '''
-    Gathers statuses from a twitter feed.
+    Gathers statuses from a twitter feed. Limited to 300 requests/15 min. @ 200 requests per batch, with a max of 3,200 total returned tweets per user.
     
     We expect that the status of each status is a sting in dictionary format
     containing the details of a 911 incident.
@@ -148,30 +156,18 @@ def get_twitter_incidents(twitter_username):
     Using application only authentication from the private module's tokens,
     attempt to retrieve as many statuses from one public twitter user as possible,
     using the public Twitter REST API.
-    
-    Save each status to the database along with it's publish time..
+
     '''
-    api = TwitterAPI(settings.TWITTER_TOKEN_1, settings.TWITTER_TOKEN_2, settings.TWITTER_TOKEN_3, settings.TWITTER_TOKEN_4)
-    r = api.request('statuses/user_timeline', {'screen_name':'%s' % twitter_username, \
-                                               #We don't want anything except the statuses.
-                                               'exclude_replies':'true', \
-                                               # 3,200 is the TwitterAPI rate limit.
-                                               'count': '3200', \
-                                               #Further reduce our response size by excluding the user's metadata.
-                                               'trim_user': 'true', \
-                                               #Further reduce our response size by excluding other details
-                                               'contributor_details': 'false', \
-                                               #The ID of the oldest status to start importing from. 
-                                               #This defaults to the oldest possible if the maximum rate limit is reached.
-                                               'since_id': '' \
-                                               })
+    api = TwitterAPI(TWITTER_TOKEN_1, TWITTER_TOKEN_2, TWITTER_TOKEN_3, TWITTER_TOKEN_4)
+    r = api.request('statuses/user_timeline', {'screen_name':'ulstercounty911', 'user_id':'951808694', 'since_id': '553785088983711745',})                            
+    import pdb; pdb.set_trace()
     
     for status in r:
         received_datetime = datetime.strptime(status["created_at"], "%a %b %d %H:%M:%S +0000 %Y")
         status = status["text"]
-        process_import(status, recieved_datetime)
-        
-    return HttpResponse(status=201)
+        process_import(status, received_datetime)
+        print received_datetime, status
+        return HttpResponse(status=201)
     
     
     
