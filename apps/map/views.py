@@ -1,12 +1,14 @@
 # Import django modules
+import re
 import string
 import urllib
 
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
-from private.dispatch_settings import LOCATION_FIELDS, LOCALE_STATE, LOCALE_COUNTY
-import simplejson
 from map.models import Incident
+from private.dispatch_settings import LOCATION_FIELDS, LOCALE_STATE, LOCALE_COUNTY, KEYS
+import simplejson
+
 
 def mapView(request):
     'Display map'
@@ -28,12 +30,31 @@ def get_zipcode():
     '''
     pass
 
-def compile_incident_location_string(incident_dict):
+def compile_incident_location(incident_dict):
     '''
     Gather the required search text from the incident dict.
     '''
     location_fields = LOCATION_FIELDS
+    dispatch_fields = KEYS
     loc_string = ''
+    loc_more = ''
+    for key in dispatch_fields:
+        if incident_dict.has_key(key):
+            if any(char.isdigit() for char in str(incident_dict[key])):
+                m = re.findall("(\d+.*?\D*?\s\D*)", str(incident_dict[key]))
+                if m != None:
+                    for i in range(0,len(m)):
+                        loc_more+=str(m[i] + " ")
+                elif m == None:
+                    pass
+                else:
+                    pass
+            else:
+                pass
+        else:
+            print "%s not found in this dictionary" % key
+            pass
+  
     for key in location_fields:
         if incident_dict.has_key(key):
             loc_string+=str(incident_dict[key]) + ' '
@@ -41,20 +62,21 @@ def compile_incident_location_string(incident_dict):
             print "%s not found in this dictionary" % key
             pass
     
-    incident_location_string = (string.lower(loc_string) + " " + LOCALE_STATE + " " + LOCALE_COUNTY).encode('utf-8')
+    incident_loc_str = (string.lower(loc_string) + " " + LOCALE_STATE + " " + LOCALE_COUNTY).encode('utf-8')
+    verbose_loc_str = (string.lower(loc_more) + " " + LOCALE_STATE + " " + LOCALE_COUNTY).encode('utf-8')
     
-    return incident_location_string
+    return incident_loc_str, verbose_loc_str
 
-def geocode(incident_location_string, from_sensor=False):
+def geocode(incident_loc_str, verbose_loc_str, from_sensor=False):
     '''
     Uses the unauthenticated Google Maps API V3.  using passed incident location string, return a latitude and logitude for an incident. 
     '''
-    if incident_location_string == '' or None:
+    if incident_loc_str == '' or None:
         raise ValueError ("No address string was provided.")
     
     googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
     params = {
-        'address': incident_location_string,
+        'address': incident_loc_str,
         'sensor': "true" if from_sensor else "false"
     }
     
@@ -68,22 +90,22 @@ def geocode(incident_location_string, from_sensor=False):
     elif response['results']:
         location = response['results'][0]['geometry']['location']
         latitude = location['lat']; longitude = location['lng']
-        print incident_location_string, latitude, longitude
+        print incident_loc_str, verbose_loc_str, latitude, longitude
         return latitude, longitude
     else:
         #import pdb; pdb.set_trace()
-        print "No Geolocation fix for %s." % incident_location_string
+        print "No Geolocation fix for %s." % incident_loc_str, verbose_loc_str
         print "Searching for nearby locations..." 
         # Invalid geocode result, trying to get a nearby fix by removing numbers from the address. 
-        street_only = ''.join([i for i in incident_location_string if not i.isdigit()])
-        if street_only == '' or None:
-            raise ValueError ("Unable to remove numbers from string.") 
-        print "Trying %s" % street_only
-        geo = geocode(street_only)
+        if  incident_loc_str != verbose_loc_str:
+            geo = geocode(verbose_loc_str, verbose_loc_str)
+        else:
+            street_only = ''.join(i for i in incident_loc_str if not i.isdigit())
+            geo = geocode(street_only, verbose_loc_str)
+            
         latitude = geo[0]; longitude = geo[1]
         return latitude, longitude
-
-
+        
 def mapbox_geocode(incidnet_loction_string):
     '''
     '''

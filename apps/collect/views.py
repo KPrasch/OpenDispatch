@@ -14,7 +14,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import json as simplejson
 from map.models import Incident, FixedLocation, IncidentData
-from map.views import compile_incident_location_string, geocode
+from map.views import compile_incident_location, geocode
 from private.dispatch_settings import KEYS, DELINIATERS
 from private.secret_settings import TWITTER_TOKEN_1, TWITTER_TOKEN_2, TWITTER_TOKEN_3, TWITTER_TOKEN_4
 from private.secret_settings import TWITTER_USERNAME, EMAIL_USERNAME
@@ -95,12 +95,12 @@ def process_import(incident_str, received_datetime):
     incident_dict = parse
     if incident_dict == None:
         pass
-    loc_str = compile_incident_location_string(incident_dict)
-    if loc_str == '': 
+    loc_str = compile_incident_location(incident_dict)
+    if loc_str[0] == '': 
         raise ValueError
-    geo = geocode(loc_str)
+    geo = geocode(loc_str[0], loc_str[0])
     if geo[0] == None:
-        raise ValueError
+        raise ValueError("Missing location parameters")
     else:
         lat = geo[0]; lng = geo[1]    
         fixed_loc = FixedLocation.objects.create(lat = lat, lng = lng, street_address=loc_str)
