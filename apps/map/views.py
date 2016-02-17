@@ -2,62 +2,161 @@
 import string
 import urllib
 
-from django.shortcuts import render_to_response
-from django.template.loader import render_to_string
-from map.models import *
-from private.dispatch_settings import LOCATION_FIELDS, LOCALE_STATE
 import simplejson
+import requests
+from rest_framework import status
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.response import Response
+
+from django.shortcuts import render
+from rest_framework.renderers import JSONRenderer
+
+from apps.map.models import *
+from apps.map.serializers import IncidentGeoSerializer
+from private.dispatch_settings import *
+from private.secret_settings import *
 
 
-def mapView(request):
-    'Display map'
-    incidents = Incident.objects.order_by('received_time')
-    return render_to_response('app/map/map.html', {
-        'incidents': incidents,
-        'content': render_to_string('app/map/map.html', {'incidents': incidents}),
-    })
+def map_view(request):
+    """
+    Return the Template
+    """
+    past_incidents = Incident.objects.all().order_by("-dispatch_time")
 
-def get_zipcode():
-    '''
-    Identify the postal zip code for an incident
-    '''
-    pass
+    dispatch_dump = []
+    dispatch_counts = []
+
+    for pi in past_incidents:
+        dispatch_dump.append(pi.meta.dispatch)
+
+    incident_types = list(set(dispatch_dump))
+
+    for i in incident_types:
+        dispatch_counts.append(dispatch_dump.count(i))
+
+    mapped_values = dict(zip(incident_types, dispatch_counts))
+
+    return render(request, 'app/map/map.html', {"incidents": past_incidents, "incident_types":  incident_types,
+                                                "incident_chart": mapped_values,
+                                                "locale_state": LOCALE_STATE})
+
+
+def bubble_view(request):
+    """
+    Return the Template
+    """
+    return render(request, 'app/graph.html')
+
+
+@api_view(['GET'])
+@renderer_classes((JSONRenderer,))
+def most_recent_dispatch(request):
+    """
+    Most Recent Dispatch in GeoJSON
+    """
+    recent = Incident.objects.all().order_by("created_time")[0]
+    serializer = IncidentGeoSerializer(recent)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@renderer_classes((JSONRenderer,))
+def get_geoincidents(request):
+    """
+    FeatureCollection list of all Incidents in GeoJSON
+
+    {"type":"FeatureCollection","features":[]}
+
+    """
+    geoincidents = Incident.objects.all().order_by('-dispatch_time')
+    serializer = IncidentGeoSerializer(geoincidents, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 def compile_incident_location_string(incident_dict):
-    '''
+    """
     Gather the required search text from the incident dict.
-    '''
-    location_fields = LOCATION_FIELDS
+    """
     loc_string = ''
-    for key in location_fields:
-        if incident_dict.has_key(key):
-            loc_string+=str(incident_dict[key]) + ' '
+    for key in STREET_ADDRESS_KEYS:
+        if key in incident_dict:
+            loc_string += str(incident_dict[key]) + ', '
         else:
-            print "%s not found in this dictionary"
-            pass
-    
-    incident_location_string = (string.lower(loc_string) + " " + LOCALE_STATE).encode('utf-8')
+            print "No value for key %s" % key
+
+    for key in VENUE_KEYS:
+        if key in incident_dict:
+            loc_string += str(incident_dict[key])
+        else:
+            print "No value for key %s" % key
+
+    incident_location_string = (loc_string.lower().title()).encode('utf-8')
     
     return incident_location_string
 
-def geocode(incident_location_string, from_sensor=False):
-    '''
+
+def geocode(incident_location_string, from_sensor=False, strict=True, round=1):
+    """
     Uses the unauthenticated Google Maps API V3.  using passed incident location string, return a latitude and logitude for an incident. 
-    '''
-    googleGeocodeUrl = 'http://maps.googleapis.com/maps/api/geocode/json?'
+    """
+
+    print "Geocoding %s ..." % incident_location_string
+
+    if incident_location_string == '' or incident_location_string is None:
+        raise ValueError('Empty incident strings cannot be geocoded.')
+
+    url = 'https://maps.googleapis.com/maps/api/geocode/json?'
+
+    geocoder_restrictions = "country:" + LOCALE_COUNTRY + "|administrative_area:" + LOCALE_STATE
+
+    if strict is True:
+        geocoder_restrictions += "|administrative_area:" + LOCALE_ADMIN_REGION
+
     params = {
+        'key': GOOGLE_SERVER_KEY,
         'address': incident_location_string,
-        'sensor': "true" if from_sensor else "false"
-    }
-    url = googleGeocodeUrl + urllib.urlencode(params)
-    json_response = urllib.urlopen(url)
-    response = simplejson.loads(json_response.read())
-    if response['results']:
-        location = response['results'][0]['geometry']['location']
-        latitude, longitude = location['lat'], location['lng']
-        print incident_location_string, latitude, longitude
+        'sensor': "true" if from_sensor else "false",
+        'components': geocoder_restrictions
+        }
+
+    re = requests.get(url=url, params=params)
+
+    if re.status_code == 200:
+        response = re.json()
+
+        if "error_message" in response:
+            latitude, longitude = None, None
+            error = response["status"]
+            reason = response["error_message"]
+            payload = incident_location_string
+            print "Could not generate coordinates for an Incident\n Status: %s\n Reason: %s\n Payload: %s" % (error, reason, payload)
+
+        elif response['status'] == "ZERO_RESULTS":
+            if round == 1:
+                geocode(incident_location_string, strict=False, round=2)
+                print "Zero results for %s \n trying again with strict = False" % incident_location_string
+            elif round == 2:
+                # Do something more recursive, again...?
+                print "No Location Found. Payload: %s" % incident_location_string
+                latitude, longitude = None, None
+
+        elif response['status'] == 'OK':
+            result = response['results'][0]['geometry']
+            location = result['location']
+            accuracy = result['location_type']
+            latitude, longitude = location['lat'], location['lng']
+
+            print incident_location_string, accuracy, latitude, longitude
+
+        else:
+            latitude, longitude = None, None
+            reason = response["status"]
+            print incident_location_string, "Could not generate coordinates for this Incident - Reason: %s" % reason
     else:
-        latitude, longitude = None, None
-        print incident_location_string, "Could not generate coordinates for this Incident"
-        
+        print "%s" % re.status_code
+        import pdb; pdb.set_trace()
+        # Do Something!
+
     return latitude, longitude
+
+

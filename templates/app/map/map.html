@@ -1,106 +1,377 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset=utf-8 />
-<title>Leaflet Draw</title>
-<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
-<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
-<style>
-  body { margin:0; padding:0; }
-  #map { position:absolute; top:0; bottom:0; width:100%; }
-  .leaflet-control-locate {
-  border:1px solid rgba(0,0,0,0.4);
-  }
-.leaflet-control-locate a {
-  background-color:#fff;
-  background-position:-3px, -2px;
-  }
-.leaflet-control-locate.active a {
-  background-position:-33px -2px;
-  }
-</style>
-</head>
-<body>
+{% extends "sitewide.html" %}
 
-<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet' />
-<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
-<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js'></script>
-<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css' rel='stylesheet' />
-<!--[if lt IE 9]>
-<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.21.0/L.Control.Locate.ie.css' rel='stylesheet' />
-<![endif]-->
-<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
-<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />
-<div id='map'></div>
+{% block main %}
 
 <script>
-L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
-  var map = L.mapbox.map('map', 'examples.map-i86nkdio')
-      .setView([38.89399, -77.03659], 17);
 
-  L.control.locate().addTo(map);
-  var featureGroup = L.featureGroup().addTo(map);
+function clickButton(incident_id, realtime) {
+    IncidentLayer.eachLayer(function(marker) {
+        if (marker.feature.id == incident_id) {
+            map.panTo(marker.getLatLng());
+            marker.openPopup();
+        }
+        $("#dispatch-list>li.incident-li-active").removeClass("incident-li-active");
+        $('li[data-incidentId='+incident_id+']').addClass('incident-li-active');
+        if (realtime == "true") {
 
-  // Define circle options
-  // http://leafletjs.com/reference.html#circle
-  var circle_options = {
-      color: '#fff',      // Stroke color
-      opacity: 1,         // Stroke opacity
-      weight: 10,         // Stroke weight
-      fillColor: '#000',  // Fill color
-      fillOpacity: 0.6    // Fill opacity
-  };
+        }
+    });
+}
 
-  var circle_one = L.circle([38.89415, -77.03738], 20, circle_options).addTo(featureGroup);
-  var circle_two = L.circle([38.89415, -77.03578], 20, circle_options).addTo(featureGroup);
+function RefreshMap(feature) {
+    var incidentHTML = '<li class="incident-li" id="incident-li" onclick="clickButton('+feature.id+')" data-incidentId="'+feature.id+')">' +
+    '<div class="meta-created">'+feature.properties.dispatch_time+'</div>' +
+    '<div class="meta-dispatch">'+feature.properties.meta.dispatch+'</div>' +
+    '<div class="meta-coords">lng:'+feature.properties.location.lat+ '|' +feature.properties.location.lng+'</div>' +
+    '<div class="meta-venue">'+feature.properties.meta.venue+'</div>' +
+    '<div class="meta-xsts">'+feature.properties.meta.intersection+'</div></li>';
 
-  // Create array of lat,lon points
-  var line_points = [
-      [38.893596444352134, -77.0381498336792],
-      [38.89337933372204, -77.03792452812195],
-      [38.89316222242831, -77.03761339187622],
-      [38.893028615148424, -77.03731298446655],
-      [38.892920059048464, -77.03691601753235],
-      [38.892903358095296, -77.03637957572937],
-      [38.89301191422077, -77.03592896461487],
-      [38.89316222242831, -77.03549981117249],
-      [38.89340438498248, -77.03514575958252],
-      [38.893596444352134, -77.0349633693695]
-  ];
+     $(incidentHTML).prependTo($("#dispatch-list"));
+     IncidentLayer.loadURL('/get_geoincidents/');
+     clickButton(feature.id, "true");
+}
 
-  // Define polyline options
-  // http://leafletjs.com/reference.html#polyline
-  var polyline_options = {
-      color: '#000'
-  };
+var sock = new SockJS('/twitter-dispatches/dispatch-stream');
 
-  // Defining a polygon here instead of a polyline will connect the
-  // endpoints and fill the path.
-  // http://leafletjs.com/reference.html#polygon
-  var polyline = L.polyline(line_points, polyline_options).addTo(featureGroup);
+ sock.onopen = function(e) {
+     sock.send(JSON.stringify({"hx_subscribe": "twitter-dispatches"}));
+     console.log('ws:' + e.data);
+ };
 
-  var drawControl = new L.Control.Draw({
-    edit: {
-      featureGroup: featureGroup
-    }
-  }).addTo(map);
-  
-  L.marker([38.9206, -77.0357]).bindLabel('Meridian Hill Park').addTo(map);
-    var layers = {
-      Streets: L.mapbox.tileLayer('examples.map-i87786ca'),
-      Outdoors: L.mapbox.tileLayer('examples.ik7djhcc'),
-      Satellite: L.mapbox.tileLayer('examples.map-igb471ik')
-  };
+ sock.onmessage = function(e) {
+     console.log('message', e.data);
+     var dispatch_list = document.getElementById('dispatch-list');
 
-  layers.Streets.addTo(map);
-  L.control.layers(layers).addTo(map);
+     messageJSON = JSON.parse(e.data);
 
-  map.on('draw:created', function(e) {
-      featureGroup.addLayer(e.layer);
-  });
+     if(messageJSON.hasOwnProperty('geometry')) {
+         RefreshMap(messageJSON);
+     } else {
+        div = document.getElementById('notifier');
+        div.innerHTML = div.innerHTML + JSON.stringify(messageJSON);
+        function fade_out() {
+          div.innerHTML = '';
+        };
+        setTimeout(fade_out, 10000);
+     }
+
+ };
+
+ //sock.close();
 </script>
 
-</body>
-</html>
+<div id="app-container">
 
+    <nav id='menu-ui' class='menu-ui'></nav>
+
+    <div id="burger"><img src="/static/img/burger.png"></div>
+
+    <div id='map'></div>
+
+    <div id="sidebar" class="nano">
+
+        <div id="list-filter">
+            <input id="list-filter-input"></input>
+        </div>
+
+        <ul id="dispatch-list" class="nano-content">
+            {% for i in incidents %}
+               {% if i.meta.dispatch == '' %}
+
+                <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }}, 'false')">
+                    <div class="meta-created">{{ i.dispatch_time }}</div>
+                    <div class="meta-coords">lng:{{ i.location.point.x }} lat:{{ i.location.point.y }}</div>
+                    <div class="dispatch-list-error">Error with incident DBID#{{ i.id }}</div>
+                </li>
+
+                {% else %}
+
+                <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }})">
+                    <div class="meta-created">{{ i.dispatch_time }}</div>
+                    <div class="meta-dispatch">{{ i.meta.dispatch }}</div>
+                    <div class="meta-coords">{{ i.location.point.x }}|{{ i.location.point.y }}</div>
+                    <div class="meta-venue">{{ i.meta.location }}</div>
+                    <div class="meta-xsts">{{ i.meta.intersection }}</div>
+                </li>
+
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <div id="lower-panes-container">
+
+            <div id='pane-two' class="panes lower-panes">
+                <div id="selected-digits">0</div>
+                <div id='counter-digits'>{{ incidents.count }}</div>
+                 <div id="selected-counter-label">Incidents Selected</div>
+                <div id="total-counter-label">Incidents Counted</div>
+            </div>
+
+            <div id='pane-three' class="panes lower-panes">
+              <div id="chart-1" style="position: relative; min-width: 300px; height: 300px; margin: 0 auto;"></div>
+            </div>
+
+    </div>
+
+</div>
+
+<div id="notifier"></div>
+
+<script>
+
+$(function () {
+    $('#chart-1').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            type: 'category',
+            labels: {
+                rotation: -65,
+                style: {
+                    fontSize: '8px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Incident Volume'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: '<b>{point.y:.1f} dispatches</b>'
+        },
+        series: [{
+            name: 'Incidents',
+            data: [
+            {% for k, v in incident_chart.items %}
+            ['{{ k }}', {{ v }}],
+            {% endfor %}
+            ],
+            dataLabels: {
+                enabled: true,
+                rotation: -90,
+                color: '#FFFFFF',
+                align: 'right',
+                format: '{point.y:.1f}', // one decimal
+                y: 10, // 10 pixels down from the top
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        }]
+    });
+});
+
+$(".nano").nanoScroller({ alwaysVisible: true });
+
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+  $("#slider").dateRangeSlider({
+    bounds: {min: new Date(2012, 0, 1), max: new Date(2012, 11, 31, 12, 59, 59)},
+    defaultValues: {min: new Date(2012, 1, 10), max: new Date(2012, 4, 22)},
+    scales: [{
+      first: function(value){ return value; },
+      end: function(value) {return value; },
+      next: function(value){
+        var next = new Date(value);
+        return new Date(next.setMonth(value.getMonth() + 1));
+      },
+      label: function(value){
+        return months[value.getMonth()];
+      },
+      format: function(tickContainer, tickStart, tickEnd){
+        tickContainer.addClass("myCustomClass");
+      }
+    }]
+  });
+
+
+L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
+mapboxgl.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
+
+{% comment %}
+  var geojson = [
+
+  {% for i in incidents %}
+
+  {
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [{{ i.location.lng }}, {{ i.location.lat }}]
+    },
+    "properties": {
+      "title": "{{ i.meta.dispatch }} - {{ i.meta.location }}",
+      "meta": {"addr" : "{{ i.location.street_address }}",
+                     "xsts" : "{{ i.meta.intersection }}",
+                      "lng" : "{{ i.location.lng }}",
+                      "lat" : "{{ i.location.lat }}",
+                      "app_time" : "{{ i.dispatch_time }}",
+                      "incident_id" : "{{ i.id }}"}
+    }
+  },
+
+  {% endfor %}
+
+];
+
+
+if (!mapboxgl.supported()) {
+    alert('Your browser does not support Mapbox GL');
+
+} else {
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/kprasch/cikh63zrs004j9vkooy90by64',
+        center: [ -74.2600, 41.8900],
+        zoom: 9
+    });
+}
+ {% endcomment %}
+
+var map = L.mapbox.map('map', null, {minZoom: 9, maxZoom:22})
+              .setView([41.8900, -74.2600], 10);
+
+var layers = document.getElementById('menu-ui');
+
+var ClusterLayer = new L.MarkerClusterGroup();
+var IncidentLayer = new L.mapbox.featureLayer().loadURL('/get_geoincidents/');
+
+
+//var MostRecentLayer = new L.mapbox.featureLayer()
+//    .loadURL('https://wanderdrone.appspot.com/')
+    // Once this layer loads, we set a timer to load it again in a few seconds.
+//    .on('ready', run_recent)
+//    .addTo(map);
+
+//function run_recent() {
+//    MostRecentLayer.eachLayer(function(l) {
+//        map.panTo(l.getLatLng());
+//    });
+//    window.setTimeout(function() {
+//        MostRecentLayer.loadURL('/twitter-dispatches/dispatch-stream');
+//    }, 2000);
+//}
+
+
+//var heat = L.heatLayer([geojson], { maxZoom: 12 });
+
+addLayer(IncidentLayer, 'Incidents (all)', 1, "true");
+addLayer(ClusterLayer, 'Incidents (cluster)', 2, "false");
+//addLayer(heat, 'Heat Map', 3, false);
+addLayer(L.mapbox.tileLayer('mapbox.streets'), 'Streets', 4, "false");
+addLayer(L.mapbox.tileLayer('mapbox.satellite'), 'Satellite', 5, "false");
+addLayer(L.mapbox.tileLayer('mapbox.outdoors'), 'Outdoors', 6, "true");
+addLayer(L.mapbox.tileLayer('kprasch.59f9f541'), 'Civil Borders', 7, "true");
+
+
+function addLayer(layer, name, zIndex, initial) {
+            // Create a simple layer switcher that
+    // toggles layers on and off.
+    var link = document.createElement('a');
+        link.href = '#';
+        link.className = '';
+        link.innerHTML = name;
+
+        if (initial == "true") {
+        layer.setZIndex(zIndex)
+        layer.addTo(map);
+        link.className = 'active';
+        } else {
+        layer.setZIndex(zIndex);
+        }
+
+    link.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (map.hasLayer(layer)) {
+            map.removeLayer(layer);
+            this.className = '';
+        } else {
+            map.addLayer(layer);
+            this.className = 'active';
+        }
+    };
+
+    layers.appendChild(link);
+}
+
+
+IncidentLayer.on('layeradd', function(e) {
+  var marker = e.layer,
+  feature = marker.feature;
+  marker.setIcon(L.icon({"iconUrl": "/static/img/RedDot.svg", "iconSize": [9, 9], "iconAnchor": [0, 0], "popupAnchor": [4, 0], "className": "dot"}));
+
+  // Create custom popup content
+  var popupContent =  '<div class="incident-tooltip">' +
+                       feature.properties.meta.dispatch + " in " + feature.properties.meta.location +
+                       '<ul class="tooltip-list">' +
+                       '<li>' + feature.properties.meta.street_address + ', {{ locale_state }}</li>' +
+                       '<li>' + feature.properties.meta.intersection + '</li>' +
+                       '<li> Lng: ' + feature.properties.location.lng + '</li>' +
+                       '<li> Lat: ' + feature.properties.location.lat + '</li>' +
+                       '<li>Dispatched: ' + feature.properties.dispatch_time + '</li>' +
+                       '<li>Twitter Received: ' + feature.properties.received_time + '</li>' +
+                       '<li>Web Created: ' + feature.properties.created_time + '</li>' +
+                       '<li>' + feature.id + '</li>' +
+                       '<li><a href="/flag_incorrect/">Report an incorrect location.</a></li>' +
+                       '<li><img class="streetview-img" src="' + feature.properties.location.streetview_url + '"></li>'
+                       '</ul></div>';
+
+   // http://leafletjs.com/reference.html#popup
+  marker.bindPopup(popupContent,{
+    closeButton: true,
+    keepInView: true,
+    minWidth: 320
+  }).on('click', function(e) {
+    list_id = e.target.feature.id;
+    $("#dispatch-list>li.incident-li-active").removeClass("incident-li-active");
+
+    $('li[data-incidentId='+list_id+']').addClass('incident-li-active');
+    $(".nano").nanoScroller({ scrollTo:  $('li[data-incidentId='+list_id+']') });
+
+
+
+
+});
+
+});
+
+//IncidentLayer.setGeoJSON();
+ClusterLayer.addLayer(IncidentLayer);
+
+map.on('ready', function() {
+    // featureLayer.getBounds() returns the corners of the furthest-out markers,
+    // and map.fitBounds() makes sure that the map contains these.
+    map.fitBounds(IncidentLayer.getBounds());
+
+});
+
+var sliderControl = L.control.sliderControl({position: "topright", layer: IncidentLayer, range: true});
+map.addControl(sliderControl);
+sliderControl.startSlider();
+//$('#slider-timestamp').html(options.markers[ui.value].feature.properties.time.substr(0, 19));
+
+//var runLayer = omnivore.kml('/static/product/data/ulster-agencies.kml')
+//    .on('ready', function() {
+//        map.fitBounds(runLayer.getBounds());
+//    })
+//    .addTo(map);
+
+
+</script>
+
+
+{% endblock %}

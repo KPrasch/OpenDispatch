@@ -1,40 +1,11 @@
-from datetime import datetime
-import re
+import urllib
 
-from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D
-from django.db import models
+from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.db import models
 
 
-class InheritanceCastModel(models.Model):
-    """
-    An abstract base class that provides a ``real_type`` FK to ContentType.
-
-    For use in trees of inherited models, to be able to downcast
-    parent instances to their child types.
-
-    """
-    real_type = models.ForeignKey(ContentType, editable=False)
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.real_type = self._get_real_type()
-        super(InheritanceCastModel, self).save(*args, **kwargs)
-
-    def _get_real_type(self):
-        return ContentType.objects.get_for_model(type(self))
-
-    def cast(self):
-        return self.real_type.get_object_for_this_type(pk=self.pk)
-
-    class Meta:
-        abstract = True
-
-
-#Areas
+# Areas
 class WorldBorder(models.Model):
     # Regular Django fields corresponding to the attributes in the
     # world borders shapefile.
@@ -59,6 +30,7 @@ class WorldBorder(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Country(models.Model):
     world = models.ForeignKey(WorldBorder)
     name = models.CharField(max_length=24)
@@ -69,7 +41,8 @@ class Country(models.Model):
     
     def __unicode__(self):
         return self.name
-    
+
+
 class State(models.Model):
     country = models.ForeignKey(Country)
     name = models.CharField(max_length=24)
@@ -81,6 +54,7 @@ class State(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class County(models.Model):
     state = models.ForeignKey(State)
     name = models.CharField(max_length=24)
@@ -90,9 +64,10 @@ class County(models.Model):
     
     def __unicode__(self):
         return self.name
-    
+
+
 class Zipcode(models.Model):
-    county = models.ForeignKey(County)
+    county = models.ForeignKey(County, related_name="zip_codes")
     code = models.CharField(max_length=5)
     poly = models.PolygonField()
     center = models.PointField()
@@ -101,17 +76,19 @@ class Zipcode(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class District(models.Model):
-    zip = models.ForeignKey(Zipcode)
+    zip = models.ForeignKey(Zipcode, related_name="districts")
     name = models.CharField(max_length=24)
     poly = models.PolygonField()
     objects = models.GeoManager()
     
     def __unicode__(self):
         return self.name
-    
+
+
 class PrimaryResponseArea(models.Model):
-    district = models.ForeignKey(District)
+    district = models.ForeignKey(District, related_name="response_areas")
     name = models.CharField(max_length=24)
     center = models.PointField()
     poly = models.PolygonField()
@@ -120,7 +97,8 @@ class PrimaryResponseArea(models.Model):
     def __unicode__(self):
         return self.name
 
-#Areas of note within a Response Area
+
+# Areas of note within a Response Area
 class TargetHazard(models.Model):
     response_area = models.ForeignKey(PrimaryResponseArea)
     name = models.CharField(max_length=24)
@@ -134,6 +112,7 @@ class TargetHazard(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class HeliSpot(models.Model):
     primary_response_area = models.ForeignKey(PrimaryResponseArea)
     name = models.CharField(max_length=24)
@@ -145,22 +124,19 @@ class HeliSpot(models.Model):
     
     def __unicode__(self):
         return self.name
-    
-#Points in Areas
-class FixedLocation(InheritanceCastModel):
-    #response_area = models.ForeignKey(PrimaryResponseArea)
-    location = models.PointField(geography=True)
+
+
+# Points in Areas
+class FixedLocation(models.Model):
+    # response_area = models.ForeignKey(PrimaryResponseArea)
     street_address = models.CharField(max_length=200)
     lat = models.FloatField()
-    lng = models. FloatField()
-    objects = models.GeoManager()
+    lng = models.FloatField()
+    point = models.PointField(srid=4326)
+    streetview_url = models.URLField(max_length=2000)
 
-    def save(self, *args, **kwargs):
-        self.location = Point(self.lat, self.lng)
-        super(FixedLocation, self).save(*args, **kwargs) 
-        
-    def __unicode__(self):
-        return '%s %s %s %r' % (self.name, self.geometry.x, self.geometry.y, self.cast())
+    def __str__(self):
+        return "%.8f, %.8f, %s" % (self.lng, self.lat, self.street_address)
     
     def nearest_points(self):
         input_point = self.location
@@ -169,37 +145,48 @@ class FixedLocation(InheritanceCastModel):
         nearest_points = points.distance(input_point).order_by('distance')
         return nearest_points
 
+    def save(self, *args, **kwargs):
+        self.point = GEOSGeometry('{ "type": "Point", "coordinates": [%.8f, %.8f ]}' % (self.lng, self.lat))
+
+        googleStreetviewUrl = 'https://maps.googleapis.com/maps/api/streetview?'
+        params = {'location': self.street_address, 'sensor': "false",
+                  'key': 'AIzaSyAY6BVObrWlkVMTYo5AqzlYcZf7SXChhg0', 'size': '600x300'}
+        streetview_url = googleStreetviewUrl + urllib.urlencode(params)
+
+        self.streetview_url = streetview_url
+        super(FixedLocation, self).save(*args, **kwargs)
+
+
 class Incident(models.Model):
-    #owner = models.ForeignKey(User)
-    payload = models.CharField(max_length=10000, blank=True, null=True)
+    # owner = models.ForeignKey(User)
+    payload = models.CharField(max_length=10000, editable=False)
     location = models.ForeignKey(FixedLocation)
-    is_active = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
     annual_call_number = models.IntegerField(blank=True, null=True)
-    dispatch_time = models.DateTimeField(blank=True, null=True)
+    dispatch_time = models.DateTimeField(blank=True, null=True, editable=False)
     received_time = models.DateTimeField()
-    created_time = models.DateTimeField(auto_now_add=True)
-    weather_status = models.CharField(max_length=10000, blank=True, null=True)
+    created_time = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-      unique_together = ["payload", "received_time"]
-      ordering = ["received_time"] 
+        unique_together = ["payload", "created_time"]
+        ordering = ["received_time"]
         
     def raw(self):
         return self.payload
    
-    def recieved_delay(self):
-        if self.dispatch_time != self.recieved_time:
-           delay = (self.dispatch_time-self.recieved_time).total_seconds()
+    def received_delay(self):
+        if self.dispatch_time != self.received_time:
+           delay = (self.dispatch_time-self.received_time).total_seconds()
            return delay
         else:
            return None
        
     def created_delay(self):
-         if self.recieved_time != self.created_time:
-           delay = (self.recieved_time-selfself.created_time).total_seconds()
-           return delay
-         else:
-           return None
+        if self.recieved_time != self.created_time:
+            delay = (self.recieved_time-self.created_time).total_seconds()
+            return delay
+        else:
+            return None
        
     def delay(self):
         rd = self.recieved_delay(self)
@@ -209,57 +196,63 @@ class Incident(models.Model):
             return rd, cd
         else:
             return False
-            
-class IncidentData(models.Model):
-    incident = models.ForeignKey(Incident)
-    key = models.CharField(max_length=200, blank=True)
-    value = models.CharField(max_length=200, blank=True)
-    
-    def raw(self):
-        return self.incident.id
-    
+
+
+class IncidentMeta(models.Model):
+    incident = models.OneToOneField(Incident, related_name="meta")
+    location = models.CharField(max_length=250)
+    venue = models.CharField(max_length=250)
+    dispatch = models.CharField(max_length=250)
+    intersection = models.CharField(max_length=250)
+    unit = models.CharField(max_length=250)
+
+    def __unicode__(self):
+        return str(self.incident.id)
+
+
+class WeatherSnapshot(models.Model):
+    incident = models.OneToOneField(IncidentMeta, related_name="weather")
+    description = models.CharField(max_length=2000)
+    station = models.CharField(max_length=200)
+    wind_speed = models.FloatField()
+    wind_heading = models.FloatField()
+    rain = models.FloatField
+    clouds = models.IntegerField
+    temperature = models.FloatField()
+
+
 CONSTRUCTION_CLASS = (
     ('1', 'Fire Resistive'),
     ('2', 'Non Combustible'),
     ('3', 'Ordinary'),
     ('4', 'Mill'),
     ('5', 'Wood Frame'),
+    ('6', 'Unknown'),
 )
 
-class Structure(models.Model):
-    location = models.ForeignKey(FixedLocation)  
-    construction = models.IntegerField(choices=CONSTRUCTION_CLASS)
-    stories = models.IntegerField()
-    sq_ft = models.IntegerField()
-    access_street = models.CharField(max_length=100)
-    is_commercial = models.BooleanField(default=False)
-    is_residential = models.BooleanField(default=False)
-    has_sprinklers = models.BooleanField(default=False)
-    fd_conn_loc = models.CharField(max_length=100)
-    has_hazmat = models.BooleanField(default=False)
-    has_preplan = models.BooleanField(default=False)
-    preplan = models.TextField()
-    objects = models.GeoManager()
-    
-    def __unicode__(self):
-        return self.name
-     
-class FireHouse(models.Model):
-    structure = models.ForeignKey(Structure)
-    name = models.CharField(max_length=100)
-    primary_response_area = models.ForeignKey(PrimaryResponseArea)
-    objects = models.GeoManager()
-    
-    def __unicode__(self):
-        return self.name
-    
-#Potential fire appliances to map
+BUILDING_TYPE = (
+    ('1', 'Residence'),
+    ('2', 'Commercial'),
+    ('3', 'Goverment'),
+    ('4', 'Industrial'),
+    ('6', 'Unknown'),
+)
+
 FIXED_APPLIANCES = (
     ('1', 'Hydrant'),
     ('2', 'Standpipe'),
     ('3', 'Sprinkler Control'),
     ('4', 'FD Connection'),
 )
+
+# NFPA 2015 hydrant classification
+NFPA_HYDRANT_CLASS = (
+    ('1', 'AA'),
+    ('2', 'B'),
+    ('3', 'C'),
+    ('4', 'D'),
+)
+
 
 class FixedFireAppliance(models.Model):
     location = models.ForeignKey(FixedLocation)
@@ -270,13 +263,41 @@ class FixedFireAppliance(models.Model):
     def __unicode__(self):
         return self.name
 
-#NFPA 2015 hydrant classification
-NFPA_HYDRANT_CLASS = (
-    ('1', 'AA'),
-    ('2', 'B'),
-    ('3', 'C'),
-    ('4', 'D'),  
-)
+
+class Structure(models.Model):
+    name = models.CharField(max_length=1500, blank=True, null=True)
+    location = models.ForeignKey(FixedLocation)
+    construction = models.IntegerField(choices=CONSTRUCTION_CLASS, blank=True, null=True)
+    stories = models.IntegerField()
+    sqft = models.IntegerField(blank=True, null=True)
+    access = models.TextField(blank=True, null=True)
+    type = models.IntegerField(choices=BUILDING_TYPE)
+    sprinklers = models.BooleanField(default=False)
+    appliances = models.ManyToManyField(FixedFireAppliance, blank=True, null=True)
+    hazmat = models.BooleanField(default=False, blank=True)
+    preplan = models.TextField(blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Agency(models.Model):
+    #owner = models.ForeignKey(UserProfile)
+    name = models.CharField(max_length=100)
+    unit = models.IntegerField()
+
+    def __unicode__(self):
+        return self.name
+
+
+class Station(Structure):
+    description = models.CharField(max_length=100)
+    agency = models.ForeignKey(Agency, related_name="stations")
+    #primary_response_area = models.ForeignKey(PrimaryResponseArea)
+
+    def __unicode__(self):
+        return self.name
+
 
 class Hydrant(models.Model):
     fixed_applicance = models.ForeignKey(FixedFireAppliance)
@@ -293,34 +314,6 @@ class Hydrant(models.Model):
     static_pressure = models.FloatField()
     flow_pressure = models.FloatField()
     resid_pressure = models.FloatField()
-    objects = models.GeoManager()
   
     def __unicode__(self):
         return self.name
-  
-class DraftSite(models.Model):
-    location = models.ForeignKey(FixedLocation) 
-    objects = models.GeoManager()
-    
-    def __unicode__(self):
-        return self.name
-    
-class Apparatus(models.Model):
-    firehouse = models.ForeignKey(FireHouse)
-    location = models.PointField(srid=4326)
-    type = models.CharField(max_length=100)
-    unit = models.CharField(max_length=20)
-    out_of_service = models.BooleanField(default=False)
-    availible = models.BooleanField(default=True)
-    objects = models.GeoManager()
-    
-    def __unicode__(self):
-        return self.name
-    
-class Firefighter():
-    pass
-
-    def __unicode__(self):
-        return self.name
-
-    

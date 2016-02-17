@@ -1,29 +1,26 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 
+from apps.collect.views import stream_twitter
+import apps.map.views
+import apps.collect.views
+import apps.public.views
+import apps.auth.views
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
-                       
-    #Forward facing URLs
-    url(r'^$', 'public.views.main', name='home'),
-                       
-    #Authentication                   
-    url(r'^/accounts/login/$', 'dispatch.views.login'),
-    url(r'^/accounts/logout/$', 'dispatch.views.logout'),
-    url(r'^/accounts/invalid/$', 'dispatch.views.invalid_login'),
-    
-    #User Interface
-    url(r'^dashboard/$', 'dispatch.views.dashboard', name='dashboard'),
-    url(r'^settings/$', 'dispatch.views.settingsView', name='settings'),
-    url(r'^incidents/$', 'dispatch.views.incidentsView', name='incidents'),
-    url(r'^map/$', 'map.views.mapView', name='mapView'),
-    url(r'^chart/$', 'chart.views.chartView', name='chart'),
-    url(r'^board/$', 'respond.views.respondView', name='board'),
+urlpatterns = [
+    # Admin and Auth URLs
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^accounts/login/$', apps.auth.views.app_login),
+    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^dispatches/$', apps.map.views.map_view),
+    url(r'^graph/$', apps.map.views.bubble_view),
+    url(r'^get_geoincidents/$', apps.map.views.get_geoincidents),
+    #url(r'^get_streetview/(?P<location_string>.*)/$', apps.map.views.get_streetview),
+    url(r'^most_recent/$', apps.map.views.most_recent_dispatch),
+]
 
-    #Incident db population
-    url(r'^import/(?P<source>\w{0,50})/$', 'collect.views.import_incidents'),
-
-
-)
+# Do once on Django startup. Is there a better place for this to live?
+stream_twitter()

@@ -1,14 +1,13 @@
 from hendrix.deploy.base import HendrixDeploy
-import sys, os
+from txsockjs.factory import SockJSResource
+from hendrix.contrib.async.resources import MessageHandlerProtocol
+from hendrix.facilities.resources import NamedResource
+from twisted.internet.protocol import Factory
 
+message_resource = NamedResource("twitter-dispatches")
+message_resource.putChild("dispatch-stream", SockJSResource(Factory.forProtocol(MessageHandlerProtocol)))
 
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'main.settings'
-sys.path.insert(0, '/home/k/git/Dispatch.py/main/')
-
-import pdb; pdb.set_trace()
-
-#Run Hendrix
-options = {'settings':'main.settings'}
-deployer = HendrixDeploy(options=options)
+deployer = HendrixDeploy(options={"settings": "settings"})
+deployer.resources.append(message_resource)
 deployer.run()
+

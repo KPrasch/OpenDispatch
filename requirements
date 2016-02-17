@@ -12,4 +12,4 @@ django-twitter-api
 
 
 #Should come last because of installation errors, and repo deprication.
-pywapi
+#pywapi
