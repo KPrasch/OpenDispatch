@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
-def main(request):
-    '''
-    Public facing web page.
-    '''
-    return render(request, 'public.html')
+
+def about_view(request):
+    """
+    About Page
+    """
+    return render(request, 'about.html')
