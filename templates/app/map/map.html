@@ -66,6 +66,8 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
 
     <div id="burger"><img src="/static/img/burger.png"></div>
 
+    <div id="slider"></div>
+
     <div id='map'></div>
 
     <div id="sidebar">
@@ -108,7 +110,7 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
     <div id="lower-panes-container">
             <div id="insight-controls">
                 <ul id="insight-controls-list">
-                    <li class="chart-controls"><img src="/static/img/burger.png"/></li>
+                    <li id="hide-button" class="chart-controls"><img src="/static/img/burger.png"/></li>
                     <li class="chart-controls"><img src="/static/img/volume-chart.svg"/></li>
                     <li class="chart-controls"><img src="/static/img/time-chart.svg"/></li>
                     <li class="chart-controls"><img src="/static/img/weather-chart.svg"/></li>

@@ -18,4 +18,5 @@ nosetests.xml
 coverage.xml
 *.log
 docs/_build/
-
+*.xml
+*migrations*
