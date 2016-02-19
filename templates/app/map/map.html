@@ -310,7 +310,24 @@ $(".nano").nanoScroller({ alwaysVisible: true });
 
 
 $( "#slider" ).mouseup(function() {
-  alert( "Handler for .mouseup() called." );
+  var dateSliderBounds = $("#slider").dateRangeSlider("bounds");
+  var min = dateSliderBounds.min.toString();
+  var max = dateSliderBounds.max.toString();
+
+    $.ajax({
+        type:"POST",
+        url: "/incidents/filter/daterange",
+        dataType: "json",
+        data: {min:min, max:max},
+        close: function () {
+
+        },
+        success: function (data) {
+        IncidentLayer.setGeoJSON(data);
+        //map.fitBounds(IncidentLayer.getBounds());
+        }
+    });
+
 });
 
 
