@@ -68,7 +68,7 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
 
     <div id='map'></div>
 
-    <div id="sidebar" class="nano">
+    <div id="sidebar">
 
         <div id="list-filter">
             <div id="selected-digits">0</div>
@@ -79,7 +79,7 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
 
         </div>
 
-        <ul id="dispatch-list" class="nano-content">
+        <ul id="dispatch-list" class="nano nano-content">
             {% for i in incidents %}
                {% if i.meta.dispatch == '' %}
 

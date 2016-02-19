@@ -99,7 +99,7 @@ a {
 
 #sidebar {
     background-color: white;
-    border-right: 1px solid black;
+    border-right: 1px solid #888;
     height: 100%;
     left: 3%;
     position: absolute;
@@ -107,9 +107,10 @@ a {
     width: 30%;
     z-index: 555;
     min-width: 300px;
-    border-left: 1px solid black;
-    margin-top: 2px;
+    border-left: none;
+    margin-top: 1px;
     border-top-right-radius: 3px;
+    border-top:1px solid #888;
 }
 
 #notifier {
@@ -130,8 +131,13 @@ a {
     overflow-x: hidden;
     padding: 0;
     position: absolute;
-    margin-top: 15%;
+    margin-top: 52px;
     color: black;
+    overflow-y: scroll;
+}
+
+#dispatch-list > li {
+    border-left: 1px solid #888 !important;
 }
 
 .meta-created {
@@ -182,8 +188,7 @@ a {
 	z-index: 1122;
 	height: 300px;
 	background-color: white;
-	border-top: 1px solid black;
-	border-left: 1px solid black;
+	border-top: 1px solid #777;
 }
 
 #insight-controls {
@@ -195,7 +200,7 @@ a {
 }
 
 .lower-panes {
-    border-right: 1px solid black;
+    border-right: 1px solid #888;
     bottom: 0;
     float: left;
     height: 300px;
@@ -226,17 +231,19 @@ a {
 	font-size: 25px;
     display: inline-block;
 	float: right;
-	padding: 0.25em 0.5em;
+	padding: 0.48em 0.5em;
+	padding-top: 0.43em;
 }
 
 #selected-digits {
     border-left: 1px solid #888;
 	font-size: 25px;
 	display: block;
-	padding: 0.25em 0.5em;
+	padding: 0.48em 0.5em;
+	padding-top: 0.43em;
 	float: right;
 }
-#list-filter-input:after {
+#list-filter-input::after {
     display: table;
     content: "";
     clear: both;
@@ -262,12 +269,12 @@ a {
     top: 0;
     height: 100%;
     width: 100%;
-    border: 1px solid black;
+    border: 1px solid #888;
     z-index: 555;
 }
 
 .incident-li {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #888;
     height: 53px;
     list-style: outside none none;
     margin: 0;
@@ -353,8 +360,9 @@ a {
 
 #list-filter {
     width: 100%;
-    position: relative;
-    border-bottom: 1px solid black;
+    display: block;
+    height:52px;
+    border-bottom: 1px solid #888;
 }
 
 
