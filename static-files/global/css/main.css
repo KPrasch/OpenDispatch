@@ -16,7 +16,8 @@ a {
 }
 
 #top-bar {
-    height: 5%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     background-color: #3887BE;
     top: 0;
     left: 0;
@@ -25,24 +26,51 @@ a {
     position: absolute;
 }
 
+#login-meta {
+    position: relative;
+    height: 30px;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    width: 100%;
+    background: rgb(240, 240, 240);
+    padding-top: 1.33em;
+    width: 95.5%;
+    margin-top: 40px;
+}
+
+#forgot-password  {
+    width: 289px;
+    margin-right: auto;
+    margin-left: auto;
+    color: #2323DD;
+    text-size: 9px;
+    text-decoration: underline;
+    padding-top: 5px;
+    text-align: left;
+}
+
+#sign-up {
+    margin-right: auto;
+    margin-left: auto;
+}
+
 #burger {}
 
 .nav-label {
 	float: left;
 	position: relative;
-	left: 10px;
 	margin-left: 32px;
 	color: #D8D8D8;
 }
 
 #left-nav {
-    position: absolute;
+    float: left;
     left: 0px;
     padding: 6px;
 }
 
 #right-nav {
-    position: absolute;
+    float: right;
     right: 2%;
     padding: 6px;
 }
@@ -52,6 +80,7 @@ a {
     height: 95%;
     width: 100%;
     top: 5%;
+    overflow: hidden;
 }
 
 #sidebar {
@@ -128,29 +157,41 @@ a {
 
 
 #lower-panes-container {
-    bottom: 0%;
-    right: 0%;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    width: 67%;
-    z-index: 1122;
-    height: 300px;
-    background-color: white;
+	bottom: 0%;
+	right: 0%;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	width: 66.75%;
+	z-index: 1122;
+	height: 300px;
+	background-color: white;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+}
+
+#insight-controls {
+    position: relative;
+    height: 100%;
+    width: 35px;
+    float: left;
+    background-color: #F0F0F0;
 }
 
 .lower-panes {
     border-right: 1px solid black;
     bottom: 0;
     float: left;
-    height: 170px;
+    height: 300px;
     left: 24px;
     position: relative;
     width: 33%;
 }
 
 
-#pane-two {}
+#pane-two {
+    width: 47%;
+}
 
 #total-counter-label {
     color: buttonshadow;
@@ -166,26 +207,26 @@ a {
 }
 
 #counter-digits {
-    font-size: 5em;
-    padding-left: 5%;
-    padding-top: 5%;
-    float: left;
+    border-right: 1px solid black;
+	font-size: 25px;
+	padding-left: 5%;
+	padding-top: 15px;
+	float: right;
+	position: relative;
 }
 
 #selected-digits {
-    font-size: 5em;
-    padding-left: 35%;
-    padding-top: 5%;
-    padding-right: 5%;
-    float: left;
-    border-right: 1px solid black;
+	font-size: 25px;
+	padding-left: 7%;
+	padding-top: 15px;
+	padding-right: 5%;
+	float: right;
+	position: relative;
 }
 
 #pane-three {
-    width: 65%;
+    width: 47%;
 }
-
-
 
 #pane-four {}
 
@@ -294,16 +335,16 @@ a {
 
 
 #list-filter-input {
-    border-bottom: 1px solid black;
-    border-left: medium none;
-    border-top: medium none;
-    height: 30%;
-    left: 10px;
-    padding: 10px;
-    position: relative;
-    top: 10px;
-    width: 89%;
-
+	border-bottom: 1px solid black;
+	border-left: medium none;
+	border-top: medium none;
+	height: 30%;
+	left: 10px;
+	/* padding: 10px; */
+	position: relative;
+	top: 25px;
+	width: 70%;
+	float: none;
 }
 
 .streetview-img {
@@ -319,7 +360,6 @@ a {
 }
 
 #login-background {
-    position: absolute;
     width: 100%;
     height: 100%;
     background-color: #BFBFBF;
@@ -327,9 +367,90 @@ a {
 
 #login-container {
     background-color: white;
+    /*
     position: absolute;
     top: 20%;
     left: 37%;
     height: 55%;
     width: 25%;
+    */
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 550px;
+    height: 100%;
+    padding-top: 3.5em;
+}
+
+#login-form-wrapper {
+    position: relative;
+    top: 50%;
+    transform: tranlateY(-50%);
+}
+
+#login-form-wrapper > div {
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: center;
+    padding: 12px;
+}
+
+#login-form-wrapper .user-input {
+    text-align: center;
+    padding: 8px;
+}
+
+#login-form-wrapper .user-input input {
+    padding: 14px;
+}
+
+#registration-form {
+    padding: 2em;
+    padding-top: 6em;
+}
+
+#registration-form > p {
+    width: 400px;
+    display: block;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#registration-form > p:nth-child(1) {
+    padding-bottom: 1.5em;
+}
+
+#registration-form > p:nth-child(3) {
+    padding-bottom: 1.5em;
+}
+
+#registration-form > p:nth-child(5) {
+    padding-bottom: 1.5em;
+}
+
+#registration-form > p:first-child input {
+    padding: 14px;
+    margin: 8px;
+    margin-left: 0px;
+}
+
+#registration-form > p > label {
+    display: block;
+}
+
+#registration-form .helptext {
+    font-size: 10px;
+    color: #787878;
+    display: block;
+}
+
+.registration-width {
+    width: 1100px !important;
+}
+
+
+#add-location-form {
+    margin-top: 8em;
 }

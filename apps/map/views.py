@@ -15,29 +15,32 @@ from apps.map.models import *
 from apps.map.serializers import IncidentGeoSerializer
 from private.dispatch_settings import *
 from private.secret_settings import *
+from collections import OrderedDict
 
 
-def map_view(request):
+def map_view(request, venue=None):
     """
     Return the Template
     """
-    past_incidents = Incident.objects.all().order_by("-dispatch_time")
+    if venue is None:
+        past_incidents = Incident.objects.all().order_by("-dispatch_time")
+    else:
+        past_incidents = Incident.objects.all().filter(meta__venue__icontains=venue).order_by("-dispatch_time")
 
-    dispatch_dump = []
-    dispatch_counts = []
+    incident_types = {pi.meta.dispatch for pi in past_incidents if pi.meta.dispatch}
+    incident_counts = (past_incidents.filter(meta__dispatch=i).count() for i in incident_types)
+    mapped_values = dict(zip(incident_types, incident_counts))
+    ordered_values = OrderedDict(sorted(mapped_values.items(), key=lambda t: t[1]))
 
-    for pi in past_incidents:
-        dispatch_dump.append(pi.meta.dispatch)
-
-    incident_types = list(set(dispatch_dump))
-
-    for i in incident_types:
-        dispatch_counts.append(dispatch_dump.count(i))
-
-    mapped_values = dict(zip(incident_types, dispatch_counts))
+    venues = {inc.meta.venue for inc in past_incidents}
+    venue_counts = (past_incidents.filter(meta__venue=v).count() for v in venues)
+    pie_chart = dict(zip(venues, venue_counts))
+    sorted_pie = OrderedDict(sorted(pie_chart.items(), key=lambda t: t[1]))
 
     return render(request, 'app/map/map.html', {"incidents": past_incidents, "incident_types":  incident_types,
-                                                "incident_chart": mapped_values,
+                                                "incident_chart": ordered_values,
+                                                "pie_chart": sorted_pie,
+                                                "venue_filter": venue,
                                                 "locale_state": LOCALE_STATE})
 
 
@@ -61,15 +64,20 @@ def most_recent_dispatch(request):
 
 @api_view(['GET'])
 @renderer_classes((JSONRenderer,))
-def get_geoincidents(request):
+def get_geoincidents(request, venue=None):
     """
     FeatureCollection list of all Incidents in GeoJSON
 
     {"type":"FeatureCollection","features":[]}
 
     """
-    geoincidents = Incident.objects.all().order_by('-dispatch_time')
+    if venue is None:
+        geoincidents = Incident.objects.all().order_by('-dispatch_time')
+    else:
+        geoincidents = Incident.objects.all().filter(meta__venue__icontains=venue).order_by('-dispatch_time')
+
     serializer = IncidentGeoSerializer(geoincidents, many=True)
+
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 

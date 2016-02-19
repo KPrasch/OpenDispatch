@@ -71,7 +71,12 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
     <div id="sidebar" class="nano">
 
         <div id="list-filter">
-            <input id="list-filter-input"></input>
+            <div id="selected-digits">0</div>
+            <div id='counter-digits'>{{ incidents.count }}</div>
+            <div id="loader"><img src="/static/img/loader.gif" /></div>
+            <label for="tags"></label>
+            <input id="list-filter-input" placeholder="Filter Incidents"></input>
+
         </div>
 
         <ul id="dispatch-list" class="nano-content">
@@ -90,7 +95,7 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
                     <div class="meta-created">{{ i.dispatch_time }}</div>
                     <div class="meta-dispatch">{{ i.meta.dispatch }}</div>
                     <div class="meta-coords">{{ i.location.point.x }}|{{ i.location.point.y }}</div>
-                    <div class="meta-venue">{{ i.meta.location }}</div>
+                    <div class="meta-venue">{{ i.meta.location }} : {{ i.location.street_address }}</div>
                     <div class="meta-xsts">{{ i.meta.intersection }}</div>
                 </li>
 
@@ -101,16 +106,13 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
     </div>
 
     <div id="lower-panes-container">
-
+            <div id="insight-controls"></div>
             <div id='pane-two' class="panes lower-panes">
-                <div id="selected-digits">0</div>
-                <div id='counter-digits'>{{ incidents.count }}</div>
-                 <div id="selected-counter-label">Incidents Selected</div>
-                <div id="total-counter-label">Incidents Counted</div>
+
             </div>
 
             <div id='pane-three' class="panes lower-panes">
-              <div id="chart-1" style="position: relative; min-width: 300px; height: 300px; margin: 0 auto;"></div>
+              <div id="chart-1" style="position: relative; min-width: 100px; height: 300px; margin: 0 auto;"></div>
             </div>
 
     </div>
@@ -120,6 +122,120 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
 <div id="notifier"></div>
 
 <script>
+
+/* CSRF =====================================================*/
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$(function() {
+    $("#login-form").on("submit", function(event) {
+        preventDefault();
+        $.ajax({
+            type: "POST",
+
+        });
+    });
+});
+
+$(function() {
+	var $loading = $('#loader').hide();
+	$(document)
+	.ajaxStart(function () {
+		$loading.show();
+	})
+	.ajaxStop(function () {
+		$loading.hide();
+	});
+	return false;
+});
+
+
+$(function() {
+	$("#list-filter-input").autocomplete({
+		minLength: 0,
+		disabled: false,
+		source: function( request, response ) {
+			$.ajax({
+				type:"GET",
+				url: "/incidents/search/",
+				dataType: "json",
+				data: {term:request.term},
+				close: function () {
+
+				},
+				success: function (data) {
+					IncidentLayer.setGeoJSON(data);
+				}
+			});
+		}
+	});
+});
+
+
+$(function () {
+    $('#pane-two').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Call Volume by Agency'
+        },
+        tooltip: {
+            pointFormat: '<b>{point.y:.1f} dispatches</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Agencies',
+            colorByPoint: true,
+            data: [{% for k, v in pie_chart.items %}{
+                name: '{{ k }}',
+                y: {{ v }}
+            },{% endfor %}]
+        }]
+    });
+});
+
 
 $(function () {
     $('#chart-1').highcharts({
@@ -201,32 +317,6 @@ L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmp
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
 
 {% comment %}
-  var geojson = [
-
-  {% for i in incidents %}
-
-  {
-    "type": "Feature",
-    "geometry": {
-      "type": "Point",
-      "coordinates": [{{ i.location.lng }}, {{ i.location.lat }}]
-    },
-    "properties": {
-      "title": "{{ i.meta.dispatch }} - {{ i.meta.location }}",
-      "meta": {"addr" : "{{ i.location.street_address }}",
-                     "xsts" : "{{ i.meta.intersection }}",
-                      "lng" : "{{ i.location.lng }}",
-                      "lat" : "{{ i.location.lat }}",
-                      "app_time" : "{{ i.dispatch_time }}",
-                      "incident_id" : "{{ i.id }}"}
-    }
-  },
-
-  {% endfor %}
-
-];
-
-
 if (!mapboxgl.supported()) {
     alert('Your browser does not support Mapbox GL');
 
@@ -246,8 +336,14 @@ var map = L.mapbox.map('map', null, {minZoom: 9, maxZoom:22})
 var layers = document.getElementById('menu-ui');
 
 var ClusterLayer = new L.MarkerClusterGroup();
-var IncidentLayer = new L.mapbox.featureLayer().loadURL('/get_geoincidents/');
 
+{% if venue_filter == None %}
+    var geoJSON = '/get_geoincidents'
+{% else %}
+    var geoJSON = '/get_geoincidents/{{ venue_filter }}'
+{% endif %}
+
+var IncidentLayer = new L.mapbox.featureLayer().loadURL(geoJSON);
 
 //var MostRecentLayer = new L.mapbox.featureLayer()
 //    .loadURL('https://wanderdrone.appspot.com/')
@@ -277,7 +373,7 @@ addLayer(L.mapbox.tileLayer('kprasch.59f9f541'), 'Civil Borders', 7, "true");
 
 
 function addLayer(layer, name, zIndex, initial) {
-            // Create a simple layer switcher that
+    // Create a simple layer switcher that
     // toggles layers on and off.
     var link = document.createElement('a');
         link.href = '#';
@@ -312,7 +408,11 @@ function addLayer(layer, name, zIndex, initial) {
 IncidentLayer.on('layeradd', function(e) {
   var marker = e.layer,
   feature = marker.feature;
-  marker.setIcon(L.icon({"iconUrl": "/static/img/RedDot.svg", "iconSize": [9, 9], "iconAnchor": [0, 0], "popupAnchor": [4, 0], "className": "dot"}));
+  marker.setIcon(L.icon({"iconUrl": "/static/img/RedDot.svg",
+                         "iconSize": [9, 9],
+                         "iconAnchor": [0, 0],
+                         "popupAnchor": [4, 0],
+                         "className": "dot"}));
 
   // Create custom popup content
   var popupContent =  '<div class="incident-tooltip">' +
@@ -330,23 +430,19 @@ IncidentLayer.on('layeradd', function(e) {
                        '<li><img class="streetview-img" src="' + feature.properties.location.streetview_url + '"></li>'
                        '</ul></div>';
 
-   // http://leafletjs.com/reference.html#popup
+  // http://leafletjs.com/reference.html#popup
   marker.bindPopup(popupContent,{
-    closeButton: true,
-    keepInView: true,
-    minWidth: 320
-  }).on('click', function(e) {
-    list_id = e.target.feature.id;
-    $("#dispatch-list>li.incident-li-active").removeClass("incident-li-active");
+                   closeButton: true,
+                   keepInView: true,
+                   minWidth: 320
+                   }).on('click', function(e) {
+      list_id = e.target.feature.id;
+      $("#dispatch-list>li.incident-li-active").removeClass("incident-li-active");
 
-    $('li[data-incidentId='+list_id+']').addClass('incident-li-active');
-    $(".nano").nanoScroller({ scrollTo:  $('li[data-incidentId='+list_id+']') });
+      $('li[data-incidentId='+list_id+']').addClass('incident-li-active');
+      $(".nano").nanoScroller({ scrollTo:  $('li[data-incidentId='+list_id+']') });
 
-
-
-
-});
-
+    });
 });
 
 //IncidentLayer.setGeoJSON();
@@ -359,7 +455,9 @@ map.on('ready', function() {
 
 });
 
-var sliderControl = L.control.sliderControl({position: "topright", layer: IncidentLayer, range: true});
+var sliderControl = L.control.sliderControl({position: "topright",
+                                             layer: IncidentLayer,
+                                             range: true});
 map.addControl(sliderControl);
 sliderControl.startSlider();
 //$('#slider-timestamp').html(options.markers[ui.value].feature.properties.time.substr(0, 19));

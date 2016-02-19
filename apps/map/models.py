@@ -4,6 +4,8 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.db import models
 
+from apps.people.models import Account
+
 
 # Areas
 class WorldBorder(models.Model):
@@ -317,3 +319,23 @@ class Hydrant(models.Model):
   
     def __unicode__(self):
         return self.name
+
+
+USER_LOCATION_CATEGORIES = (
+    ('Private Residence', 'Private Residence'),
+    ('Shared Residence', 'Shared Residence'),
+    ('Business', 'Business'),
+    ('Commercial Structure', 'Commercial Structure'),
+    ('Vacation Home', 'Vacation Home'),
+    ('Apartments/Complex', 'Apartments/Complex'),
+)
+
+class UserLocation(models.Model):
+    account = models.OneToOneField(Account)
+    poi = models.OneToOneField(FixedLocation)
+    title = models.CharField(max_length=64)
+    description = models.TextField(max_length=512)
+    category = models.CharField(choices=USER_LOCATION_CATEGORIES, max_length=256)
+
+    def __unicode__(self):
+        return self.title

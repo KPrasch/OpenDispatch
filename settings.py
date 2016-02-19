@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'apps.calltaker',
     'apps.responder',
     'apps.map',
+    'apps.people',
     'apps.weather',
     'apps.gmail',
     'simplejson',

@@ -6,13 +6,37 @@
 
     <div id="login-container">
 
+        <div id="login-form-wrapper">
+            <div id="welcome-header">
+                <h2>Welcome!</h2>
+            </div>
 
-        <div id="username">
-        <input id="username-input"></input>
-        </div>
+            <form id="login-form">
+                <div id="username" name="usernm" class="user-input">
+                    <input id="username-input" placeholder="Username"></input>
+                </div>
 
-        <div id=password">
-        <input id="password-input"></input>
+                <div id=password" name="passwd" class="user-input">
+                    <input id="password-input" type="password" placeholder="Password"></input>
+                    <div id="forgot-password">Forgot password?</div>
+                </div>
+
+                <input type="submit" id="form-submit" style="display: none;" onSubmit="preventDefault()"></input>
+            </form>
+            <div id="login-meta">
+                <div id="sign-up">Sign Up</div>
+            </div>
+
+            <div id="registration-form">
+                {{ user_form.as_p }}{{ account_form.as_p }}
+            </div>
+
+            <div id="add-location-form">
+                {{ fixed_location_form.as_p }}
+                <div id="little-map"></div>
+                {{ user_location_form.as_p }}
+            </div>
+
         </div>
 
     </div>
@@ -20,5 +44,10 @@
 
 </div>
 
+<script>
+    $(function() {
+        $("#registration-form").show();
+    );
+</script>
 
 {% endblock %}

@@ -11,20 +11,23 @@ from urlparse import parse_qs
 
 import re
 from dateutil import parser
-
 from django.views.decorators.csrf import csrf_exempt
-
 from django.db import IntegrityError
-
 from django.http import HttpResponse
 import simplejson
+
+from rest_framework.response import Response
 import requests
-
 from requests_oauthlib import OAuth1
-
 from hendrix.contrib.async.messaging import hxdispatcher
-
 from hendrix.experience import crosstown_traffic
+
+from rest_framework.renderers import JSONRenderer
+
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework import status
+
+from django.db.models import Q
 
 from apps.map.models import Incident, IncidentMeta, FixedLocation, WeatherSnapshot
 from apps.map.views import compile_incident_location_string, geocode
@@ -105,6 +108,31 @@ def stream_twitter():
     return HttpResponse(status=200)
 
 
+@api_view(['GET'])
+@renderer_classes((JSONRenderer,))
+def search_incidents(request):
+    """
+    Autocomplete
+    """
+    #import pdb; pdb.set_trace()
+    q = request.GET.get('term')
+
+    if q == '':
+        matches = Incident.objects.all().order_by("-dispatch_time")
+    else:
+        matches = Incident.objects.all().filter(Q(meta__dispatch__icontains=q) |
+                                                Q(meta__venue__icontains=q) |
+                                                Q(location__street_address__icontains=q)) \
+                                                .order_by("-dispatch_time")
+
+    serializer = IncidentGeoSerializer(matches, many=True)
+
+    if bool(matches) is True:
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+
 def parse_incident(payload, twitter=False):
     """
     Using configurable incident data fields, parse the data into incident models with all of the information required.
@@ -177,6 +205,18 @@ def get_weather_snapshot(lon, lat):
 
     import pdb; pdb.set_trace()
     return response
+
+
+def map_intelligence_filter(incident_dict):
+    # Proximity to User Set Locations
+    # Thruway Detection
+    # Mutual Aid Detection
+    # Out of Locale Detection
+    # 2nd Alarm detection
+    # Target Hazard Detection
+    # MediVac / LZ Detection
+    # Proximity to Preplaned Structures
+    pass
 
 
 def process_import(incident_str, received_datetime):
