@@ -311,12 +311,12 @@ $(".nano").nanoScroller({ alwaysVisible: true });
 
 $( "#slider" ).mouseup(function() {
   var dateSliderBounds = $("#slider").dateRangeSlider("bounds");
-  var min = dateSliderBounds.min.toString();
-  var max = dateSliderBounds.max.toString();
+  var min = dateSliderBounds.min.toJSON();
+  var max = dateSliderBounds.max.toJSON();
 
     $.ajax({
-        type:"POST",
-        url: "/incidents/filter/daterange",
+        type: "GET",
+        url: "/incidents/filter/daterange/",
         dataType: "json",
         data: {min:min, max:max},
         close: function () {
@@ -333,8 +333,8 @@ $( "#slider" ).mouseup(function() {
 
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
   $("#slider").dateRangeSlider({
-    bounds: {min: new Date(2012, 0, 1), max: new Date(2012, 11, 31, 12, 59, 59)},
-    defaultValues: {min: new Date(2012, 1, 10), max: new Date(2012, 4, 22)},
+    bounds: {min: new Date(2016, 0, 1), max: new Date(2016, 11, 31, 12, 59, 59)},
+    defaultValues: {min: new Date(2016, 0, 1), max: new Date()},
     scales: [{
       first: function(value){ return value; },
       end: function(value) {return value; },

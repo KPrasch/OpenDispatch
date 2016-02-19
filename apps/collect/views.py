@@ -132,21 +132,21 @@ def search_incidents(request):
     else:
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
-@api_view([''])
+@api_view(['GET'])
 @renderer_classes((JSONRenderer,))
-def filter_incidents_datetime(request):
+def filter_incidents_daterange(request):
     """
     filter by dateranges
     """
-    start_datetime = request.POST.get("min")
+    start_datetime = request.GET.get("min")
     min_dt = datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M:%S.%fZ')
-    end_datetime = request.POST.get("max")
+    end_datetime = request.GET.get("max")
     max_dt = datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M:%S.%fZ')
 
-    if request.POST.get("min") != '':
+    if request.GET.get("min") != '':
         return Response(status=status.HTTP_204_NO_CONTENT)
     else:
-        matches = Incident.objects.all().orderfilter(dispatch_time__range=[min_dt, max_dt])
+        matches = Incident.objects.all().order_by('-dispatch_time').filter(dispatch_time__range=[min_dt, max_dt])
 
     serializer = IncidentGeoSerializer(matches, many=True)
 
