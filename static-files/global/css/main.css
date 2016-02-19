@@ -3,7 +3,9 @@
     src: url('/static/fonts/Ubuntu-R.ttf');
 }
 
-html {}
+html {
+    -webkit-font-smoothing: antialiased;
+}
 
 body {
     margin:0;
@@ -13,17 +15,6 @@ body {
 
 a {
     text-decoration: none;
-}
-
-#top-bar {
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    background-color: #3887BE;
-    top: 0;
-    left: 0;
-    z-index: 1111;
-    width: 100%;
-    position: absolute;
 }
 
 #login-meta {
@@ -56,22 +47,45 @@ a {
 
 #burger {}
 
+#top-bar {
+    padding-top: 0.25em;
+    padding-bottom: 0.28em;
+    background-color: #3887BE;
+    top: 0;
+    left: 0;
+    z-index: 1111;
+    width: 100%;
+    position: absolute;
+    border-bottom: 3px solid  rgba(86, 138, 156, 0.6);
+}
+
 .nav-label {
 	float: left;
 	position: relative;
 	margin-left: 32px;
-	color: #D8D8D8;
+	margin-right: 32px;
+	color: #BBB;
+	cursor: not-allowed;
+	font-size: 13px;
+}
+
+#top-bar a {
+    color: #FFF;
+    font-weight: bold;
+    transition(all ease-in 0.25s);
+}
+#top-bar a:hover {
+    color: #D3ECF5;
+    transition(all ease-out 0.5s);
 }
 
 #left-nav {
     float: left;
-    left: 0px;
     padding: 6px;
 }
 
 #right-nav {
     float: right;
-    right: 2%;
     padding: 6px;
 }
 
@@ -94,6 +108,8 @@ a {
     z-index: 555;
     min-width: 300px;
     border-left: 1px solid black;
+    margin-top: 2px;
+    border-top-right-radius: 3px;
 }
 
 #notifier {
@@ -207,21 +223,23 @@ a {
 }
 
 #counter-digits {
-    border-right: 1px solid black;
 	font-size: 25px;
-	padding-left: 5%;
-	padding-top: 15px;
+    display: inline-block;
 	float: right;
-	position: relative;
+	padding: 0.25em 0.5em;
 }
 
 #selected-digits {
+    border-left: 1px solid #888;
 	font-size: 25px;
-	padding-left: 7%;
-	padding-top: 15px;
-	padding-right: 5%;
+	display: block;
+	padding: 0.25em 0.5em;
 	float: right;
-	position: relative;
+}
+#list-filter-input:after {
+    display: table;
+    content: "";
+    clear: both;
 }
 
 #pane-three {
@@ -327,24 +345,23 @@ a {
 .nano .nano-slider { background: #111; }
 
 #list-filter {
-    height: 53px;
-    width: 99%;
+    width: 100%;
     position: relative;
     border-bottom: 1px solid black;
 }
 
 
 #list-filter-input {
-	border-bottom: 1px solid black;
-	border-left: medium none;
+	border-bottom: 1px solid #777;
 	border-top: medium none;
-	height: 30%;
+	border-left: medium none;
 	left: 10px;
-	/* padding: 10px; */
+	padding: 5px !important;
+    padding-left: 0px;
 	position: relative;
-	top: 25px;
-	width: 70%;
-	float: none;
+	float:left;
+	width: 60%;
+    margin-top: 0.75em;
 }
 
 .streetview-img {
