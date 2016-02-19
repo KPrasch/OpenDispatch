@@ -91,9 +91,9 @@ a {
 
 #app-container {
     position: absolute;
-    height: 95%;
+    height: 100%;
     width: 100%;
-    top: 35px;
+    top: 70px;
     overflow: hidden;
 }
 
@@ -429,8 +429,8 @@ a {
 #slider {
     position: absolute;
     z-index: 1111;
-    top: 3px;
     width: 100%;
+    top: 37px;
 }
 
 #login-background {
