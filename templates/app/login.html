@@ -7,6 +7,7 @@
     <div id="login-container">
 
         <div id="login-form-wrapper">
+
             <div id="welcome-header">
                 <h2>Welcome!</h2>
             </div>
@@ -23,6 +24,7 @@
 
                 <input type="submit" id="form-submit" style="display: none;" onSubmit="preventDefault()"></input>
             </form>
+
             <div id="login-meta">
                 <div id="sign-up">Sign Up</div>
             </div>
@@ -32,22 +34,43 @@
             </div>
 
             <div id="add-location-form">
-                {{ fixed_location_form.as_p }}
-                <div id="little-map"></div>
                 {{ user_location_form.as_p }}
+                {{ fixed_location_form.as_p }}
             </div>
-
+            <div id="little-map"> </div>
         </div>
 
     </div>
 
 
 </div>
-
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 <script>
-    $(function() {
-        $("#registration-form").show();
-    );
+L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
+  var map = L.mapbox.map('little-map', 'mapbox.streets')
+      .setView([41.8900, -74.2600], 10)
+      .addControl(L.mapbox.geocoderControl('mapbox.places', {
+        keepOpen: true
+    }));
+
+  var featureGroup = L.featureGroup().addTo(map);
+
+  var drawControl = new L.Control.Draw({
+    edit: {
+      featureGroup: featureGroup
+    },
+    draw: {polyline: false,
+           polygon: false,
+           rectangle: false,
+           circle: false
+    }
+  }).addTo(map);
+
+  map.on('draw:created', function(e) {
+      featureGroup.addLayer(e.layer);
+  });
 </script>
+
+
 
 {% endblock %}

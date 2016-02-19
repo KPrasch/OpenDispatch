@@ -320,6 +320,13 @@ a {
     background:#3074a4;
 }
 
+#little-map {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    width: 90%;
+    height: 200px;
+}
 
 .nano { background: #bba; width: 500px; height: 500px; }
 .nano .nano-content { padding: 10px; }
