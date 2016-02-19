@@ -131,13 +131,12 @@ a {
     overflow-x: hidden;
     padding: 0;
     position: absolute;
-    margin-top: 52px;
     color: black;
-    overflow-y: scroll;
 }
 
 #dispatch-list > li {
     border-left: 1px solid #888 !important;
+    background: #FFF;
 }
 
 .meta-created {
@@ -363,6 +362,7 @@ a {
     display: block;
     height:52px;
     border-bottom: 1px solid #888;
+    z-index: -8;
 }
 
 
@@ -376,7 +376,7 @@ a {
 	position: relative;
 	float:left;
 	width: 60%;
-    margin-top: 0.75em;
+    margin-top: 0.75em; /* Ghetto hack sorry! */
 }
 
 .streetview-img {
@@ -485,4 +485,13 @@ a {
 
 #add-location-form {
     margin-top: 8em;
+}
+
+#loader {
+    display: none;
+    float: left;
+    display: inline;
+    margin-left: -13px;
+    margin-top: 13px;
+    z-index: -9;
 }
