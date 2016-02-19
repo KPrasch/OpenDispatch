@@ -218,6 +218,10 @@ a {
     width: 20px;
 }
 
+.chart-controls img:hover {
+    opacity: 0.5;
+}
+
 .lower-panes {
     border-right: 1px solid #888;
     bottom: 0;

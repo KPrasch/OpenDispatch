@@ -108,10 +108,10 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
     <div id="lower-panes-container">
             <div id="insight-controls">
                 <ul id="insight-controls-list">
-                    <li class="chart-controls"><img src="/static/img/burger.png"/></li>
-                    <li class="chart-controls"><img src="/static/img/volume-chart.svg"/></li>
-                    <li class="chart-controls"><img src="/static/img/time-chart.svg"/></li>
-                    <li class="chart-controls"><img src="/static/img/weather-chart.svg"/></li>
+                    <li id="minimize-lower-panes" class="chart-controls"><img src="/static/img/burger.png"/></li>
+                    <li id="volume-charts" class="chart-controls"><img src="/static/img/volume-chart.svg"/></li>
+                    <li id="time-charts" class="chart-controls"><img src="/static/img/time-chart.svg"/></li>
+                    <li id="weather-charts" class="chart-controls"><img src="/static/img/weather-chart.svg"/></li>
                 </ul>
 
             </div>
@@ -161,6 +161,10 @@ $.ajaxSetup({
     }
 });
 
+
+
+
+
 $(function() {
     $("#login-form").on("submit", function(event) {
         preventDefault();
@@ -199,6 +203,7 @@ $(function() {
 				},
 				success: function (data) {
 					IncidentLayer.setGeoJSON(data);
+					map.fitBounds(IncidentLayer.getBounds());
 				}
 			});
 		}
@@ -300,6 +305,12 @@ $(function () {
 
 // Zack did this.
 $(".nano").nanoScroller({ alwaysVisible: true });
+
+
+$( "#slider" ).mouseup(function() {
+  alert( "Handler for .mouseup() called." );
+});
+
 
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
   $("#slider").dateRangeSlider({
@@ -464,12 +475,6 @@ map.on('ready', function() {
 
 });
 
-var sliderControl = L.control.sliderControl({position: "topright",
-                                             layer: IncidentLayer,
-                                             range: true});
-map.addControl(sliderControl);
-sliderControl.startSlider();
-//$('#slider-timestamp').html(options.markers[ui.value].feature.properties.time.substr(0, 19));
 
 //var runLayer = omnivore.kml('/static/product/data/ulster-agencies.kml')
 //    .on('ready', function() {
