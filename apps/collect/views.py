@@ -139,8 +139,8 @@ def filter_incidents_datetime(request):
     filter by dateranges
     """
     q = request.POST.get('datetime')
-    start_datetime = q["start"]
-    end_datetime = q["end"]
+    start_datetime = q["min"]
+    end_datetime = q["max"]
 
     if q != '':
         return Response(status=status.HTTP_204_NO_CONTENT)
