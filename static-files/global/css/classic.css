@@ -5,15 +5,15 @@
 
 .ui-rangeSlider{
 	height:32px;
-	margin-top:6px;
+	margin-top:7px;
 	font-family: Arial, sans-serif;
 	font-size: 10px;
 }
 
 .ui-rangeSlider .ui-rangeSlider-innerBar{
 	height:16px;
-	margin:3px 6px;
-	background:#DDD;
+	margin:3px 0px;
+	background: rgba(255, 255, 255, 0.6);
 }
 
 .ui-rangeSlider .ui-rangeSlider-handle{
@@ -103,6 +103,6 @@ input.ui-editRangeSlider-inputValue{
 
 .ui-ruler-tick {
     padding-top: 1px;
-    color: #999;
+    color: #444;
     text-align: center;
 }

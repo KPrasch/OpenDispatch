@@ -11,6 +11,7 @@ body {
     margin:0;
     padding:0;
     font-family: ubuntu;
+    background-color: #65B560;
 }
 
 a {
@@ -237,6 +238,10 @@ a {
 
 .chart-controls img {
     width: 20px;
+}
+
+.chart-controls img:hover {
+    opacity: 0.5;
 }
 
 .lower-panes {

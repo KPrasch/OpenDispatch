@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^dispatches/$', apps.map.views.map_view),
     url(r'^dispatches/(?P<venue>.*)$', apps.map.views.map_view),
     url(r'^incidents/search/$', apps.collect.views.search_incidents),
+    url(r'^incidents/filter/datetime/$', apps.collect.views.filter_incidents_datetime),
     url(r'^graph/$', apps.map.views.bubble_view),
     url(r'^get_geoincidents/$', apps.map.views.get_geoincidents),
     url(r'^get_geoincidents/(?P<venue>.*)$', apps.map.views.get_geoincidents),

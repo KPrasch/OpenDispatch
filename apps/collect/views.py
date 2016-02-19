@@ -132,6 +132,28 @@ def search_incidents(request):
     else:
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['POST'])
+@renderer_classes((JSONRenderer,))
+def filter_incidents_datetime(request):
+    """
+    filter by dateranges
+    """
+    q = request.POST.get('datetime')
+    start_datetime = q["start"]
+    end_datetime = q["end"]
+
+    if q != '':
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        matches = Incident.objects.all().orderfilter(dispatch_time__range=[start_datetime, end_datetime])
+
+    serializer = IncidentGeoSerializer(matches, many=True)
+
+    if bool(matches) is True:
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
 
 def parse_incident(payload, twitter=False):
     """
