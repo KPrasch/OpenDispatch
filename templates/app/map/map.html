@@ -203,7 +203,7 @@ $(function() {
 				},
 				success: function (data) {
 					IncidentLayer.setGeoJSON(data);
-					map.fitBounds(IncidentLayer.getBounds());
+					 map.fitBounds(IncidentLayer.getBounds(), {paddingTopLeft: [-400, -800]});
 				}
 			});
 		}
@@ -372,8 +372,6 @@ var map = L.mapbox.map('map', null, {minZoom: 9, maxZoom:22})
 
 var layers = document.getElementById('menu-ui');
 
-var ClusterLayer = new L.MarkerClusterGroup();
-
 {% if venue_filter == None %}
     var geoJSON = '/get_geoincidents'
 {% else %}
@@ -381,6 +379,9 @@ var ClusterLayer = new L.MarkerClusterGroup();
 {% endif %}
 
 var IncidentLayer = new L.mapbox.featureLayer().loadURL(geoJSON);
+var ClusterLayer = new L.MarkerClusterGroup();
+
+
 
 //var MostRecentLayer = new L.mapbox.featureLayer()
 //    .loadURL('https://wanderdrone.appspot.com/')
@@ -388,25 +389,15 @@ var IncidentLayer = new L.mapbox.featureLayer().loadURL(geoJSON);
 //    .on('ready', run_recent)
 //    .addTo(map);
 
-//function run_recent() {
-//    MostRecentLayer.eachLayer(function(l) {
-//        map.panTo(l.getLatLng());
-//    });
-//    window.setTimeout(function() {
-//        MostRecentLayer.loadURL('/twitter-dispatches/dispatch-stream');
-//    }, 2000);
-//}
-
-
 //var heat = L.heatLayer([geojson], { maxZoom: 12 });
 
-addLayer(IncidentLayer, 'Incidents (all)', 1, "true");
-addLayer(ClusterLayer, 'Incidents (cluster)', 2, "false");
+addLayer(IncidentLayer, 'Incidents (all)', 1, "false");
+addLayer(ClusterLayer, 'Incidents (cluster)', 2, "true");
 //addLayer(heat, 'Heat Map', 3, false);
 addLayer(L.mapbox.tileLayer('mapbox.streets'), 'Streets', 4, "false");
 addLayer(L.mapbox.tileLayer('mapbox.satellite'), 'Satellite', 5, "false");
 addLayer(L.mapbox.tileLayer('mapbox.outdoors'), 'Outdoors', 6, "true");
-addLayer(L.mapbox.tileLayer('kprasch.59f9f541'), 'Civil Borders', 7, "true");
+addLayer(L.mapbox.tileLayer('kprasch.59f9f541'), 'Civil Borders', 7, "false");
 
 
 function addLayer(layer, name, zIndex, initial) {
@@ -482,13 +473,14 @@ IncidentLayer.on('layeradd', function(e) {
     });
 });
 
-//IncidentLayer.setGeoJSON();
-ClusterLayer.addLayer(IncidentLayer);
 
-map.on('ready', function() {
+
+
+IncidentLayer.on('ready', function() {
     // featureLayer.getBounds() returns the corners of the furthest-out markers,
     // and map.fitBounds() makes sure that the map contains these.
-    map.fitBounds(IncidentLayer.getBounds());
+    ClusterLayer.addLayer(IncidentLayer);
+    map.fitBounds(IncidentLayer.getBounds(), {paddingTopLeft: [-400, -800]});
 
 });
 
@@ -498,6 +490,7 @@ map.on('ready', function() {
 //        map.fitBounds(runLayer.getBounds());
 //    })
 //    .addTo(map);
+
 
 
 </script>
