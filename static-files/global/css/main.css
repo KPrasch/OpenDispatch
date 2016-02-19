@@ -194,6 +194,26 @@ a {
     background-color: #F0F0F0;
 }
 
+#insight-controls-list {
+    list-style: none;
+    text-decoration: none;
+    padding: 0;
+    margin-left: 6px;
+    top: 0;
+    position: relative;
+    margin-top: 0;
+}
+.chart-controls {
+    float: left;
+    width: 21px;
+    clear: right;
+    margin-top: 15px;
+}
+
+.chart-controls img {
+    width: 20px;
+}
+
 .lower-panes {
     border-right: 1px solid black;
     bottom: 0;

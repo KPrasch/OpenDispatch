@@ -2,96 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d46cbac0-c5c9-4780-810d-b670860a0891" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static-files/img/glass.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static-files/img/loader.gif" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/apps/people/forms.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/auth/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/auth/models.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apps/auth/views.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/img/RedDot.png" afterPath="$PROJECT_DIR$/static-files/img/RedDot.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/RedDot.png" afterPath="$PROJECT_DIR$/static/img/RedDot.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/img/RedDot.svg" afterPath="$PROJECT_DIR$/static-files/img/RedDot.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/RedDot.svg" afterPath="$PROJECT_DIR$/static/img/RedDot.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-B.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-B.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-B.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-B.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-BI.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-BI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-BI.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-BI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-C.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-C.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-C.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-C.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-L.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-L.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-L.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-L.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-LI.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-LI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-LI.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-LI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-M.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-M.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-M.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-M.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-MI.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-MI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-MI.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-MI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-R.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-R.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-R.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-R.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/Ubuntu-RI.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/Ubuntu-RI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/Ubuntu-RI.ttf" afterPath="$PROJECT_DIR$/static/fonts/Ubuntu-RI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/UbuntuMono-B.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/UbuntuMono-B.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/UbuntuMono-B.ttf" afterPath="$PROJECT_DIR$/static/fonts/UbuntuMono-B.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/UbuntuMono-BI.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/UbuntuMono-BI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/UbuntuMono-BI.ttf" afterPath="$PROJECT_DIR$/static/fonts/UbuntuMono-BI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/UbuntuMono-R.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/UbuntuMono-R.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/UbuntuMono-R.ttf" afterPath="$PROJECT_DIR$/static/fonts/UbuntuMono-R.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/fonts/UbuntuMono-RI.ttf" afterPath="$PROJECT_DIR$/static-files/fonts/UbuntuMono-RI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/fonts/UbuntuMono-RI.ttf" afterPath="$PROJECT_DIR$/static/fonts/UbuntuMono-RI.ttf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/img/burger.png" afterPath="$PROJECT_DIR$/static-files/img/burger.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/burger.png" afterPath="$PROJECT_DIR$/static/img/burger.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/img/search.png" afterPath="$PROJECT_DIR$/static-files/img/search.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/search.png" afterPath="$PROJECT_DIR$/static/img/search.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/map/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/apps/map/migrations/0001_initial.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/map/migrations/__init__.py" afterPath="$PROJECT_DIR$/apps/map/migrations/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/map/admin.py" afterPath="$PROJECT_DIR$/apps/map/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/js/dark-blue.js" afterPath="$PROJECT_DIR$/static-files/global/js/dark-blue.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/js/dark-blue.js" afterPath="$PROJECT_DIR$/static/global/js/dark-blue.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/deploy/deploy-tornado.py" afterPath="$PROJECT_DIR$/deploy/deploy-tornado.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/data/flare.json" afterPath="$PROJECT_DIR$/static-files/data/flare.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/data/flare.json" afterPath="$PROJECT_DIR$/static/data/flare.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/app/graph.html" afterPath="$PROJECT_DIR$/templates/app/graph.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/js/gray.js" afterPath="$PROJECT_DIR$/static-files/global/js/gray.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/js/gray.js" afterPath="$PROJECT_DIR$/static/global/js/gray.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/js/grid-light.js" afterPath="$PROJECT_DIR$/static-files/global/js/grid-light.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/js/grid-light.js" afterPath="$PROJECT_DIR$/static/global/js/grid-light.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/css/iThing.css" afterPath="$PROJECT_DIR$/static-files/global/css/iThing.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/css/iThing.css" afterPath="$PROJECT_DIR$/static/global/css/iThing.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/js/jQDateRangeSlider-min.js" afterPath="$PROJECT_DIR$/static-files/global/js/jQDateRangeSlider-min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/js/jQDateRangeSlider-min.js" afterPath="$PROJECT_DIR$/static/global/js/jQDateRangeSlider-min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/js/jQDateRangeSlider-withRuler-min.js" afterPath="$PROJECT_DIR$/static-files/global/js/jQDateRangeSlider-withRuler-min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/js/jQDateRangeSlider-withRuler-min.js" afterPath="$PROJECT_DIR$/static/global/js/jQDateRangeSlider-withRuler-min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/js/jquery-ui.min.js" afterPath="$PROJECT_DIR$/static-files/global/js/jquery-ui.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/js/jquery-ui.min.js" afterPath="$PROJECT_DIR$/static/global/js/jquery-ui.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/js/jquery.nanoscroller.min.js" afterPath="$PROJECT_DIR$/static-files/global/js/jquery.nanoscroller.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/js/jquery.nanoscroller.min.js" afterPath="$PROJECT_DIR$/static/global/js/jquery.nanoscroller.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/about.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/app/login.html" afterPath="$PROJECT_DIR$/templates/app/login.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/css/main.css" afterPath="$PROJECT_DIR$/static-files/global/css/main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/css/main.css" afterPath="$PROJECT_DIR$/static/global/css/main.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/app/map/map.html" afterPath="$PROJECT_DIR$/templates/app/map/map.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/calltaker/models.py" afterPath="$PROJECT_DIR$/apps/calltaker/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/map/models.py" afterPath="$PROJECT_DIR$/apps/map/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/responder/models.py" afterPath="$PROJECT_DIR$/apps/responder/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/css/nanoscroller.css" afterPath="$PROJECT_DIR$/static-files/global/css/nanoscroller.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/css/nanoscroller.css" afterPath="$PROJECT_DIR$/static/global/css/nanoscroller.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/map/serializers.py" afterPath="$PROJECT_DIR$/apps/map/serializers.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/settings.py" afterPath="$PROJECT_DIR$/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/sitewide.html" afterPath="$PROJECT_DIR$/templates/sitewide.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/global/js/sliderControl.js" afterPath="$PROJECT_DIR$/static-files/global/js/sliderControl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/global/js/sliderControl.js" afterPath="$PROJECT_DIR$/static/global/js/sliderControl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/product/data/ulster-agencies.kml" afterPath="$PROJECT_DIR$/static-files/product/data/ulster-agencies.kml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/product/data/ulster-agencies.kml" afterPath="$PROJECT_DIR$/static/product/data/ulster-agencies.kml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static-files/gis/ulster-border.geojson" afterPath="$PROJECT_DIR$/static-files/gis/ulster-border.geojson" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/gis/ulster-border.geojson" afterPath="$PROJECT_DIR$/static/gis/ulster-border.geojson" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dispatch/urls.py" afterPath="$PROJECT_DIR$/dispatch/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/calltaker/views.py" afterPath="$PROJECT_DIR$/apps/calltaker/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/collect/views.py" afterPath="$PROJECT_DIR$/apps/collect/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/map/views.py" afterPath="$PROJECT_DIR$/apps/map/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/responder/views.py" afterPath="$PROJECT_DIR$/apps/responder/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dispatch/views.py" afterPath="$PROJECT_DIR$/dispatch/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/people/views.py" afterPath="$PROJECT_DIR$/apps/people/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/apps/public/views.py" afterPath="$PROJECT_DIR$/apps/public/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Dispatch.py.iws" />
@@ -114,35 +32,13 @@
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/collect/views.py">
+        <entry file="file://$PROJECT_DIR$/apps/map/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="105" column="70" selection-start-line="105" selection-start-column="23" selection-end-line="105" selection-end-column="70" />
+              <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="50" selection-end-column="44" />
               <folding>
-                <element signature="e#0#39#0" expanded="true" />
+                <element signature="e#24#37#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/map/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="336" column="43" selection-start-line="336" selection-start-column="43" selection-end-line="336" selection-end-column="43" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/people/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="6" column="88" selection-start-line="6" selection-start-column="88" selection-end-line="6" selection-end-column="88" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -159,43 +55,63 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sitewide.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/sitewide.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/public/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.4920635">
-              <caret line="53" column="57" selection-start-line="53" selection-start-column="57" selection-end-line="53" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/people/forms.py">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/people/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="53" column="35" selection-start-line="53" selection-start-column="35" selection-end-line="53" selection-end-column="35" />
+              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
               <folding>
-                <element signature="e#0#43#0" expanded="true" />
+                <element signature="e#0#51#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static-files/global/css/main.css">
+      <file leaf-file-name="about.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/about.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="435" column="21" selection-start-line="435" selection-start-column="21" selection-end-line="435" selection-end-column="21" />
+            <state vertical-scroll-proportion="-6.0">
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="login.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/static-files/global/css/main.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.54280156">
+              <caret line="204" column="1" selection-start-line="204" selection-start-column="1" selection-end-line="204" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sitewide.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/sitewide.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-8.920635">
+              <caret line="65" column="8" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/app/login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4483986">
-              <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+            <state vertical-scroll-proportion="-16.666666">
+              <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -204,8 +120,8 @@
       <file leaf-file-name="map.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/app/map/map.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.37037">
-              <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+            <state vertical-scroll-proportion="-1.9411764">
+              <caret line="110" column="79" selection-start-line="110" selection-start-column="79" selection-end-line="110" selection-end-column="79" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#2;n#div#3;n#div#0;n#!!top" expanded="true" />
               </folding>
@@ -217,8 +133,10 @@
         <entry file="file://$PROJECT_DIR$/dispatch/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-              <folding />
+              <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -239,7 +157,6 @@
         <option value="$PROJECT_DIR$/dispatch/settings.py" />
         <option value="$PROJECT_DIR$/manage.py" />
         <option value="$PROJECT_DIR$/wsgi.py" />
-        <option value="$PROJECT_DIR$/apps/public/views.py" />
         <option value="$PROJECT_DIR$/deploy/deploy-twisted.py" />
         <option value="$PROJECT_DIR$/deploy/deploy-tornado.py" />
         <option value="$PROJECT_DIR$/templates/app/public.html" />
@@ -260,18 +177,20 @@
         <option value="$PROJECT_DIR$/dispatch/views.py" />
         <option value="$PROJECT_DIR$/apps/collect/views.py" />
         <option value="$PROJECT_DIR$/deploy/deploy.py" />
-        <option value="$PROJECT_DIR$/templates/app/map/map.html" />
         <option value="$PROJECT_DIR$/apps/auth/views.py" />
         <option value="$PROJECT_DIR$/apps/auth/models.py" />
         <option value="$PROJECT_DIR$/settings.py" />
-        <option value="$PROJECT_DIR$/dispatch/urls.py" />
         <option value="$PROJECT_DIR$/apps/map/models.py" />
         <option value="$PROJECT_DIR$/apps/people/models.py" />
-        <option value="$PROJECT_DIR$/static-files/global/css/main.css" />
-        <option value="$PROJECT_DIR$/apps/people/views.py" />
-        <option value="$PROJECT_DIR$/templates/sitewide.html" />
         <option value="$PROJECT_DIR$/apps/people/forms.py" />
+        <option value="$PROJECT_DIR$/apps/public/views.py" />
         <option value="$PROJECT_DIR$/templates/app/login.html" />
+        <option value="$PROJECT_DIR$/templates/app/about.html" />
+        <option value="$PROJECT_DIR$/apps/people/views.py" />
+        <option value="$PROJECT_DIR$/dispatch/urls.py" />
+        <option value="$PROJECT_DIR$/templates/sitewide.html" />
+        <option value="$PROJECT_DIR$/templates/app/map/map.html" />
+        <option value="$PROJECT_DIR$/static-files/global/css/main.css" />
       </list>
     </option>
   </component>
@@ -606,43 +525,25 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Dispatch.py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Dispatch.py" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="apps" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="people" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Dispatch.py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Dispatch.py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="apps" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="map" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Dispatch.py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Dispatch.py" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="apps" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="collect" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -654,7 +555,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../envs/dispatch-env/bin/python2.7" />
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="settings.editor.selected.configurable" value="reference.idesettings.debugger.python" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
@@ -666,11 +567,11 @@
       <recent name="$PROJECT_DIR$/apps/auth" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$/apps" />
       <recent name="$PROJECT_DIR$/static-files/gis" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/dispatch" />
-      <recent name="$PROJECT_DIR$/templates" />
     </key>
   </component>
   <component name="RunManager" selected="Python.Dispatch.py">
@@ -844,7 +745,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.3290735" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="263" y="768" width="899" height="546" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.3290735" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="484" y="706" width="899" height="546" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24981302" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.40734825" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="158" y="171" width="770" height="246" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -878,13 +779,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/app/incident_table.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/app/dashboard.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -945,13 +839,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.34951457">
           <caret line="12" column="74" selection-start-line="12" selection-start-column="74" selection-end-line="12" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/public/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -1176,11 +1063,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dispatch/urls.py">
+    <entry file="file://$PROJECT_DIR$/apps/map/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
+          <caret line="336" column="43" selection-start-line="336" selection-start-column="43" selection-end-line="336" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/people/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="53" column="35" selection-start-line="53" selection-start-column="35" selection-end-line="53" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1197,43 +1096,25 @@
     <entry file="file://$PROJECT_DIR$/apps/map/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="64" selection-start-line="7" selection-start-column="64" selection-end-line="7" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/app/map/map.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.37037">
-          <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="50" selection-end-column="44" />
           <folding>
-            <element signature="n#style#0;n#div#0;n#div#2;n#div#3;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#24#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static-files/global/css/main.css">
+    <entry file="file://$PROJECT_DIR$/templates/app/login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="435" column="21" selection-start-line="435" selection-start-column="21" selection-end-line="435" selection-end-column="21" />
+        <state vertical-scroll-proportion="-16.666666">
+          <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/map/models.py">
+    <entry file="file://$PROJECT_DIR$/templates/about.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="336" column="43" selection-start-line="336" selection-start-column="43" selection-end-line="336" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/people/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="88" selection-start-line="6" selection-start-column="88" selection-end-line="6" selection-end-column="88" />
+        <state vertical-scroll-proportion="-6.0">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1248,28 +1129,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sitewide.html">
+    <entry file="file://$PROJECT_DIR$/apps/public/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.4920635">
-          <caret line="53" column="57" selection-start-line="53" selection-start-column="57" selection-end-line="53" selection-end-column="57" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/people/forms.py">
+    <entry file="file://$PROJECT_DIR$/apps/people/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="53" column="35" selection-start-line="53" selection-start-column="35" selection-end-line="53" selection-end-column="35" />
+          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
           <folding>
-            <element signature="e#0#43#0" expanded="true" />
+            <element signature="e#0#51#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/app/login.html">
+    <entry file="file://$PROJECT_DIR$/dispatch/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4483986">
-          <caret line="35" column="43" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sitewide.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.920635">
+          <caret line="65" column="8" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/app/map/map.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.9411764">
+          <caret line="110" column="79" selection-start-line="110" selection-start-column="79" selection-end-line="110" selection-end-column="79" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#3;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static-files/global/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.54280156">
+          <caret line="204" column="1" selection-start-line="204" selection-start-column="1" selection-end-line="204" selection-end-column="1" />
           <folding />
         </state>
       </provider>

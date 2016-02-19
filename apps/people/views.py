@@ -43,7 +43,7 @@ def app_login(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('/map/')
+    return redirect('/dispatches/')
 
 def registration(request):
     pass
