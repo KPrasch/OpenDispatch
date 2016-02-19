@@ -1,3 +1,5 @@
+.idea/*
+.gitignore
 *.xml
 *migrations*
 secret-settings.py
@@ -20,4 +22,5 @@ nosetests.xml
 coverage.xml
 *.log
 docs/_build/
-
+*.xml
+*migrations*

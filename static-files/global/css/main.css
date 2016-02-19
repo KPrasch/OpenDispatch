@@ -11,6 +11,7 @@ body {
     margin:0;
     padding:0;
     font-family: ubuntu;
+    background-color: #65B560;
 }
 
 a {
@@ -91,9 +92,9 @@ a {
 
 #app-container {
     position: absolute;
-    height: 95%;
+    height: 100%;
     width: 100%;
-    top: 5%;
+    top: 70px;
     overflow: hidden;
 }
 
@@ -101,7 +102,7 @@ a {
     background-color: white;
     border-right: 1px solid #888;
     height: 100%;
-    left: 3%;
+    left: 37px;
     position: absolute;
     top: 10px;
     width: 30%;
@@ -193,9 +194,9 @@ a {
 #insight-controls {
     position: relative;
     height: 100%;
-    width: 35px;
+    width: 40px;
     float: left;
-    background-color: #F0F0F0;
+    background-color: #DDD;
 }
 
 #insight-controls-list {
@@ -207,10 +208,31 @@ a {
     position: relative;
     margin-top: 0;
 }
+
+#insight-controls-list > li {
+    display: block;
+    cursor: pointer;
+}
+
+#insight-controls-list > li img {
+    transition: all ease-in 0.15s;
+}
+
+#insight-controls-list > li img:hover {
+    width: 26px;
+    transition: all ease-out 0.25s;
+}
+
+#insight-controls-list #hide-control:hover {
+    width: 20px;
+}
+
 .chart-controls {
     float: left;
-    width: 21px;
+    padding-left: 0.25em;
+    padding-right: 0.4em;
     clear: right;
+    width: 30px;
     margin-top: 15px;
 }
 
@@ -224,6 +246,7 @@ a {
 
 .lower-panes {
     border-right: 1px solid #888;
+    border-left: 1px solid #FFF;
     bottom: 0;
     float: left;
     height: 300px;
@@ -410,9 +433,9 @@ a {
 
 #slider {
     position: absolute;
-    bottom: 0px;
     z-index: 1111;
     width: 100%;
+    top: 37px;
 }
 
 #login-background {
