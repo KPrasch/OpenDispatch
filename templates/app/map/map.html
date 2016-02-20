@@ -117,12 +117,8 @@ var sock = new SockJS('/twitter-dispatches/dispatch-stream');
                 </ul>
 
             </div>
-            <div id='pane-two' class="panes lower-panes">
-
-            </div>
-
             <div id='pane-three' class="panes lower-panes">
-              <div id="chart-1" style="position: relative; min-width: 100px; height: 300px; margin: 0 auto;"></div>
+              <div id="chart-1" style="position: relative; min-width: 100px; height: 250px; padding-top: 35px; margin: 0 auto;"></div>
             </div>
 
     </div>
@@ -482,7 +478,7 @@ IncidentLayer.on('ready', function() {
     // featureLayer.getBounds() returns the corners of the furthest-out markers,
     // and map.fitBounds() makes sure that the map contains these.
     ClusterLayer.addLayer(IncidentLayer);
-    map.fitBounds(IncidentLayer.getBounds(), {paddingTopLeft: [-400, -800]});
+    map.fitBounds(IncidentLayer.getBounds());
 
 });
 
