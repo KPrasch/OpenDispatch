@@ -11,7 +11,6 @@ body {
     margin:0;
     padding:0;
     font-family: ubuntu;
-    background-color: #65B560;
 }
 
 a {
@@ -94,23 +93,23 @@ a {
     position: absolute;
     height: 100%;
     width: 100%;
-    top: 70px;
     overflow: hidden;
 }
 
 #sidebar {
     background-color: white;
     border-right: 1px solid #888;
-    height: 100%;
+    height: 40%;
     left: 37px;
     position: absolute;
-    top: 10px;
+    top: 82px;
     width: 30%;
     z-index: 555;
     min-width: 300px;
     border-left: none;
     margin-top: 1px;
     border-top-right-radius: 3px;
+    border-bottom: 1px solid #888;
     border-top:1px solid #888;
 }
 
@@ -184,11 +183,12 @@ a {
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	width: 66.75%;
+	width: 500px;
 	z-index: 1122;
 	height: 300px;
 	background-color: white;
 	border-top: 1px solid #777;
+	border-left: 1px solid #777;
 }
 
 #insight-controls {
@@ -249,7 +249,7 @@ a {
     border-left: 1px solid #FFF;
     bottom: 0;
     float: left;
-    height: 300px;
+    height: 350px;
     left: 24px;
     position: relative;
     width: 33%;
@@ -258,6 +258,7 @@ a {
 
 #pane-two {
     width: 47%;
+    display: none;
 }
 
 #total-counter-label {
@@ -296,7 +297,10 @@ a {
 }
 
 #pane-three {
-    width: 47%;
+    width: 80%;
+    border-left: none;
+    position:relative;
+    padding-right: 36px !important;
 }
 
 #pane-four {}
@@ -315,6 +319,7 @@ a {
     top: 0;
     height: 100%;
     width: 100%;
+    top: 72px;
     border: 1px solid #888;
     z-index: 555;
 }
@@ -330,7 +335,10 @@ a {
     width: 100%;
     font-size: 12px;
     line-height: 18px;
+}
 
+.incident-li:last-child {
+    border-bottom: none;
 }
 
 .incident-li:hover {
@@ -399,7 +407,14 @@ a {
     height: 200px;
 }
 
-.nano { background: #bba; width: 500px; height: 500px; }
+.nano {
+    background: #bba;
+    height: 100% !important;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius:  3px;
+    border-bottom: 1px solid #888;
+    border-right:  1px solid #888;
+}
 .nano .nano-content { padding: 10px; }
 .nano .nano-pane   { background: #888; }
 .nano .nano-slider { background: #111; }
@@ -541,4 +556,26 @@ a {
     margin-left: -13px;
     margin-top: 13px;
     z-index: -9;
+}
+
+nav#menu-ui {
+    top:82px !important;
+}
+
+nav#menu-ui > a {
+    padding: 4px;
+}
+
+div.leaflet-control-zoom {
+    /* JUST IN CASE */
+}
+
+
+#notifier {
+    display: none;
+}
+
+.nano .has-scrollbar {
+    border-right: 1px solid #888;
+    border-bottom: 1px solid #888;
 }
