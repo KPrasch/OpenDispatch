@@ -175,7 +175,7 @@ class Incident(models.Model):
         
     def sms_str(self, user_location):
         greeting = "OpenDispatch Notification:"
-        boilerplate = "near your %s at %s" % (user_location.category, user_location.poi.street_adddress)
+        boilerplate = "near your %s at %s" % (user_location.category, user_location.poi.street_address)
         message = greeting + self.meta.dispatch + "\nwas dispatched to " + self.location.street_address + " \n" + boilerplate
 
         return message
