@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^get_geoincidents/$', apps.map.views.get_geoincidents),
     url(r'^get_geoincidents/(?P<venue>.*)$', apps.map.views.get_geoincidents),
     #url(r'^get_streetview/(?P<location_string>.*)/$', apps.map.views.get_streetview),
-    url(r'^most_recent/$', apps.map.views.most_recent_dispatch),
+    url(r'^most_recent/$', apps.map.views.most_recent_dispatch)
 ]
 
 # Do once on Django startup. Is there a better place for this to live?

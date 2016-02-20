@@ -173,6 +173,13 @@ class Incident(models.Model):
         unique_together = ["payload", "created_time"]
         ordering = ["received_time"]
         
+    def sms_str(self, user_location):
+        greeting = "OpenDispatch Notification:"
+        boilerplate = "near your %s at %s" % (user_location.category, user_location.poi.street_adddress)
+        message = greeting + self.meta.dispatch + "\nwas dispatched to " + self.location.street_address + " \n" + boilerplate
+
+        return message
+
     def raw(self):
         return self.payload
    

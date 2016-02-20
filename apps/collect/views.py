@@ -35,6 +35,8 @@ from apps.map.serializers import IncidentGeoSerializer
 from private.secret_settings import *
 from private.dispatch_settings import *
 
+from apps.people.views import notify_users_in_radius
+
 
 def setup_oauth():
     """Authorize your app via identifier."""
@@ -138,12 +140,13 @@ def filter_incidents_daterange(request):
     """
     filter by dateranges
     """
+
     start_datetime = request.GET.get("min")
     min_dt = datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M:%S.%fZ')
     end_datetime = request.GET.get("max")
     max_dt = datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M:%S.%fZ')
 
-    if request.GET.get("min") != '':
+    if not bool(start_datetime or end_datetime):
         return Response(status=status.HTTP_204_NO_CONTENT)
     else:
         matches = Incident.objects.all().order_by('-dispatch_time').filter(dispatch_time__range=[min_dt, max_dt])
@@ -285,6 +288,11 @@ def process_import(incident_str, received_datetime):
         else:
             # Got something else....?
             pass
+
+    @crosstown_traffic()
+    def notify():
+        notify_users_in_radius(incident, firehose=True)
+        print "Finished Notifying Users."
 
     incidentmeta.save()
     incident.save()

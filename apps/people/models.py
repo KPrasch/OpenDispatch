@@ -15,11 +15,13 @@ ROLES = (
     ('Technical', 'Technical')
 )
 
+
 class Account(models.Model):
     user = models.OneToOneField(User)
     phone_number = PhoneNumberField(blank=True, default=None)
     agency = models.CharField(max_length=64, blank=True, null=True)
     role = models.CharField(choices=ROLES, max_length=256, blank=True, null=True)
+    # firehose = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username

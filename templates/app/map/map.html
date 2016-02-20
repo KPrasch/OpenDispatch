@@ -310,7 +310,7 @@ $(".nano").nanoScroller({ alwaysVisible: true });
 
 
 $( "#slider" ).mouseup(function() {
-  var dateSliderBounds = $("#slider").dateRangeSlider("bounds");
+  var dateSliderBounds = $("#slider").dateRangeSlider("values");
   var min = dateSliderBounds.min.toJSON();
   var max = dateSliderBounds.max.toJSON();
 
@@ -328,6 +328,23 @@ $( "#slider" ).mouseup(function() {
         }
     });
 
+});
+
+
+$( "#minimize-lower-panes" ).toggle(function() {
+
+  $( "#lower-panes-container" ).animate({
+      bottom: "-=300px"
+  }, 500, function() {
+      $(this).css("display", "none");
+
+  });
+
+}, function() {
+    $( "#lower-panes-container" ).animate({
+      display: "toggle",
+      bottom: "+=300px"
+    }, 500);
 });
 
 
