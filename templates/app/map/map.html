@@ -478,7 +478,6 @@ IncidentLayer.on('ready', function() {
     // featureLayer.getBounds() returns the corners of the furthest-out markers,
     // and map.fitBounds() makes sure that the map contains these.
     ClusterLayer.addLayer(IncidentLayer);
-    map.fitBounds(IncidentLayer.getBounds());
 
 });
 

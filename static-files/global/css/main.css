@@ -562,6 +562,10 @@ nav#menu-ui {
     top:82px !important;
 }
 
+nav#menu-ui > a {
+    padding: 4px;
+}
+
 div.leaflet-control-zoom {
     /* JUST IN CASE */
 }
