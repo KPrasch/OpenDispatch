@@ -1,0 +1,59 @@
+{% extends "sitewide.html" %}
+
+{% block extra_head %}
+  <script src="/static/global/js/responder-sock.js"></script>
+  <script src="/static/global/js/responder-map.js"></script>
+{% endblock %}
+
+{% block top_bar %}
+  {% include top_bar.html %}
+{% endblock %}
+
+{% block main %}
+
+<div id="app-container">
+
+    <nav id='menu-ui' class='menu-ui'></nav>
+
+    <div id="burger"><img src="/static/img/burger.png"></div>
+
+    <div id='map'></div>
+
+    <div id="sidebar">
+
+        <div id="loader-container">
+            <div id="loader"><img src="/static/img/loader.gif" /></div>
+        </div>
+        <div class="nano">
+            <ul id="dispatch-list" class="nano-content">
+                {% for i in incidents %}
+                   {% if i.meta.dispatch == '' %}
+
+                    <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }}, 'false')">
+                        <div class="meta-created">{{ i.dispatch_time }}</div>
+                        <div class="meta-coords">lng:{{ i.location.point.x }} lat:{{ i.location.point.y }}</div>
+                        <div class="dispatch-list-error">Error with incident DBID#{{ i.id }}</div>
+                    </li>
+
+                    {% else %}
+
+                    <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }})">
+                        <div class="meta-created">{{ i.dispatch_time }}</div>
+                        <div class="meta-dispatch">{{ i.meta.dispatch }}</div>
+                        <div class="meta-coords">{{ i.location.point.x }}|{{ i.location.point.y }}</div>
+                        <div class="meta-venue">{{ i.meta.location }} : {{ i.location.street_address }}</div>
+                        <div class="meta-xsts">{{ i.meta.intersection }}</div>
+                    </li>
+
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="notifier"></div>
+
+{% endblock %}

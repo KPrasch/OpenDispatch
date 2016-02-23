@@ -1,0 +1,21 @@
+<div id="top-bar">
+
+  <div id="left-nav">
+    <div id="Map" class="nav-label"><a href="/dispatches/">Map</a></div>
+    <div id="Analytics" class="nav-label">Insight</div>
+    <div id="About" class="nav-label"><a href="/about/">About</a></div>
+
+  </div>
+
+  <div id="right-nav">
+    {% if user.is_authenticated %}
+        <div id="Account" class="nav-label">Account</div>
+        <div id="logout" class="nav-label"><a href="/accounts/logout/">Sign Out ({{ user.username }})</a></div>
+
+    {% else %}
+        <div id="login" class="nav-label"><a href="/accounts/login/"> Sign In</a></div>
+    {% endif %}
+
+  </div>
+
+</div>

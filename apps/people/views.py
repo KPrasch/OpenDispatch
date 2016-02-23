@@ -52,6 +52,7 @@ def logout_view(request):
 def registration(request):
     pass
 
+
 def notify_users_in_radius(incident, firehose=True):
     client = TwilioRestClient(TWILIO_SID, TWILIO_SECRET)
     radius = 100 if firehose is True else 20
