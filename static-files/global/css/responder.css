@@ -1,0 +1,84 @@
+#responder-map {
+    border: 1px solid #888;
+    float: right;
+    height: 100%;
+    right: 0;
+    top: 72px;
+    width: 50%;
+    z-index: 555;
+    position: absolute;
+}
+
+#not-map {
+    border-top: 1px solid grey;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 72px;
+    width: 50%;
+}
+
+#responder-list-container {
+    height: 100%;
+    position: relative;
+    top: 0;
+    width: 100%;
+}
+
+#responder-list {
+    list-style: outside none none;
+    margin: 0;
+    padding-left: 0;
+    position: relative;
+    text-decoration: none;
+    top: 0;
+    width: 100%;
+}
+
+#responder-li {
+    border-bottom: 1px solid black;
+    height: 30px;
+    left: 0;
+    margin: 3px;
+    padding: 0;
+    position: relative;
+    text-decoration: none;
+    top: 0;
+    width: 100%;
+}
+
+
+#responder-labels {
+    border-bottom: 1px solid black;
+    height: 26px;
+    left: 0;
+    position: relative;
+    text-decoration: none;
+    top: 0;
+    width: 100%;
+}
+
+.responder-meta {
+    display: inline;
+    font-size: 13pt;
+    margin-left: 1px;
+    margin-right: 90px;
+    padding-left: 5em;
+}
+
+.responder-meta-labels {
+    border-left: 1px solid black;
+    display: inline;
+    font-size: 13pt;
+    font-weight: 600;
+    margin-left: 0;
+    margin-right: 5em;
+    padding-left: 5em;
+}
+
+#notifier {
+    position: fixed;
+    bottom: 0px;
+    height: 15px;
+    width: 100%;
+}

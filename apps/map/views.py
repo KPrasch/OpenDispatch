@@ -25,7 +25,7 @@ def map_view(request, venue=None):
     if venue is None:
         past_incidents = Incident.objects.all().order_by("-dispatch_time")
     else:
-        past_incidents = Incident.objects.all().filter(meta__venue__icontains=venue).order_by("-dispatch_time")
+        past_incidents = Incident.objects.filter(meta__venue__icontains=venue).order_by("-dispatch_time")
 
     incident_types = {pi.meta.dispatch for pi in past_incidents if pi.meta.dispatch}
     incident_counts = (past_incidents.filter(meta__dispatch=i).count() for i in incident_types)
@@ -57,7 +57,7 @@ def most_recent_dispatch(request):
     """
     Most Recent Dispatch in GeoJSON
     """
-    recent = Incident.objects.all().order_by("created_time")[0]
+    recent = Incident.objects.all().order_by("-dispatch_time")[0]
     serializer = IncidentGeoSerializer(recent)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

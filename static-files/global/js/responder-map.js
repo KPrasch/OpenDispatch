@@ -17,7 +17,7 @@ $(".nano").nanoScroller({ alwaysVisible: true });
 L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
 
-{% comment %}
+
 if (!mapboxgl.supported()) {
     alert('Your browser does not support Mapbox GL');
 
@@ -29,18 +29,12 @@ if (!mapboxgl.supported()) {
         zoom: 9
     });
 }
-{% endcomment %}
 
-var map = L.mapbox.map('map', null, {minZoom: 9, maxZoom:22})
+
+var map = L.mapbox.map('responder-map', null, {minZoom: 9, maxZoom:22})
               .setView([41.8900, -74.2600], 10);
 
 var layers = document.getElementById('menu-ui');
-
-{% if venue_filter == None %}
-    var geoJSON = '/get_geoincidents'
-{% else %}
-    var geoJSON = '/get_geoincidents/{{ venue_filter }}'
-{% endif %}
 
 var IncidentLayer = new L.mapbox.featureLayer().loadURL(geoJSON);
 
@@ -134,6 +128,5 @@ IncidentLayer.on('layeradd', function(e) {
 IncidentLayer.on('ready', function() {
     // featureLayer.getBounds() returns the corners of the furthest-out markers,
     // and map.fitBounds() makes sure that the map contains these.
-    ClusterLayer.addLayer(IncidentLayer);
 
 });

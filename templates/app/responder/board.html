@@ -1,32 +1,55 @@
-{% extends "sitewide.html" %}
+{% extends "global/sitewide.html" %}
 
 {% block extra_head %}
   <script src="/static/global/js/responder-sock.js"></script>
-  <script src="/static/global/js/responder-map.js"></script>
+  <link href="/static/global/css/responder.css" rel="stylesheet">
+
 {% endblock %}
 
 {% block top_bar %}
-  {% include top_bar.html %}
+  {% include "global/top_bar.html" %}
 {% endblock %}
 
 {% block main %}
 
 <div id="app-container">
 
-    <nav id='menu-ui' class='menu-ui'></nav>
+    <div id="loader-container">
+        <div id="loader"><img src="/static/img/loader.gif" /></div>
+    </div>
 
-    <div id="burger"><img src="/static/img/burger.png"></div>
+    <div id="not-map">
+        <div id="responder-list-container">
+            <ul id="responder-list">
 
-    <div id='map'></div>
+                <li id="responder-labels">
+                    <div class="responder-meta-labels" id="responder-name-labels">Name</div>
+                    <div class="responder-meta-labels" id="responder-role-labels">Role</div>
+                    <div class="responder-meta-labels" id="responder-eta-labels">ETA</div>
+                    <div class="responder-meta-labels" id="responder-status-labels">Status</div>
+                </li>
 
-    <div id="sidebar">
+                <li id="responder-li">
+                    <div class="responder-meta" id="responder-name">Mike Amador</div>
+                    <div class="responder-meta" id="responder-role">Firefighter</div>
+                    <div class="responder-meta" id="responder-eta">5:28</div>
+                    <div class="responder-meta" id="responder-status">Responded at 13:02</div>
+                </li>
 
-        <div id="loader-container">
-            <div id="loader"><img src="/static/img/loader.gif" /></div>
+            </ul>
+
         </div>
+    </div>
+
+    <nav id='menu-ui' class='menu-ui'></nav>
+    <div id='responder-map'></div>
+
+    {% comment %}
+    <div id="below-responders">
+
         <div class="nano">
             <ul id="dispatch-list" class="nano-content">
-                {% for i in incidents %}
+                {% for i in recent_incidents %}
                    {% if i.meta.dispatch == '' %}
 
                     <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }}, 'false')">
@@ -51,9 +74,21 @@
         </div>
 
     </div>
+    {% endcomment %}
+
+<div id="notifier"></div>
 
 </div>
 
-<div id="notifier"></div>
+
+
+<script>
+{% if venue_filter == None %}
+    var geoJSON = '/get_geoincidents'
+{% else %}
+    var geoJSON = '/get_geoincidents/{{ venue_filter }}'
+{% endif %}
+</script>
+<script src="/static/global/js/responder-map.js"></script>
 
 {% endblock %}
