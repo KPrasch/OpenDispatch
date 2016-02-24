@@ -13,13 +13,12 @@
     border-top: 1px solid #888;
     height: 100%;
     left: 0;
-    position: absolute;
+    position: relative;
     top: 72px;
     width: 50%;
 }
 
 #responder-list-container {
-    height: 100%;
     position: relative;
     width: 100%;
 }
@@ -86,4 +85,11 @@ table .spacer {
 
 table {
     border-collapse: collapse;
+}
+
+#below-responders {
+    height: 200px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }

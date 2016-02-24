@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.db.models import Q
 from apps.map.models import Incident
 from private.responder_settings import *
-from datetime import datetime
+import datetime
 
 
 def responder_board(request, venue=None):
@@ -12,13 +12,14 @@ def responder_board(request, venue=None):
     if venue is None:
         recent_incidents = Incident.objects.all().order_by("-dispatch_time")
     else:
-        max_dt = datetime.now()
-        min_dt = max_dt - BOARD_INCIDENT_AUTOCLEAR_TIME_IN_HOURS
+        max_dt = datetime.datetime.now()
+        min_dt = max_dt - datetime.timedelta(minutes=BOARD_INCIDENT_AUTOCLEAR_TIME_IN_MINUTES)
 
-        recent_incidents = Incident.objects.filter(Q(meta__venue__icontains=venue) |
+        recent_incidents = Incident.objects.filter(Q(meta__venue__icontains=venue) &
                                                  Q(dispatch_time__range=[min_dt, max_dt])
                                                  ).order_by("-dispatch_time")
-    return render(request, 'app/responder/board.html', {"past_incidents": recent_incidents})
+
+    return render(request, 'app/responder/board.html', {"recent_incidents": recent_incidents})
 
 
 """
