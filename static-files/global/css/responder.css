@@ -10,7 +10,7 @@
 }
 
 #not-map {
-    border-top: 1px solid grey;
+    border-top: 1px solid #888;
     height: 100%;
     left: 0;
     position: absolute;
@@ -21,59 +21,48 @@
 #responder-list-container {
     height: 100%;
     position: relative;
-    top: 0;
+    width: 100%;
+}
+
+#responder-list-container table {
     width: 100%;
 }
 
 #responder-list {
-    list-style: outside none none;
-    margin: 0;
-    padding-left: 0;
-    position: relative;
     text-decoration: none;
-    top: 0;
     width: 100%;
 }
 
-#responder-li {
-    border-bottom: 1px solid black;
-    height: 30px;
-    left: 0;
-    margin: 3px;
-    padding: 0;
-    position: relative;
+.responder-li {
+    border-bottom: 1px solid #888;
     text-decoration: none;
-    top: 0;
-    width: 100%;
+    margin-top: -2px;
 }
-
+.responder-li > td.responder-meta:first-child {
+    border-left: none;
+}
 
 #responder-labels {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #888;
     height: 26px;
-    left: 0;
-    position: relative;
     text-decoration: none;
-    top: 0;
-    width: 100%;
 }
 
 .responder-meta {
-    display: inline;
-    font-size: 13pt;
-    margin-left: 1px;
-    margin-right: 90px;
-    padding-left: 5em;
+    font-size: 10pt;
+    padding: 0.5em;
+    border-left: 1px solid #999;
 }
 
 .responder-meta-labels {
-    border-left: 1px solid black;
-    display: inline;
+    border-left: 1px solid #777;
+    width: 25%;
     font-size: 13pt;
     font-weight: 600;
-    margin-left: 0;
-    margin-right: 5em;
-    padding-left: 5em;
+    padding: 1em;
+}
+.responder-meta-labels:first-child {
+    border-left: none;
 }
 
 #notifier {
@@ -81,4 +70,20 @@
     bottom: 0px;
     height: 15px;
     width: 100%;
+}
+
+.responder-table-header {
+    margin-top: -3px;
+    border-bottom: 1px solid #888;
+}
+
+table .spacer {
+    padding: 0;
+    margin: 0;
+    height: 1px;
+    background: #888;
+}
+
+table {
+    border-collapse: collapse;
 }

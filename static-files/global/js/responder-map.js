@@ -17,7 +17,7 @@ $(".nano").nanoScroller({ alwaysVisible: true });
 L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
 
-
+/*
 if (!mapboxgl.supported()) {
     alert('Your browser does not support Mapbox GL');
 
@@ -29,7 +29,7 @@ if (!mapboxgl.supported()) {
         zoom: 9
     });
 }
-
+*/
 
 var map = L.mapbox.map('responder-map', null, {minZoom: 9, maxZoom:22})
               .setView([41.8900, -74.2600], 10);
