@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^get_geoincidents/(?P<venue>.*)$', apps.map.views.get_geoincidents),
     #url(r'^get_streetview/(?P<location_string>.*)/$', apps.map.views.get_streetview),
     url(r'^most_recent/$', apps.map.views.most_recent_dispatch),
+    url(r'^responder_test/', apps.responder.views.initiate_personnel_response),
     url(r'^handle_key/(?P<responder_id>.*)', apps.responder.views.confirm_personnel_response),
     url(r'^responder/(?P<venue>.*)$', apps.responder.views.responder_board),
     url(r'^get_recent_incidents/(?P<venue>.*)$', apps.responder.views.get_recent_incidents)

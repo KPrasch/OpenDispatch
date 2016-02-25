@@ -15,41 +15,44 @@ sock.onopen = function(e) {
  console.log('ws:' + e.data);
 };
 
+function updateResponderList(_responder) {
+     var responderHTML = '<tr class="responder-li">' +
+                            '<td class="responder-meta">' +
+                                _responder.user.last_name +
+                            '</td>' +
+                            '<td class="responder-meta">' +
+                                _responder.role +
+                            '</td>' +
+                            '<td class="responder-meta">' +
+                                _responder.default_eta +
+                            '</td>' +
+                            '<td class="responder-meta">' +
+                                '5 minutes ago' +
+                            '</td>' +
+                        '</tr>';
+
+    // In either case...
+    $('#responder-list-container table').append(responderHTML);
+    console.log(responderHTML);
+
+    // Check for map data
+    if(_responder.hasOwnProperty('geometry')) {
+        RefreshMap(_responder);
+    }
+}
+
 sock.onmessage = function(e) {
  console.log('message', e.data);
  var dispatch_list = document.getElementById('responder-list');
 
- responder = JSON.parse(e.data);
+ var responder = JSON.parse(e.data);
 
  // Is a valid Account JSON object? If not forget about it!
- if(!responder.hasOwnProperty('id') && !responder.hasOwnProperty('user')) {
-    return false;
+ console.log(responder);
+ if(responder.hasOwnProperty('user') == true) {
+    updateResponderList(responder);
+    console.log("We started from the bottom now we here.");
  }
-
-
- // Check for map data
- if(responder.hasOwnProperty('geometry')) {
-     RefreshMap(responder);
- }
-
- var responderHTML = '<tr class="responder-li">' +
-                        '<td class="responder-meta">' +
-                            responder.user.last_name +
-                        '</td>' +
-                        '<td class="responder-meta">' +
-                            responder.role +
-                        '</td>' +
-                        '<td class="responder-meta">' +
-                            responder.default_eta +
-                        '</td>' +
-                        '<td class="responder-meta">' +
-                            '5 minutes ago' +
-                        '</td>' +
-                    '</tr>';
-
- // In either case...
- $(responderHTML).prependTo($("#responder-list"));
-
 };
 
 $(function() {

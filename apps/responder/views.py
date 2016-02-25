@@ -15,6 +15,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.map.models import Incident
 from apps.map.serializers import IncidentGeoSerializer
 from apps.people.models import Account
+from private.responder_settings import *
 from apps.people.serializers import AccountModelSerializer
 
 
@@ -58,7 +59,7 @@ def initiate_personnel_response(request):
             user = Account.objects.get(phone_number=from_number)
             if user.is_responder is True and user.responder_active is True:
                 responder = user
-                message = "Hello {0}, press any key respond. The most recent dispatch was dispatched at {1} to {2} for {3}" \
+                message = "Hello {0}, press any key to respond... The most recent dispatch, was dispatched at {1}. to. {2}. for. {3}." \
                     .format(responder.user.first_name,
                             most_recent.dispatch_time,
                             most_recent.location.street_address,
