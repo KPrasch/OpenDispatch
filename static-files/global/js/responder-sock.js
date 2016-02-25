@@ -8,7 +8,7 @@ var responderHTMML = '<li id="responder">' +
                      '</li>'
 */
 
-var sock = new SockJS('/twilio-stream/responder-stream');
+var sock = new SockJS('/twilio-stream/responder');
 
 sock.onopen = function(e) {
  sock.send(JSON.stringify({"hx_subscribe": "twilio-stream"}));
@@ -19,14 +19,34 @@ sock.onmessage = function(e) {
  console.log('message', e.data);
  var dispatch_list = document.getElementById('responder-list');
 
- messageJSON = JSON.parse(e.data);
+ responder = JSON.parse(e.data);
+
+ // Is a valid Account JSON object? If not forget about it!
+ if(!responder.hasOwnProperty('id') && !responder.hasOwnProperty('user')) {
+    return false;
+ }
+
 
  // Check for map data
- if(messageJSON.hasOwnProperty('geometry')) {
-     RefreshMap(messageJSON);
- } else {
-
+ if(responder.hasOwnProperty('geometry')) {
+     RefreshMap(responder);
  }
+
+ var responderHTML = '<tr class="responder-li">' +
+                        '<td class="responder-meta">' +
+                            responder.user.last_name +
+                        '</td>' +
+                        '<td class="responder-meta">' +
+                            responder.role +
+                        '</td>' +
+                        '<td class="responder-meta">' +
+                            responder.default_eta +
+                        '</td>' +
+                        '<td class="responder-meta">' +
+                            '5 minutes ago' +
+                        '</td>' +
+                    '</tr>';
+
  // In either case...
  $(responderHTML).prependTo($("#responder-list"));
 
@@ -58,5 +78,5 @@ $(function() {
         });
     });
 
-})();
+});
 
