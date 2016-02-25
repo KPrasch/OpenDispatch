@@ -170,7 +170,7 @@ class Incident(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        unique_together = ["payload", "created_time"]
+        unique_together = ["payload", "dispatch_time"]
         ordering = ["received_time"]
         
     def sms_str(self, user_location):
@@ -275,16 +275,17 @@ class FixedFireAppliance(models.Model):
 
 class Structure(models.Model):
     name = models.CharField(max_length=1500, blank=True, null=True)
-    location = models.ForeignKey(FixedLocation)
+    location = models.OneToOneField(FixedLocation)
     construction = models.IntegerField(choices=CONSTRUCTION_CLASS, blank=True, null=True)
     stories = models.IntegerField()
-    sqft = models.IntegerField(blank=True, null=True)
+    sqft = models.PositiveIntegerField(blank=True, null=True)
     access = models.TextField(blank=True, null=True)
-    type = models.IntegerField(choices=BUILDING_TYPE)
+    category = models.IntegerField(choices=BUILDING_TYPE)
     sprinklers = models.BooleanField(default=False)
-    appliances = models.ManyToManyField(FixedFireAppliance, blank=True, null=True)
+    utilities = models.TextField(blank=True, null=True)
     hazmat = models.BooleanField(default=False, blank=True)
     preplan = models.TextField(blank=True, null=True)
+    additional = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -337,9 +338,10 @@ USER_LOCATION_CATEGORIES = (
     ('Apartments/Complex', 'Apartments/Complex'),
 )
 
+
 class UserLocation(models.Model):
     account = models.OneToOneField(Account)
-    poi = models.OneToOneField(FixedLocation)
+    poi = models.OneToOneField(Structure)
     title = models.CharField(max_length=64)
     description = models.TextField(max_length=512)
     category = models.CharField(choices=USER_LOCATION_CATEGORIES, max_length=256)

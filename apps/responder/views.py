@@ -1,9 +1,29 @@
-from django.shortcuts import render
-from django.db.models import Q
-from apps.map.models import Incident
-from private.responder_settings import *
 from datetime import datetime
 
+from django.shortcuts import render, HttpResponse
+from django.db.models import Q
+import twilio.twiml
+
+from apps.map.models import Incident
+from private.responder_settings import *
+
+from django.views.decorators.csrf import csrf_exempt
+
+from rest_framework import status
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.response import Response
+
+from django.shortcuts import render
+import requests
+from rest_framework.renderers import JSONRenderer
+from hendrix.experience import crosstown_traffic
+
+from django.contrib.auth.models import User
+from apps.people.models import Account
+from hendrix.contrib.async.messaging import hxdispatcher
+from apps.people.serializers import AccountModelSerializer
+
+from django.core.exceptions import ObjectDoesNotExist
 
 def responder_board(request, venue=None):
     """
@@ -21,24 +41,60 @@ def responder_board(request, venue=None):
     return render(request, 'app/responder/board.html', {"past_incidents": recent_incidents})
 
 
-"""
-# Try adding your own number to this list!
-callers = {
-    "+18456331959": "Kieran",
-}
+@csrf_exempt
+def initiate_personnel_response(request):
 
-@api_view(['GET, POST'])
-def hello_monkey(request):
-    # Get the caller's phone number from the incoming Twilio request
-    from_number = request.values.get('From', None)
-    resp = twilio.twiml.Response()
- 
-    # if the caller is someone we know:
-    if from_number in callers:
-        # Greet the caller by name
-        resp.say("Hello " + callers[from_number])
+    if request.method == 'POST':
+
+        most_recent = Incident.objects.all()[0]
+        # Get the caller's phone number from the incoming Twilio request
+        # from_number = request.POST.get("From")
+        from_number = request.POST.get('From')
+        print "response call from {}".format(from_number)
+
+        resp = twilio.twiml.Response()
+
+        try:
+            user = Account.objects.get(phone_number=from_number)
+            if user.is_responder is True and user.responder_active is True:
+                responder = user
+                message = "Hello {0}, press any key respond. The most recent dispatch was dispatched at {1} to {2} for {3}" \
+                    .format(responder.user.first_name,
+                            most_recent.dispatch_time,
+                            most_recent.location.street_address,
+                            most_recent.meta.dispatch)
+
+                with resp.gather(numDigits=1, action="/handle_key/%s" % responder.id, method="POST") as g:
+                    g.say(message)
+
+            else:
+                message = "You are not authorized to respond."
+
+        except ObjectDoesNotExist:
+            message = "You have reached a Responder Zero phone number. You do not have an account."
+
+        resp.say(message)
+        return HttpResponse(str(resp))
+
+
+@csrf_exempt
+def confirm_personnel_response(request, responder_id):
+
+    if request.method == 'POST':
+
+        # Get the digit pressed by the user
+        digit_pressed = request.POST.get('Digits', None)
+        responder = Account.objects.get(id=responder_id)
+
+        @crosstown_traffic()
+        def respond():
+            serializer = AccountModelSerializer(responder)
+            hxdispatcher.send("twilio-stream", serializer.data)
+
+        resp = twilio.twiml.Response()
+        resp.say("Response Confirmed. Your E.T.A. is %s minutes" % str(responder.default_eta))
+
+        return HttpResponse(str(resp))
+
     else:
-        resp.say("Hello Monkey")
- 
-    return Response(status=status.HTTP_200_OK)
-"""
+        pass

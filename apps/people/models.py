@@ -19,9 +19,13 @@ ROLES = (
 class Account(models.Model):
     user = models.OneToOneField(User)
     phone_number = PhoneNumberField(blank=True, default=None)
+    is_responder = models.BooleanField(default=False)
+    responder_active = models.BooleanField(default=False)
     agency = models.CharField(max_length=64, blank=True, null=True)
     role = models.CharField(choices=ROLES, max_length=256, blank=True, null=True)
-    # firehose = models.BooleanField(default=False)
+    citizen_notifications = models.BooleanField(default=False)
+    firehose_notifications = models.BooleanField(default=False)
+    default_eta = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username

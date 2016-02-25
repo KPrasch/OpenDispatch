@@ -134,6 +134,7 @@ def search_incidents(request):
     else:
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
+
 @api_view(['GET'])
 @renderer_classes((JSONRenderer,))
 def filter_incidents_daterange(request):
