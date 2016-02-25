@@ -8,10 +8,11 @@ from apps.people.forms import AccountForm, UserForm, FixedLocationForm, UserLoca
 from rest_framework.decorators import api_view, renderer_classes
 from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import TwilioRestClient
-from private.secret_settings import TWILIO_SID, TWILIO_SECRET, TWILIO_NUMBER
+from private.secret_settings import TWILIO_SID, TWILIO_SECRET, TWILIO_NUMBER, SMS_DISABLE
 from apps.map.models import Incident, UserLocation
 from django.contrib.gis.measure import D
 from django.contrib.auth.models import User
+import chalk
 
 def app_login(request):
 
@@ -54,6 +55,10 @@ def registration(request):
 
 
 def notify_users_in_radius(incident, firehose=True):
+    if SMS_DISABLE:
+        chalk.magenta("SMS_DISABLE is currently true, no users are notified.")
+        return incident.id
+
     client = TwilioRestClient(TWILIO_SID, TWILIO_SECRET)
     radius = 100 if firehose is True else 20
 

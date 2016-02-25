@@ -20,61 +20,50 @@
 
     <div id="not-map">
         <div id="responder-list-container">
-            <ul id="responder-list">
+            <table>
+                <tr class="responder-table-header">
+                    <th class="responder-meta-labels">
+                        Name
+                    </th>
+                    <th class="responder-meta-labels">
+                        Role
+                    </th>
+                    <th class="responder-meta-labels">
+                        ETA
+                    </th>
+                    <th class="responder-meta-labels">
+                        Status
+                    </th>
+                </tr>
+                <tr class="spacer"></tr>
+                <tr class="responder-li" id="responder_list">
+                    <td class="responder-meta">
+                        Mike Amador
+                    </td>
+                    <td class="responder-meta">
+                        Firefighter
+                    </td>
+                    <td class="responder-meta">
+                        5:28
+                    </td>
+                    <td class="responder-meta">
+                        Responded at 13:02
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-                <li id="responder-labels">
-                    <div class="responder-meta-labels" id="responder-name-labels">Name</div>
-                    <div class="responder-meta-labels" id="responder-role-labels">Role</div>
-                    <div class="responder-meta-labels" id="responder-eta-labels">ETA</div>
-                    <div class="responder-meta-labels" id="responder-status-labels">Status</div>
-                </li>
+        <div id="below-responders">
+            <div class="nano">
+                <ul id="dispatch-list" class="nano-content">
 
-                <li id="responder-li">
-                    <div class="responder-meta" id="responder-name">Mike Amador</div>
-                    <div class="responder-meta" id="responder-role">Firefighter</div>
-                    <div class="responder-meta" id="responder-eta">5:28</div>
-                    <div class="responder-meta" id="responder-status">Responded at 13:02</div>
-                </li>
-
-            </ul>
-
+                </ul>
+            </div>
         </div>
     </div>
 
     <nav id='menu-ui' class='menu-ui'></nav>
     <div id='responder-map'></div>
-
-    {% comment %}
-    <div id="below-responders">
-
-        <div class="nano">
-            <ul id="dispatch-list" class="nano-content">
-                {% for i in recent_incidents %}
-                   {% if i.meta.dispatch == '' %}
-
-                    <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }}, 'false')">
-                        <div class="meta-created">{{ i.dispatch_time }}</div>
-                        <div class="meta-coords">lng:{{ i.location.point.x }} lat:{{ i.location.point.y }}</div>
-                        <div class="dispatch-list-error">Error with incident DBID#{{ i.id }}</div>
-                    </li>
-
-                    {% else %}
-
-                    <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }})">
-                        <div class="meta-created">{{ i.dispatch_time }}</div>
-                        <div class="meta-dispatch">{{ i.meta.dispatch }}</div>
-                        <div class="meta-coords">{{ i.location.point.x }}|{{ i.location.point.y }}</div>
-                        <div class="meta-venue">{{ i.meta.location }} : {{ i.location.street_address }}</div>
-                        <div class="meta-xsts">{{ i.meta.intersection }}</div>
-                    </li>
-
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-
-    </div>
-    {% endcomment %}
 
 <div id="notifier"></div>
 

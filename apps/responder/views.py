@@ -1,45 +1,45 @@
-from datetime import datetime
+import datetime
 
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import HttpResponse
 from django.db.models import Q
 import twilio.twiml
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.shortcuts import render
+from hendrix.experience import crosstown_traffic
+from hendrix.contrib.async.messaging import hxdispatcher
+from django.core.exceptions import ObjectDoesNotExist
 
 from apps.map.models import Incident
-from private.responder_settings import *
-
-from django.views.decorators.csrf import csrf_exempt
-
-from rest_framework import status
-from rest_framework.decorators import api_view, renderer_classes
-from rest_framework.response import Response
-
-from django.shortcuts import render
-import requests
-from rest_framework.renderers import JSONRenderer
-from hendrix.experience import crosstown_traffic
-
-from django.contrib.auth.models import User
+from apps.map.serializers import IncidentGeoSerializer
 from apps.people.models import Account
-from hendrix.contrib.async.messaging import hxdispatcher
 from apps.people.serializers import AccountModelSerializer
 
-from django.core.exceptions import ObjectDoesNotExist
 
 def responder_board(request, venue=None):
     """
     Return the Template
     """
+    return render(request, 'app/responder/board.html')
+
+
+@api_view(['GET'])
+def get_recent_incidents(request, venue=None):
     if venue is None:
         recent_incidents = Incident.objects.all().order_by("-dispatch_time")
     else:
-        max_dt = datetime.now()
-        min_dt = max_dt - BOARD_INCIDENT_AUTOCLEAR_TIME_IN_HOURS
+        max_dt = datetime.datetime.now()
+        min_dt = max_dt - datetime.timedelta(minutes=BOARD_INCIDENT_AUTOCLEAR_TIME_IN_MINUTES)
 
-        recent_incidents = Incident.objects.filter(Q(meta__venue__icontains=venue) |
+        recent_incidents = Incident.objects.filter(Q(meta__venue__icontains=venue) &
                                                  Q(dispatch_time__range=[min_dt, max_dt])
                                                  ).order_by("-dispatch_time")
-    return render(request, 'app/responder/board.html', {"past_incidents": recent_incidents})
 
+    geo_serializer = IncidentGeoSerializer(recent_incidents, many=True)
+
+    return Response(geo_serializer.data, status=status.HTTP_200_OK)
 
 @csrf_exempt
 def initiate_personnel_response(request):
