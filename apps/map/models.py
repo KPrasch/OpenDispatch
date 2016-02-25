@@ -170,7 +170,7 @@ class Incident(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
-        unique_together = ["payload", "created_time"]
+        unique_together = ["payload", "dispatch_time"]
         ordering = ["received_time"]
         
     def sms_str(self, user_location):

@@ -90,6 +90,19 @@ table {
 #below-responders {
     height: 200px;
     position: absolute;
-    bottom: 0;
+    bottom: 74px;
     width: 100%;
+    top: 20;
+}
+
+.incident-close {
+    float: right;
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+    color: #999;
+    font-weight: 800;
+}
+#below-responders li.incident-li:first-child {
+    border-top: 1px solid #888;
 }

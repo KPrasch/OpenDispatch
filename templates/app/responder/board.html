@@ -52,30 +52,11 @@
                 </tr>
             </table>
         </div>
+
         <div id="below-responders">
             <div class="nano">
                 <ul id="dispatch-list" class="nano-content">
-                    {% for i in recent_incidents %}
-                       {% if i.meta.dispatch == '' %}
 
-                        <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }}, 'false')">
-                            <div class="meta-created">{{ i.dispatch_time }}</div>
-                            <div class="meta-coords">lng:{{ i.location.point.x }} lat:{{ i.location.point.y }}</div>
-                            <div class="dispatch-list-error">Error with incident DBID#{{ i.id }}</div>
-                        </li>
-
-                        {% else %}
-
-                        <li class="incident-li" id="incident-li" data-incidentId="{{ i.id }}" onclick="clickButton({{ i.id }})">
-                            <div class="meta-created">{{ i.dispatch_time }}</div>
-                            <div class="meta-dispatch">{{ i.meta.dispatch }}</div>
-                            <div class="meta-coords">{{ i.location.point.x }}|{{ i.location.point.y }}</div>
-                            <div class="meta-venue">{{ i.meta.location }} : {{ i.location.street_address }}</div>
-                            <div class="meta-xsts">{{ i.meta.intersection }}</div>
-                        </li>
-
-                        {% endif %}
-                    {% endfor %}
                 </ul>
             </div>
         </div>

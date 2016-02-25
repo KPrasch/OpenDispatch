@@ -2,6 +2,11 @@ from django.shortcuts import render
 from django.db.models import Q
 from apps.map.models import Incident
 from private.responder_settings import *
+from apps.map.serializers import IncidentGeoSerializer, IncidentMetaSerializer
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
+from rest_framework.decorators import api_view, renderer_classes
 import datetime
 
 
@@ -9,6 +14,11 @@ def responder_board(request, venue=None):
     """
     Return the Template
     """
+    return render(request, 'app/responder/board.html')
+
+
+@api_view(['GET'])
+def get_recent_incidents(request, venue=None):
     if venue is None:
         recent_incidents = Incident.objects.all().order_by("-dispatch_time")
     else:
@@ -19,8 +29,9 @@ def responder_board(request, venue=None):
                                                  Q(dispatch_time__range=[min_dt, max_dt])
                                                  ).order_by("-dispatch_time")
 
-    return render(request, 'app/responder/board.html', {"recent_incidents": recent_incidents})
+    geo_serializer = IncidentGeoSerializer(recent_incidents, many=True)
 
+    return Response(geo_serializer.data, status=status.HTTP_200_OK)
 
 """
 # Try adding your own number to this list!
