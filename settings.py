@@ -211,6 +211,12 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': GLOBAL_LOGGING_DIRECTORY + 'debug.log',
             'formatter': 'verbose',
+        },
+        'auth_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': GLOBAL_LOGGING_DIRECTORY + 'auth.log',
+            'formatter': 'verbose',
         }
     },
     'loggers': {
@@ -221,6 +227,14 @@ LOGGING = {
         'django.request': {
             'handlers': ['console', 'file', 'mail_admins'],
             'level': 'ERROR',
+            'propagate': False,
+        },
+        'geocoder': {
+            'handlers': ['console', 'file'],
+            'propagate': False,
+        },
+        'auth': {
+            'handlers': ['console', 'auth_file'],
             'propagate': False,
         },
     }
