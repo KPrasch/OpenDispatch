@@ -59,6 +59,10 @@ def notify_users_in_radius(incident, firehose=True):
         chalk.magenta("SMS_DISABLE is currently true, no users are notified.")
         return incident.id
 
+    if incident.id == None:
+        print "No incident object received when attemping to notify user."
+        return
+
     client = TwilioRestClient(TWILIO_SID, TWILIO_SECRET)
     radius = 100 if firehose is True else 20
 
