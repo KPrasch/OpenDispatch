@@ -290,7 +290,7 @@ def process_import(incident_str, received_datetime):
             # Got something else....?
             pass
 
-    @crosstown_traffic()
+    # @crosstown_traffic()
     def notify():
         notify_users_in_radius(incident, firehose=True)
         telephony_logger.info("Finished Notifying Users.")
