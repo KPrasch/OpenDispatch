@@ -217,6 +217,12 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': GLOBAL_LOGGING_DIRECTORY + 'auth.log',
             'formatter': 'verbose',
+        },
+        'telephony_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': GLOBAL_LOGGING_DIRECTORY + 'telephony.log',
+            'formatter': 'verbose',
         }
     },
     'loggers': {
@@ -235,6 +241,10 @@ LOGGING = {
         },
         'auth': {
             'handlers': ['console', 'auth_file'],
+            'propagate': False,
+        },
+        'telephony': {
+            'handlers': ['console', 'telephony_file'],
             'propagate': False,
         },
     }
