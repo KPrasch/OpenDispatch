@@ -22,7 +22,7 @@ telephony_logger = logging.getLogger('telephony')
 def app_login(request):
 
     if request.method == 'POST':
-        if request.POST['username'] == '' or reqiest.POST['password'] == '':
+        if request.POST['username'] == '' or request.POST['password'] == '':
             return JsonResponse({"error": "Must enter username and password."})
 
         usernm = request.POST['username']
