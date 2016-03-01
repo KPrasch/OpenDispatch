@@ -10,7 +10,8 @@ from twilio.rest import TwilioRestClient
 from django.contrib.gis.measure import D
 import chalk
 
-from apps.people.forms import AccountForm, UserForm, FixedLocationForm, UserLocationForm
+from apps.map.forms import FixedLocationForm, StructureForm
+from apps.people.forms import AccountForm, UserForm, UserLocationForm
 from private.secret_settings import TWILIO_SID, TWILIO_SECRET, TWILIO_NUMBER, SMS_DISABLE
 from apps.map.models import UserLocation
 
@@ -43,10 +44,12 @@ def app_login(request):
         account_form = AccountForm()
         user_location_form = UserLocationForm()
         fixed_location_form = FixedLocationForm()
+        structure_form = StructureForm()
         return render(request, 'global/login.html', {"account_form": account_form,
                                                   "user_form": user_form,
                                                   "user_location_form": user_location_form,
-                                                  "fixed_location_form": fixed_location_form})
+                                                  "fixed_location_form": fixed_location_form,
+                                                  "structure_form": structure_form})
 
 
 def logout_view(request):
