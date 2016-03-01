@@ -49,7 +49,10 @@
     padding-top: 6em;
 }
 
-#registration-form > p, #add-location-form > p {
+#registration-form > p,
+#add-location-form > p,
+#add-fixedpoint-form > p,
+#structure-form    > p {
     width: 400px;
     display: block;
     text-align: left;
@@ -75,7 +78,10 @@
     margin-left: 0px;
 }
 
-#registration-form > p > label, #add-location-form > p > label {
+#registration-form   > p > label,
+#add-location-form   > p > label,
+#add-fixedpoint-form > p > label,
+#structure-form      > p > label {
     display: block;
 }
 
@@ -89,24 +95,97 @@
     width: 1100px !important;
 }
 
+#add-location-button {
+    padding: 0.7rem;
+    width: 40%;
+    margin-top: 40px;
+    background: #83A5D4;
+    border-radius: 0.5rem;
+    border-bottom: 3px solid #4A5F7D;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 0px 1px 0px rgba(255,255,255,0.5);
+}
 
-#add-location-form {
-    margin-top: 1.5rem;
+#add-location-button:active {
+    border-bottom: none;
+    margin-top: 43px;
+    color: #555;
+}
+
+#add-location-button a:link, #add-location-button a:visited {
+    color: #000;
+}
+
+#add-location-form-progress {
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    display: table;
+}
+
+#add-location-form-progress span {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 14pt;
+    color: #AAA;
+}
+
+#add-location-form-progress a {
+    padding: 8px;
+    background: #F0F0F0;
+    border-radius: 3px;
+    color: #AAA;
+    cursor: pointer;
+}
+
+#add-location-form-progress .active {
+    color: #000;
 }
 
 #add-location-form > p:nth-child(1) label {
     font-size: 18pt;
 }
 
+#add-location-form > p:first-child,
+#add-fixedpoint-form > p:last-child {
+    margin-top: 0rem;
+}
+#add-location-form > p:last-child,
+#add-fixedpoint-form > p:last-child {
+    margin-bottom: 0rem;
+}
+
 #add-location-form > p:nth-child(2) {
     margin-bottom: 1.5rem;
 }
 
-#add-location-form > p:nth-child(2):after {
-    display: block;
-    width: 100%;
+#add-fixedpoint-form {
+    display: none;
+}
+
+#fixedpoint-form-map {
+    width: 740px;
+    height: 420px;
+}
+
+#structure-form {
     margin-top: 1.5rem;
-    background: #D0D0D0;
-    height: 2px;
-    content: " ";
+    margin-bottom: 1.5rem;
+    display: none;
+}
+.blocker {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0px;
+}
+
+.modal {
+    border-radius: 4px;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    padding: 1.5rem;
+    box-shadow: 0px 10px 20px rgba(100, 100, 100, 0.7);
+    width: auto;
 }

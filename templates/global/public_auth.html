@@ -5,7 +5,11 @@
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.3/leaflet.draw.js'></script>
 
     <script src="/static/global/js/auth.js"></script>
+    <script src="/static/global/js/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="/static/global/css/jquery.modal.css" />
     <link rel="stylesheet" href="/static/global/css/public_auth.css" />
+
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 {% endblock %}
 
 {% block main %}
@@ -20,7 +24,7 @@
                 <h2>Welcome!</h2>
             </div>
 
-            <form id="login-form"">
+            <form id="login-form">
                 <div id="username" name="usernm" class="user-input">
                     <input id="username-input" placeholder="Username"></input>
                 </div>
@@ -39,21 +43,32 @@
 
             <div id="registration-form">
                 {{ user_form.as_p }}{{ account_form.as_p }}
+                 <div id="add-location-button"><a href="#add-location-form-container" rel="modal:open">+ Add Location</a></div>
             </div>
-            <div id="add-location-on-signup"><a>+ Add Location</a></div>
-            <div id="add-location-form">
-                {{ user_location_form.as_p }}
-                {{ fixed_location_form.as_p }}
+            <div id="add-location-form-container" style="display:none;">
+                <div id="add-location-form-progress">
+                    <a id="show-location-form" class="active">Description</a> <span>>></span> <a id="show-fixedpoint-form">Location</a>
+                </div>
+                <div id="add-location-form">
+                    {{ user_location_form.as_p }}
+                </div>
+                <div id="add-fixedpoint-form">
+                    <div id="fixedpoint-form-map"> </div>
+                </div>
             </div>
-            <div id="little-map"> </div>
+
+            <div id="structure-form-container">
+                <div id="structure-form">
+                    {{ structure_form.as_p }}
+                </div>
+            </div>
         </div>
 
     </div>
 </div>
-<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 <script>
 L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
-  var map = L.mapbox.map('little-map', 'mapbox.streets')
+  var map = L.mapbox.map('fixedpoint-form-map', 'mapbox.streets')
       .setView([41.8900, -74.2600], 10)
       .addControl(L.mapbox.geocoderControl('mapbox.places', {
         keepOpen: true
