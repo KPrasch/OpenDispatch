@@ -27,6 +27,9 @@ $(function() {
                     $(".errors").remove();
                     $('#login-container').prepend($('<div class="errors">'+ data.error +'</div>'));
                 }
+                if(data.status != undefined && data.status == 'authenticated') {
+                    window.location.href = '/dispatches/';
+                }
             }
         });
     });

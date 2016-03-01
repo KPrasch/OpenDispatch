@@ -40,9 +40,9 @@ def app_login(request):
         account = authenticate(username=usernm, password=passwd)
 
         if account is not None:
-            if user.is_active:
+            if account.is_active:
                 login(request, account)
-                return redirect('/dispatches/')
+                return JsonResponse({"status": "authenticated"})
             else:
                 # Return a 'disabled account' error message
                 error = "Your account has been disabled."

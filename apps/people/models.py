@@ -24,7 +24,7 @@ class AccountManager(BaseUserManager):
         email = self.normalize_email(email)
         account = self.model(email=email,
                           is_staff=is_staff, is_active=True,
-                          is_superaccount=is_superaccount, last_login=now,
+                          is_superuser=is_superuser, last_login=now,
                           date_joined=now, **extra_fields)
         account.set_password(password)
         account.save(using=self._db)
