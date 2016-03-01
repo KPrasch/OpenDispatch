@@ -14,10 +14,38 @@ $(function() {
 
 
     $("#login-form").on("submit", function(event) {
-        preventDefault();
+        event.preventDefault();
+
         $.ajax({
             type: "POST",
+            data: {
+                username: $("input#username-input").val(),
+                password: $("input#password-input").val()
+            },
+            success: function(data) {
+                if (data.error != undefined) {
+                    $(".errors").remove();
+                    $('#login-container').prepend($('<div class="errors">'+ data.error +'</div>'));
+                }
+            }
+        });
+    });
 
+    $("#registration-form #submit").click(function() {
+        var formData = {
+            username: $("input#id_username").val(),
+            phone_number: $("input#id_phone_number").val(),
+            citizen_notifications: '',
+            email: $("input#id_email").val(),
+            password: $("input#id_password").val(),
+            first_name: $("input#id_first_name").val(),
+            last_name: $("input#id_last_name").val(),
+        }
+        console.log(formData);
+        $.ajax({
+            type: "POST",
+            url: "/api/accounts",
+            data: formData
         });
     });
 

@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from twilio.rest import TwilioRestClient
 from django.contrib.gis.measure import D
+from django.http import JsonResponse
 import chalk
 
 from apps.map.forms import FixedLocationForm, StructureForm
@@ -21,8 +22,8 @@ telephony_logger = logging.getLogger('telephony')
 def app_login(request):
 
     if request.method == 'POST':
-        if 'username' not in request.POST or 'password' not in request.POST:
-            return Response({"error": "Missing username or password."}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        if request.POST['username'] == '' or reqiest.POST['password'] == '':
+            return JsonResponse({"error": "Must enter username and password."})
 
         usernm = request.POST['username']
         passwd = request.POST['password']
@@ -30,15 +31,16 @@ def app_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('/map/')
+                return redirect('/dispatches/')
             else:
                 # Return a 'disabled account' error message
                 error = "Your account has been disabled."
+                return JsonResponse({"error": error})
         else:
             # Return an 'invalid login' error message.
-            error = "Invalid Login User and Password Combination."
+            error = "No user found with that username and password."
+            return JsonResponse({"error": error})
 
-        return Response({"error": error}, status=status.HTTP_403_FORBIDDEN)
     else:
         user_form = UserForm()
         account_form = AccountForm()

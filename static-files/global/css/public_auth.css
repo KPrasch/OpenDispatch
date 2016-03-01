@@ -294,3 +294,11 @@ html,body { height: 100%; margin: 0px; padding: 0px; }
     margin-top: -3rem;
     text-shadow: none;
 }
+
+.errors {
+    width: 100%;
+    text-align: center;
+    color: red;
+    padding: 1rem;
+    margin-left: -0.75rem;
+}

@@ -29,11 +29,11 @@
                     <h2>Welcome!</h2>
                 </div>
 
-                <div id="username" name="usernm" class="user-input">
+                <div id="username" name="username" class="user-input">
                     <input id="username-input" placeholder="Username"></input>
                 </div>
 
-                <div id=password" name="passwd" class="user-input">
+                <div id=password" name="password" class="user-input">
                     <input id="password-input" type="password" placeholder="Password"></input>
                     <div id="forgot-password">Forgot password?</div>
                 </div>
@@ -46,6 +46,7 @@
 
             <div id="registration-form">
                 <a id="back-to-login" class="button">< Back To Login</a>
+                <button id="submit">SIGN UP</button>
                 {{ user_form.as_p }}{{ account_form.as_p }}
                 <a id="show-location-form-button" href="#add-location-form-container" rel="modal:open" class="button">
                     + Add Location
