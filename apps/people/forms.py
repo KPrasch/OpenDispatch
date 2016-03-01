@@ -19,7 +19,7 @@ class UserForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'first_name', 'last_name')
+        fields = ('email', 'password', 'first_name', 'last_name')
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -43,7 +43,7 @@ class UserForm(ModelForm):
 class AccountForm(ModelForm):
     class Meta:
         model = Account
-        fields = ('phone_number',) #, 'agency', 'role')
+        fields = ('username', 'phone_number', 'citizen_notifications')
 
 
 class UserLocationForm(ModelForm):

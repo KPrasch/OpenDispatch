@@ -163,18 +163,17 @@ HENDRIX_CHILD_RESOURCES = (
   )
 
 REST_FRAMEWORK = {
-    'DEFAULT_PARSER_CLASSES': (
-        'rest_framework_xml.parsers.XMLParser',
-    ),
     'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework_xml.renderers.XMLRenderer',
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework_xml.renderers.XMLRenderer',
     )
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+
+AUTH_USER_MODEL = 'people.Account'
 
 # Logging...
 
