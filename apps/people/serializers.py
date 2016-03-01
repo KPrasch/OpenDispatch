@@ -9,7 +9,16 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
 
-        fields = ('id', 'first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'password', 'email',)
+        write_only_fields = ('password',)
+        read_only_fields = ('is_staff', 'is_superuser', 'is_active', 'date_joined',)
+
+    def restore_object(self, attrs, instance=None):
+        # call set_password on user object. Without this
+        # the password will be stored in plain text.
+        user = super(UserModelSerializer, self).restore_object(attrs, instance)
+        user.set_password(attrs['password'])
+        return user
 
 
 class AccountModelSerializer(serializers.ModelSerializer):

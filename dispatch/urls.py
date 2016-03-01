@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from apps.collect.views import stream_twitter
+from rest_framework import routers
 import logging
 import apps.map.views
 import apps.collect.views
@@ -11,14 +12,18 @@ import apps.people.views
 import apps.public.views
 from apps.responder import views
 
+
+router = routers.DefaultRouter()
+router.register(r'^accounts', apps.people.views.AccountView, 'list')
+
 admin.autodiscover()
 
 urlpatterns = [
     # Admin and Auth URLs
+    url(r'^api/', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', apps.people.views.app_login),
     url(r'^accounts/logout/$', apps.people.views.logout),
-    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^about/$', apps.public.views.about_view),
     url(r'^dispatches/$', apps.map.views.map_view),
     url(r'^dispatches/(?P<venue>.*)$', apps.map.views.map_view),

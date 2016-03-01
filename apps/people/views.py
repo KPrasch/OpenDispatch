@@ -9,11 +9,19 @@ from django.shortcuts import render
 from twilio.rest import TwilioRestClient
 from django.contrib.gis.measure import D
 import chalk
+from rest_framework import viewsets
 
 from apps.map.forms import FixedLocationForm, StructureForm
 from apps.people.forms import AccountForm, UserForm, UserLocationForm
 from private.secret_settings import TWILIO_SID, TWILIO_SECRET, TWILIO_NUMBER, SMS_DISABLE
 from apps.map.models import UserLocation
+from django.shortcuts import get_object_or_404
+from apps.people.models import Account
+from apps.people.serializers import AccountModelSerializer
+from rest_framework.decorators import detail_route, list_route
+from rest_framework import permissions
+from rest_framework.permissions import AllowAny
+from django.shortcuts import HttpResponse
 
 telephony_logger = logging.getLogger('telephony')
 
@@ -22,7 +30,7 @@ def app_login(request):
 
     if request.method == 'POST':
         if 'username' not in request.POST or 'password' not in request.POST:
-            return Response({"error": "Missing username or password."}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return HttpResponse({"error": "Missing username or password."})
 
         usernm = request.POST['username']
         passwd = request.POST['password']
@@ -30,7 +38,7 @@ def app_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('/map/')
+                return redirect('/dispatches/')
             else:
                 # Return a 'disabled account' error message
                 error = "Your account has been disabled."
@@ -38,7 +46,7 @@ def app_login(request):
             # Return an 'invalid login' error message.
             error = "Invalid Login User and Password Combination."
 
-        return Response({"error": error}, status=status.HTTP_403_FORBIDDEN)
+        return HttpResponse({"error": error})
     else:
         user_form = UserForm()
         account_form = AccountForm()
@@ -52,13 +60,33 @@ def app_login(request):
                                                   "structure_form": structure_form})
 
 
+class IsStaffOrTargetUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # allow user to list all users if logged in user is staff
+        return view.action == 'retrieve' or request.user.is_staff
+
+    def has_object_permission(self, request, view, obj):
+        # allow logged in user to view own details, allows staff to view all records
+        return request.user.is_staff or obj == request.user
+
+
+class AccountView(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for listing or retrieving users.
+    """
+    serializer_class = AccountModelSerializer
+    queryset = Account.objects.all()
+    model = Account
+
+    def get_permissions(self):
+        # allow non-authenticated user to create via POST
+        return (AllowAny() if self.request.method == 'POST'
+                else IsStaffOrTargetUser()),
+
+
 def logout_view(request):
     logout(request)
     return redirect('/dispatches/')
-
-
-def registration(request):
-    pass
 
 
 def notify_users_in_radius(incident, firehose=True):
