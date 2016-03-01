@@ -43,7 +43,7 @@ def app_login(request):
         account_form = AccountForm()
         user_location_form = UserLocationForm()
         fixed_location_form = FixedLocationForm()
-        return render(request, 'app/login.html', {"account_form": account_form,
+        return render(request, 'global/login.html', {"account_form": account_form,
                                                   "user_form": user_form,
                                                   "user_location_form": user_location_form,
                                                   "fixed_location_form": fixed_location_form})
