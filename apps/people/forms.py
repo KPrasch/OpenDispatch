@@ -43,7 +43,7 @@ class UserForm(ModelForm):
 class AccountForm(ModelForm):
     class Meta:
         model = Account
-        fields = ('phone_number', 'agency', 'role')
+        fields = ('phone_number',) #, 'agency', 'role')
 
 
 class UserLocationForm(ModelForm):
