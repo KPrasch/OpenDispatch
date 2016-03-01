@@ -17,35 +17,6 @@ a {
     text-decoration: none;
 }
 
-#login-meta {
-    position: relative;
-    height: 30px;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    width: 100%;
-    background: rgb(240, 240, 240);
-    padding-top: 1.33em;
-    width: 95.5%;
-    margin-top: 40px;
-    vertical-align: center;
-}
-
-#forgot-password  {
-    width: 289px;
-    margin-right: auto;
-    margin-left: auto;
-    color: #2323DD;
-    text-size: 9px;
-    text-decoration: underline;
-    padding-top: 5px;
-    text-align: left;
-}
-
-#sign-up {
-    margin-right: auto;
-    margin-left: auto;
-}
-
 #burger {}
 
 #top-bar {
@@ -398,14 +369,6 @@ a {
 }
 .menu-ui a.active:hover {
     background:#3074a4;
-}
-
-#little-map {
-    position: relative;
-    top: 0;
-    bottom: 0;
-    width: 90%;
-    height: 200px;
 }
 
 .nano {

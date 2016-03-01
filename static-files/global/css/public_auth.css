@@ -1,30 +1,55 @@
+#login-meta {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    width: 100%;
+    margin-top: 40px;
+}
+
+#forgot-password  {
+    width: 289px;
+    margin-right: auto;
+    margin-left: auto;
+    color: #2323DD;
+    text-size: 9px;
+    text-decoration: underline;
+    padding-top: 5px;
+    text-align: left;
+}
+
+#sign-up {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    text-align: center;
+    display: block;
+}
+
 #login-background {
     width: 100%;
-    height: 100%;
-    background-color: #BFBFBF;
+}
+
+body {
+    background: #BFBFBF;
 }
 
 #login-container {
     background-color: white;
-    /*
-    position: absolute;
-    top: 20%;
-    left: 37%;
-    height: 55%;
-    width: 25%;
-    */
     position: relative;
     margin-left: auto;
     margin-right: auto;
     width: 550px;
-    height: 100%;
-    padding-top: 3.5em;
+
+    box-shadow: 0px 5px 5px #999;
+    border: 1px solid #999;
+    border-radius: 0 0 5px 5px;
+    border-top: none;
 }
 
 #login-form-wrapper {
     position: relative;
-    top: 50%;
-    transform: tranlateY(-50%);
+    padding-top: 3rem;
+    padding-bottom: 3rem;
 }
 
 #login-form-wrapper > div {
@@ -42,17 +67,19 @@
 
 #login-form-wrapper .user-input input {
     padding: 14px;
+    width: 258px;
 }
 
 #registration-form {
     padding: 2em;
     padding-top: 6em;
+    display: none;
 }
 
-#registration-form > p,
-#add-location-form > p,
+#registration-form   > p,
+#add-location-form   > p,
 #add-fixedpoint-form > p,
-#structure-form    > p {
+#add-structure-form  > p {
     width: 400px;
     display: block;
     text-align: left;
@@ -81,7 +108,7 @@
 #registration-form   > p > label,
 #add-location-form   > p > label,
 #add-fixedpoint-form > p > label,
-#structure-form      > p > label {
+#add-structure-form  > p > label {
     display: block;
 }
 
@@ -91,39 +118,59 @@
     display: block;
 }
 
+#add-location-form > p input {
+    width: 100%;
+    padding. 0.5rem;
+}
+
+#add-location-form > p textarea {
+    width: 100%;
+}
+
 .registration-width {
     width: 1100px !important;
 }
 
-#add-location-button {
+.button {
     padding: 0.7rem;
+    color: #333;
     width: 40%;
-    margin-top: 40px;
+    cursor: pointer;
     background: #83A5D4;
     border-radius: 0.5rem;
     border-bottom: 3px solid #4A5F7D;
     margin-left: auto;
     margin-right: auto;
-    text-shadow: 0px 1px 0px rgba(255,255,255,0.5);
+    text-shadow: 0px 1px 0px rgba(255,255,255,0.3);
 }
 
-#add-location-button:active {
+.green {
+    background: #83D489 !important;
+    border-bottom: 3px solid #659E69 !important;
+}
+
+.green:active {
     border-bottom: none;
-    margin-top: 43px;
+}
+
+.button:active {
+    border-bottom: none;
+    margin-top: 3px;
     color: #555;
 }
 
-#add-location-button a:link, #add-location-button a:visited {
-    color: #000;
+#registration-form a:link, #registration-form a:visited {
+    color: #333;
 }
 
 #add-location-form-progress {
     margin-left: auto;
     margin-right: auto;
-    width: 60%;
+    width: 100%;
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     display: table;
+    margin-top: -4px;
 }
 
 #add-location-form-progress span {
@@ -151,11 +198,13 @@
 }
 
 #add-location-form > p:first-child,
-#add-fixedpoint-form > p:last-child {
+#add-fixedpoint-form > p:first-child,
+#add-structure-form > p:first-child {
     margin-top: 0rem;
 }
 #add-location-form > p:last-child,
-#add-fixedpoint-form > p:last-child {
+#add-fixedpoint-form > p:last-child,
+#add-structure-form > p:last-child {
     margin-bottom: 0rem;
 }
 
@@ -168,15 +217,39 @@
 }
 
 #fixedpoint-form-map {
-    width: 740px;
-    height: 420px;
+    width: 940px;
+    height: 480px;
+    position: relative;
+    margin-top: 3px;
 }
 
-#structure-form {
+#add-structure-form {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
     display: none;
 }
+
+#add-structure-form > p textarea {
+    width: 98%;
+}
+
+#add-location-form-container .show-next-form {
+    float: right;
+    font-size: 10pt;
+}
+
+
+#show-location-form-button {
+    padding: 1rem;
+    margin-top: 4rem;
+    display: block;
+}
+
+#welcome-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
 .blocker {
     background: rgba(0, 0, 0, 0.2);
     padding: 0px;
@@ -185,7 +258,39 @@
 .modal {
     border-radius: 4px;
     border: 2px solid rgba(0, 0, 0, 0.4);
-    padding: 1.5rem;
+    padding: 2rem;
     box-shadow: 0px 10px 20px rgba(100, 100, 100, 0.7);
     width: auto;
+}
+
+.close-modal {
+    display: none;
+    visibility: hidden;
+}
+
+html,body { height: 100%; margin: 0px; padding: 0px; }
+
+#top-bar {
+    position: relative;
+    z-index: 0;
+    height: 1.66em;
+}
+
+#welcome-header h2 {
+    color: #444;
+    margin-top: 0px;
+    font-size: 41pt;
+    margin-top: 0.25rem;
+}
+
+#back-to-login {
+    margin-bottom: 3rem;
+    display:block;
+    padding: 0.5rem;
+    width: inherit;
+    color: rgba(0, 0, 0, 0.5);
+    background: rgb(220, 220, 220);
+    border: none;
+    margin-top: -3rem;
+    text-shadow: none;
 }

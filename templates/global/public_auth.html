@@ -12,6 +12,10 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 {% endblock %}
 
+{% block top_bar %}
+    {% include "global/top_bar.html" %}
+{% endblock %}
+
 {% block main %}
 
 <div id="login-background">
@@ -20,11 +24,11 @@
 
         <div id="login-form-wrapper">
 
-            <div id="welcome-header">
-                <h2>Welcome!</h2>
-            </div>
-
             <form id="login-form">
+                <div id="welcome-header">
+                    <h2>Welcome!</h2>
+                </div>
+
                 <div id="username" name="usernm" class="user-input">
                     <input id="username-input" placeholder="Username"></input>
                 </div>
@@ -35,63 +39,35 @@
                 </div>
 
                 <input type="submit" id="form-submit" style="display: none;" onSubmit="preventDefault()"></input>
+                <div id="login-meta">
+                    <a id="sign-up" class="button green">Sign Up</a>
+                </div>
             </form>
 
-            <div id="login-meta">
-                <div id="sign-up">Sign Up</div>
-            </div>
-
             <div id="registration-form">
+                <a id="back-to-login" class="button">< Back To Login</a>
                 {{ user_form.as_p }}{{ account_form.as_p }}
-                 <div id="add-location-button"><a href="#add-location-form-container" rel="modal:open">+ Add Location</a></div>
+                <a id="show-location-form-button" href="#add-location-form-container" rel="modal:open" class="button">
+                    + Add Location
+                </a>
             </div>
             <div id="add-location-form-container" style="display:none;">
                 <div id="add-location-form-progress">
-                    <a id="show-location-form" class="active">Description</a> <span>>></span> <a id="show-fixedpoint-form">Location</a>
+                    <a id="show-location-form" class="active">Description</a>
+                    <span>>></span>
+                    <a id="show-fixedpoint-form">Location</a>
                 </div>
                 <div id="add-location-form">
                     {{ user_location_form.as_p }}
+                    <button id="show-fixedpoint-form" class="show-next-form button">Next ></button>
                 </div>
                 <div id="add-fixedpoint-form">
                     <div id="fixedpoint-form-map"> </div>
-                </div>
-            </div>
-
-            <div id="structure-form-container">
-                <div id="structure-form">
-                    {{ structure_form.as_p }}
                 </div>
             </div>
         </div>
 
     </div>
 </div>
-<script>
-L.mapbox.accessToken = 'pk.eyJ1Ijoia3ByYXNjaCIsImEiOiJ0U1RtQVpvIn0.wHmPex20_XUmpjL2a0a4mQ';
-  var map = L.mapbox.map('fixedpoint-form-map', 'mapbox.streets')
-      .setView([41.8900, -74.2600], 10)
-      .addControl(L.mapbox.geocoderControl('mapbox.places', {
-        keepOpen: true
-    }));
-
-  var featureGroup = L.featureGroup().addTo(map);
-
-  var drawControl = new L.Control.Draw({
-    edit: {
-      featureGroup: featureGroup
-    },
-    draw: {polyline: false,
-           polygon: false,
-           rectangle: false,
-           circle: false
-    }
-  }).addTo(map);
-
-  map.on('draw:created', function(e) {
-      featureGroup.addLayer(e.layer);
-  });
-</script>
-
-
 
 {% endblock %}
