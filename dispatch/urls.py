@@ -37,4 +37,3 @@ urlpatterns = [
 
 # Do once on Django startup. Is there a better place for this to live?
 stream_twitter()
-default_logger = logging.getLogger('django')

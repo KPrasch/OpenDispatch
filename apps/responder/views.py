@@ -17,7 +17,9 @@ from apps.map.serializers import IncidentGeoSerializer
 from apps.people.models import Account
 from private.responder_settings import *
 from apps.people.serializers import AccountModelSerializer
-from dispatch.urls import default_logger
+import logging
+
+default_logger = logging.getLogger('django')
 
 
 def responder_board(request, venue=None):

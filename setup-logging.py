@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 from private.dispatch_settings import GLOBAL_LOGGING_DIRECTORY
 

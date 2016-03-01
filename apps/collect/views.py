@@ -32,8 +32,8 @@ from apps.map.serializers import IncidentGeoSerializer
 from private.secret_settings import *
 from private.dispatch_settings import *
 from apps.people.views import notify_users_in_radius
-from dispatch.urls import default_logger
 
+default_logger = logging.getLogger('django')
 auth_logger = logging.getLogger('auth')
 telephony_logger = logging.getLogger('telephony')
 
