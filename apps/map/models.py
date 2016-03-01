@@ -243,11 +243,11 @@ CONSTRUCTION_CLASS = (
 )
 
 BUILDING_TYPE = (
-    ('1', 'Residence'),
-    ('2', 'Commercial'),
-    ('3', 'Goverment'),
-    ('4', 'Industrial'),
-    ('6', 'Unknown'),
+    ('Residence', 'Residence'),
+    ('Commercial', 'Commercial'),
+    ('Goverment', 'Goverment'),
+    ('Industrial', 'Industrial'),
+    ('Unknown', 'Unknown'),
 )
 
 FIXED_APPLIANCES = (
@@ -265,6 +265,24 @@ NFPA_HYDRANT_CLASS = (
     ('4', 'D'),
 )
 
+TRUSSES = (
+    ('IF', 'Type 1 Floor Truss'),
+    ('IIF', 'Type 2 Floor Truss'),
+    ('IIIF', 'Type 3 Floor Truss'),
+    ('IVF', 'Type 4 Floor Truss'),
+    ('VF', 'Type 5 Floor Truss'),
+    ('IR', 'Type 1 Roof Truss'),
+    ('IIR', 'Type 2 Roof Truss'),
+    ('IIIR', 'Type 3 Roof Truss'),
+    ('IVR', 'Type 4 Roof Truss'),
+    ('VR', 'Type 5 Roof Truss'),
+    ('IFR', 'Type 1 Floor and Roof Truss'),
+    ('IIFR', 'Type 2 Floor and Roof Truss'),
+    ('IIIFR', 'Type 3 Floor and Roof Truss'),
+    ('IVFR', 'Type 4 Floor and Roof Truss'),
+    ('VFR', 'Type 5 Floor and Roof Truss'),
+)
+
 
 class FixedFireAppliance(models.Model):
     location = models.ForeignKey(FixedLocation)
@@ -279,15 +297,14 @@ class FixedFireAppliance(models.Model):
 class Structure(models.Model):
     name = models.CharField(max_length=1500, blank=True, null=True)
     location = models.OneToOneField(FixedLocation)
-    construction = models.IntegerField(choices=CONSTRUCTION_CLASS, blank=True, null=True)
-    stories = models.IntegerField()
+    construction = models.IntegerField(choices=CONSTRUCTION_CLASS, blank=True, null=True, default='6')
+    trusses = models.CharField(choices=TRUSSES, max_length=256, blank=True, null=True)
+    regular_occupancy = models.PositiveIntegerField(blank=True, null=True)
+    stories = models.IntegerField(blank=True, null=True)
     sqft = models.PositiveIntegerField(blank=True, null=True)
     access = models.TextField(blank=True, null=True)
-    category = models.IntegerField(choices=BUILDING_TYPE)
+    category = models.CharField(choices=BUILDING_TYPE, max_length=100, default='Unknown')
     sprinklers = models.BooleanField(default=False)
-    utilities = models.TextField(blank=True, null=True)
-    hazmat = models.BooleanField(default=False, blank=True)
-    preplan = models.TextField(blank=True, null=True)
     additional = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
@@ -304,7 +321,6 @@ class Agency(models.Model):
     unit = models.IntegerField()
     unique_id = models.CharField(max_length=8, default=createUniqueKey())
 
-
     def save(self, *args, **kwargs):
         # If agency doesn't exist in database, create a new random ID for it.
         if not self.pk:
@@ -320,6 +336,40 @@ class Agency(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+HAZARDS = (
+    ('Fuel', 'Fuel'),
+    ('Chemicals', 'Chemicals'),
+    ('None', 'None'),
+    ('Unknown', 'Unknown'),
+)
+
+UTILITIES = (
+    ('Heating', 'Heating'),
+    ('Cooking', 'Cooking'),
+    ('Electric', 'Electric'),
+    ('Solar', 'Solar'),
+    ('Water', 'Water'),
+    ('Sewer', 'Sewer'),
+    ('None', 'None'),
+    ('Unknown', 'Unknown'),
+)
+
+
+class StructureHazard(models.Model):
+    structure = models.ForeignKey(Structure, related_name="hazards")
+    hazard = models.CharField(choices=HAZARDS, max_length=100, blank=True, null=True, default="Unknown")
+    quantity = models.CharField(max_length=100, blank=True, null=True)
+    description = models.CharField(max_length=512, blank=True, null=True)
+
+
+class StructureUtility(models.Model):
+    structure = models.ForeignKey(Structure, related_name="utilities")
+    utility = models.CharField(choices=UTILITIES, max_length=100, blank=True, null=True, default="Unknown")
+    location = models.CharField(max_length=512, blank=True, null=True)
+    provider = models.CharField(max_length=512, blank=True, null=True)
+    notes = models.TextField(max_length=2000, blank=True, null=True)
 
 
 class Station(Structure):
@@ -349,6 +399,12 @@ class Hydrant(models.Model):
   
     def __unicode__(self):
         return self.name
+
+
+class DraftSite(models.Model):
+    location = models.ForeignKey(FixedLocation)
+    access = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(max_length=2000)
 
 
 USER_LOCATION_CATEGORIES = (
