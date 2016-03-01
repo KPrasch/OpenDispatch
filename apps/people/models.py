@@ -80,8 +80,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     objects = AccountManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['username', 'email', 'password']
 
     class Meta:
         verbose_name = _('account')

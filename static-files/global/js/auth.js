@@ -44,7 +44,7 @@ $(function() {
         console.log(formData);
         $.ajax({
             type: "POST",
-            url: "/api/accounts",
+            url: "/api/accounts/",
             data: formData
         });
     });

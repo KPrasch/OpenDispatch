@@ -36,10 +36,12 @@ def app_login(request):
 
         usernm = request.POST['username']
         passwd = request.POST['password']
-        user = authenticate(username=usernm, password=passwd)
-        if user is not None:
+
+        account = authenticate(username=usernm, password=passwd)
+
+        if account is not None:
             if user.is_active:
-                login(request, user)
+                login(request, account)
                 return redirect('/dispatches/')
             else:
                 # Return a 'disabled account' error message
