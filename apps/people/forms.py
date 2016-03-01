@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 import re
 
 from apps.people.models import Account
-from apps.map.models import UserLocation, FixedLocation
+from apps.map.models import UserLocation
 
 
 class UserForm(ModelForm):
@@ -51,7 +51,6 @@ class UserLocationForm(ModelForm):
         model = UserLocation
         fields = ('title', 'description', 'category')
 
-class FixedLocationForm(ModelForm):
-    class Meta:
-        model = FixedLocation
-        fields = ('street_address', 'lat', 'lng')
+
+
+
