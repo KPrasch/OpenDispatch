@@ -294,25 +294,25 @@ class Structure(models.Model):
         return self.name
 
 
+def createUniqueKey():
+        return hashlib.md5(str(random.randrange(1000000))).hexdigest()[0:7]
+
+
 class Agency(models.Model):
     #owner = models.ForeignKey(UserProfile)
     name = models.CharField(max_length=100)
     unit = models.IntegerField()
-    unique_id = models.CharField()
-
-
-    def createUniqueKey(self):
-        return hashlib.md5(str(random.randrange(1000000))).hexdigest()[0:7]
+    unique_id = models.CharField(max_length=8, default=createUniqueKey())
 
 
     def save(self, *args, **kwargs):
         # If agency doesn't exist in database, create a new random ID for it.
         if not self.pk:
             # This makes a unique id by truncating an MD5 hash of a random float between 0 and 1 million.
-            key = self.createUniqueKey()
+            key = createUniqueKey()
             # Ensure uniqueness.
             while Agency.objects.filter(unique_id=key).count() > 0:
-                key = self.createUniqueKey()
+                key = createUniqueKey()
 
             self.unique_id = key
 

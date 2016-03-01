@@ -4,6 +4,7 @@ from hendrix.contrib.async.resources import MessageHandlerProtocol
 from hendrix.facilities.resources import NamedResource
 from twisted.internet.protocol import Factory
 
+
 dispatch_resource = NamedResource("twitter-dispatches")
 dispatch_resource.putChild("incidents", SockJSResource(Factory.forProtocol(MessageHandlerProtocol)))
 

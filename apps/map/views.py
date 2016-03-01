@@ -17,6 +17,9 @@ from private.dispatch_settings import *
 from private.secret_settings import *
 from collections import OrderedDict
 
+import logging
+logger = logging.getLogger('geocoder')
+
 
 def map_view(request, venue=None):
     """
@@ -90,13 +93,13 @@ def compile_incident_location_string(incident_dict):
         if key in incident_dict:
             loc_string += str(incident_dict[key]) + ', '
         else:
-            print "No value for key %s" % key
+            logger.warn("No value for key %s" % key)
 
     for key in VENUE_KEYS:
         if key in incident_dict:
             loc_string += str(incident_dict[key])
         else:
-            print "No value for key %s" % key
+            logger.warn("No value for key %s" % key)
 
     incident_location_string = (loc_string.lower().title()).encode('utf-8')
     
@@ -108,10 +111,12 @@ def geocode(incident_location_string, from_sensor=False, strict=True, round=1):
     Uses the unauthenticated Google Maps API V3.  using passed incident location string, return a latitude and logitude for an incident. 
     """
 
-    print "Geocoding %s ..." % incident_location_string
+    logger.info("Geocoding %s ..." % incident_location_string)
 
     if incident_location_string == '' or incident_location_string is None:
+        logger.error('Empty incident strings cannot be geocoded.')
         raise ValueError('Empty incident strings cannot be geocoded.')
+
 
     url = 'https://maps.googleapis.com/maps/api/geocode/json?'
 
@@ -137,15 +142,16 @@ def geocode(incident_location_string, from_sensor=False, strict=True, round=1):
             error = response["status"]
             reason = response["error_message"]
             payload = incident_location_string
-            print "Could not generate coordinates for an Incident\n Status: %s\n Reason: %s\n Payload: %s" % (error, reason, payload)
+            logger.error("Failed to generate coordinates for an Incident\n Status: %s\n Reason: %s\n Payload: %s" % \
+                         (error, reason, payload))
 
         elif response['status'] == "ZERO_RESULTS":
             if round == 1:
                 geocode(incident_location_string, strict=False, round=2)
-                print "Zero results for %s \n trying again with strict = False" % incident_location_string
+                logger.info("Zero results for %s \n trying again with strict = False" % incident_location_string)
             elif round == 2:
                 # Do something more recursive, again...?
-                print "No Location Found. Payload: %s" % incident_location_string
+                logger.warn("No Location Found after removing strict filtration. Payload: %s" % incident_location_string)
                 latitude, longitude = None, None
 
         elif response['status'] == 'OK':
@@ -154,15 +160,14 @@ def geocode(incident_location_string, from_sensor=False, strict=True, round=1):
             accuracy = result['location_type']
             latitude, longitude = location['lat'], location['lng']
 
-            print incident_location_string, accuracy, latitude, longitude
+            logger.info(incident_location_string, accuracy, latitude, longitude)
 
         else:
             latitude, longitude = None, None
             reason = response["status"]
-            print incident_location_string, "Could not generate coordinates for this Incident - Reason: %s" % reason
+            logger.warn(incident_location_string, "Could not generate coordinates for this Incident - Reason: %s" % reason)
     else:
-        print "%s" % re.status_code
-        import pdb; pdb.set_trace()
+        logger.error("%s" % re.status_code)
         # Do Something!
 
     return latitude, longitude

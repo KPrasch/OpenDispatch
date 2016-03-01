@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from apps.collect.views import stream_twitter
+import logging
 import apps.map.views
 import apps.collect.views
 import apps.public.views
@@ -36,3 +37,4 @@ urlpatterns = [
 
 # Do once on Django startup. Is there a better place for this to live?
 stream_twitter()
+default_logger = logging.getLogger('django')

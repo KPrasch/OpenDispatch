@@ -8,6 +8,7 @@ import imaplib
 import unicodedata
 import urllib
 from urlparse import parse_qs
+import logging
 
 import re
 from dateutil import parser
@@ -15,18 +16,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from django.http import HttpResponse
 import simplejson
-
 from rest_framework.response import Response
 import requests
 from requests_oauthlib import OAuth1
 from hendrix.contrib.async.messaging import hxdispatcher
 from hendrix.experience import crosstown_traffic
-
 from rest_framework.renderers import JSONRenderer
-
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework import status
-
 from django.db.models import Q
 
 from apps.map.models import Incident, IncidentMeta, FixedLocation, WeatherSnapshot
@@ -34,8 +31,11 @@ from apps.map.views import compile_incident_location_string, geocode
 from apps.map.serializers import IncidentGeoSerializer
 from private.secret_settings import *
 from private.dispatch_settings import *
-
 from apps.people.views import notify_users_in_radius
+from dispatch.urls import default_logger
+
+auth_logger = logging.getLogger('auth')
+telephony_logger = logging.getLogger('telephony')
 
 
 def setup_oauth():
@@ -50,7 +50,7 @@ def setup_oauth():
 
     # Authorize
     authorize_url = TWITTER_AUTHORIZE_URL + resource_owner_key
-    print 'Please go here and authorize: ' + authorize_url
+    auth_logger.error('Please go here and authorize: ' + authorize_url)
 
     verifier = raw_input('Please input the verifier: ')
     oauth = OAuth1(TWITTER_CONSUMER_KEY,
@@ -83,8 +83,8 @@ def stream_twitter():
     def stream():
         if not TWITTER_OAUTH_TOKEN:
             token, secret = setup_oauth()
-            print "OAUTH_TOKEN: " + token
-            print "OAUTH_TOKEN_SECRET: " + secret
+            auth_logger.info("OAUTH_TOKEN: " + token)
+            auth_logger.info("OAUTH_TOKEN_SECRET: " + secret)
 
         else:
             oauth = get_oauth()
@@ -106,7 +106,7 @@ def stream_twitter():
                     #except ValueError:
                     #    print(line)
                         #hxdispatcher.send("twitter-dispatches", line)
-    print "Crosstown Traffic Thread Listening for Tweets ...\n"
+    default_logger.info("Crosstown Traffic Thread Listening for Tweets ...")
     return HttpResponse(status=200)
 
 
@@ -267,7 +267,7 @@ def process_import(incident_str, received_datetime):
 
     # Explore if incidents are validated for duplicates well enough.  Twitter Stream API does in fact send dupes.
     except IntegrityError:
-        print "Duplicate Incident. (Probably the the Twitter Streaming API back filling from a recent reconnection.)"
+        default_logger.warn("Duplicate Incident. (Probably the the Twitter Streaming API back filling from a recent reconnection.)")
         return HttpResponse(status=200)
 
     # weathersnapshot = WeatherSnapshot.objects.create()
@@ -293,11 +293,11 @@ def process_import(incident_str, received_datetime):
     @crosstown_traffic()
     def notify():
         notify_users_in_radius(incident, firehose=True)
-        print "Finished Notifying Users."
+        telephony_logger.info("Finished Notifying Users.")
 
     incidentmeta.save()
     incident.save()
-    print "Created %d" % incident.id
+    default_logger.info("Created %d" % incident.id)
     # hxdispatcher.send("twitter-dispatches", "Created %d" % incident.id)
 
     serializer = IncidentGeoSerializer(incident)

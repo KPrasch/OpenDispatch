@@ -1,18 +1,21 @@
+import logging
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from rest_framework import status
 from rest_framework.response import Response
 from django.shortcuts import redirect
 from django.shortcuts import render
-from apps.people.forms import AccountForm, UserForm, FixedLocationForm, UserLocationForm
-from rest_framework.decorators import api_view, renderer_classes
-from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import TwilioRestClient
-from private.secret_settings import TWILIO_SID, TWILIO_SECRET, TWILIO_NUMBER, SMS_DISABLE
-from apps.map.models import Incident, UserLocation
 from django.contrib.gis.measure import D
-from django.contrib.auth.models import User
 import chalk
+
+from apps.people.forms import AccountForm, UserForm, FixedLocationForm, UserLocationForm
+from private.secret_settings import TWILIO_SID, TWILIO_SECRET, TWILIO_NUMBER, SMS_DISABLE
+from apps.map.models import UserLocation
+
+telephony_logger = logging.getLogger('telephony')
+
 
 def app_login(request):
 
@@ -50,6 +53,7 @@ def logout_view(request):
     logout(request)
     return redirect('/dispatches/')
 
+
 def registration(request):
     pass
 
@@ -69,6 +73,6 @@ def notify_users_in_radius(incident, firehose=True):
         phone_number = str(account.phone_number)
         sms_body = incident.sms_str(user_location)
         message = client.messages.create(to=phone_number, from_=TWILIO_NUMBER, body=sms_body)
-        print "Sending SMS to %s: %s" % (account.user.first_name + account.user.last_name, str(account.phone_number))
+        telephony_logger.info("Sending SMS to %s: %s" % (account.user.first_name + account.user.last_name, str(account.phone_number)))
 
     return nearby_uls.count()

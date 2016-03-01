@@ -17,6 +17,7 @@ from apps.map.serializers import IncidentGeoSerializer
 from apps.people.models import Account
 from private.responder_settings import *
 from apps.people.serializers import AccountModelSerializer
+from dispatch.urls import default_logger
 
 
 def responder_board(request, venue=None):
@@ -51,7 +52,7 @@ def initiate_personnel_response(request):
         # Get the caller's phone number from the incoming Twilio request
         # from_number = request.POST.get("From")
         from_number = request.POST.get('From')
-        print "response call from {}".format(from_number)
+        default_logger.info("response call from {}".format(from_number))
 
         resp = twilio.twiml.Response()
 
@@ -59,7 +60,8 @@ def initiate_personnel_response(request):
             user = Account.objects.get(phone_number=from_number)
             if user.is_responder is True and user.responder_active is True:
                 responder = user
-                message = "Hello {0}, press any key to respond... The most recent dispatch, was dispatched at {1}. to. {2}. for. {3}." \
+                message = "Hello {0}, press any key to respond with E.T.A.\
+                    The most recent dispatch, was dispatched at {1}. to. {2}. for. {3}." \
                     .format(responder.user.first_name,
                             most_recent.dispatch_time,
                             most_recent.location.street_address,
@@ -72,7 +74,7 @@ def initiate_personnel_response(request):
                 message = "You are not authorized to respond."
 
         except ObjectDoesNotExist:
-            message = "You have reached a Responder Zero phone number. You do not have an account."
+            message = "You have reached a Responder Zero phone number. You do not have an account. Goodbye."
 
         resp.say(message)
         return HttpResponse(str(resp))
@@ -92,8 +94,9 @@ def confirm_personnel_response(request, responder_id):
             serializer = AccountModelSerializer(responder)
             hxdispatcher.send("twilio-stream", serializer.data)
 
+
         resp = twilio.twiml.Response()
-        resp.say("Response Confirmed. Your E.T.A. is %s minutes" % str(responder.default_eta))
+        resp.say("Response Confirmed. Your E.T.A. is %s minutes" % str(digit_pressed))
 
         return HttpResponse(str(resp))
 

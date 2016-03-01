@@ -106,3 +106,13 @@ table {
 #below-responders li.incident-li:first-child {
     border-top: 1px solid #888;
 }
+
+#footer {
+    background-color: white;
+    border-top: 1px solid black;
+    bottom: 0;
+    height: 30px;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+}

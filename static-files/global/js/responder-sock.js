@@ -15,8 +15,15 @@ sock.onopen = function(e) {
  console.log('ws:' + e.data);
 };
 
-function updateResponderList(_responder) {
-     var responderHTML = '<tr class="responder-li">' +
+function addResponderToLocalStorage(_responder) {
+    if(localStorage['call_'+ _responder.id] == undefined) {
+        localStorage['call_'+ _responder.id] = JSON.stringify(_responder);
+        console.log(localStorage['call_'+ _responder.id]);
+    }
+}
+
+function responderHTMLBlock(_responder) {
+     var responderHTML = '<tr class="responder-li" id="responder_'+ _responder.id +'>' +
                             '<td class="responder-meta">' +
                                 _responder.user.last_name +
                             '</td>' +
@@ -30,9 +37,18 @@ function updateResponderList(_responder) {
                                 '5 minutes ago' +
                             '</td>' +
                         '</tr>';
+     return responderHTML;
+}
 
-    // In either case...
-    $('#responder-list-container table').append(responderHTML);
+function updateResponderList(_responder) {
+
+    for(var call in localStorage) {
+        call = JSON.parse(call);
+        console.log(call);
+        $('#responder'+call.id).remove();
+        $('#responder-list-container table').append(responderHTMLBlock(call));
+    }
+
     console.log(responderHTML);
 
     // Check for map data
@@ -50,6 +66,7 @@ sock.onmessage = function(e) {
  // Is a valid Account JSON object? If not forget about it!
  console.log(responder);
  if(responder.hasOwnProperty('user') == true) {
+    addResponderToLocalStorage(responder);
     updateResponderList(responder);
     console.log("We started from the bottom now we here.");
  }
@@ -57,6 +74,10 @@ sock.onmessage = function(e) {
 
 $(function() {
     $.get('/get_recent_incidents/', function(data) {
+        if(data.features == undefined) {
+            $("#below-responders").fadeOut(200);
+            return;
+        }
         for(feature of data.features) {
             var incidentHTML = '<li class="incident-li" id="incident_'+feature.id+'" onclick="clickButton('+feature.id+')">' +
                 '<div class="incident-close" id="close_'+feature.id+'">X</div>' +
@@ -80,6 +101,5 @@ $(function() {
             });
         });
     });
-
 });
 
