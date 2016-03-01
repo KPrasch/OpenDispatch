@@ -16,7 +16,7 @@ class AccountModelSerializer(serializers.ModelSerializer):
     def restore_object(self, attrs, instance=None):
         # call set_password on user object. Without this
         # the password will be stored in plain text.
-        account = super(UserModelSerializer, self).restore_object(attrs, instance)
+        account = super(AccountModelSerializer, self).restore_object(attrs, instance)
         account.set_password(attrs['password'])
         return account
 

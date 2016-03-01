@@ -13,7 +13,7 @@ import chalk
 from rest_framework import viewsets
 
 from apps.map.forms import FixedLocationForm, StructureForm
-from apps.people.forms import AccountForm, UserForm, UserLocationForm
+from apps.people.forms import AccountForm, UserLocationForm
 from private.secret_settings import TWILIO_SID, TWILIO_SECRET, TWILIO_NUMBER, SMS_DISABLE
 from apps.map.models import UserLocation
 from django.shortcuts import get_object_or_404
@@ -51,14 +51,12 @@ def app_login(request):
             return JsonResponse({"error": error})
 
     else:
-        user_form = UserForm()
         account_form = AccountForm()
         user_location_form = UserLocationForm()
         fixed_location_form = FixedLocationForm()
 
         structure_form = StructureForm()
         return render(request, 'global/public_auth.html', {"account_form": account_form,
-                                                           "user_form": user_form,
                                                            "user_location_form": user_location_form,
                                                            "fixed_location_form": fixed_location_form,
                                                            "structure_form": structure_form})

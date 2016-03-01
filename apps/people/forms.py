@@ -7,7 +7,7 @@ from apps.people.models import Account
 from apps.map.models import UserLocation
 
 
-class UserForm(ModelForm):
+class AccountForm(ModelForm):
     username = RegexField(label="Username", max_length=30,
          regex=r'^[\w.@+-]+$', help_text = "My text",
          error_messages = {'invalid':
@@ -18,8 +18,8 @@ class UserForm(ModelForm):
                               widget=PasswordInput)
 
     class Meta:
-        model = User
-        fields = ('email', 'password', 'first_name', 'last_name')
+        model = Account
+        fields = ('username', 'email', 'password', 'first_name', 'last_name', 'phone_number')
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -27,23 +27,17 @@ class UserForm(ModelForm):
             raise ValidationError(
                   'Username can contain only alphanumeric characters')
         try:
-            User.objects.get(username=username)
+            Account.objects.get(username=username)
         except ObjectDoesNotExist:
             return username
         raise ValidationError('Username is already taken')
 
     def save(self, commit=True):
-        user = super(UserForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password"])
+        account = super(AccountForm, self).save(commit=False)
+        account.set_password(self.cleaned_data["password"])
         if commit:
-            user.save()
-        return user
-
-
-class AccountForm(ModelForm):
-    class Meta:
-        model = Account
-        fields = ('username', 'phone_number', 'citizen_notifications')
+            account.save()
+        return account
 
 
 class UserLocationForm(ModelForm):
