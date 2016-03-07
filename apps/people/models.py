@@ -81,7 +81,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     objects = AccountManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['username', 'email', 'password']
+    REQUIRED_FIELDS = ['email', 'password']
 
     class Meta:
         verbose_name = _('account')
@@ -107,3 +107,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         """
         send_mail(subject, message, from_email, [self.email])
 
+class PersonnelResponse(models.Model):
+    responded = models.DateTimeField(auto_now_add=True)
+    responder = models.ForeignKey(Account)
+    eta = models.PositiveIntegerField()

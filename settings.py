@@ -32,8 +32,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'apps.collect',
-    'apps.calltaker',
-    'apps.responder',
     'apps.map',
     'apps.people',
     'apps.weather',
@@ -91,10 +89,10 @@ USE_TZ = True
 DATABASES = {
     'default': {
          'ENGINE': 'django.contrib.gis.db.backends.postgis',
-         'NAME': 'geodjango',
+         'NAME': 'opendispatch_dev_db',
          'USER': 'geodjango',
-         'PASSWORD': 'geodjango',
-         'HOST': 'localhost',
+         'PASSWORD': 'moneybirdjumpspurple',
+         'HOST': 'opendispatch-dev-db.ccrdwgi0qgql.us-west-2.rds.amazonaws.com',
          'PORT': '5432',
      }
 }

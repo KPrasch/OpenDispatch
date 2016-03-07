@@ -18,6 +18,12 @@ deployer = HendrixDeploy(options={"settings": "settings"})
 deployer.resources.append(dispatch_resource)
 deployer.resources.append(message_resource)
 logger.info("Starting Hendrix at %s" % str(datetime.datetime.now()))
+
+
+from apps.collect.views import stream_twitter
+# Do once on Django startup. Is there a better place for this to live?
+stream_twitter()
+
 deployer.run()
 
 
