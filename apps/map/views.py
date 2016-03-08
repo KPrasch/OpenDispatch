@@ -1,18 +1,14 @@
-# Import django modules
-import string
-import urllib
 
-import simplejson
 import requests
-from rest_framework import status
-from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework import viewsets
 
 from django.shortcuts import render
 from rest_framework.renderers import JSONRenderer
 
 from apps.map.models import *
-from apps.map.serializers import IncidentGeoSerializer
+from apps.map.serializers import IncidentGeoSerializer, IncidentListSerializer
 from private.dispatch_settings import *
 from private.secret_settings import *
 from collections import OrderedDict
@@ -47,41 +43,24 @@ def map_view(request, venue=None):
                                                 "locale_state": LOCALE_STATE})
 
 
-def bubble_view(request):
+class IncidentViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    Return the Template
+    This viewset automatically provides `list` and `detail` actions.
     """
-    return render(request, 'app/graph.html')
+    queryset = Incident.objects.order_by('-dispatch_time')
+    serializer_class = IncidentGeoSerializer
 
+    @list_route(renderer_classes=[JSONRenderer])
+    def geo(self, request, *args, **kwargs):
+        queryset = Incident.objects.order_by('-dispatch_time')
+        serializer = IncidentGeoSerializer(queryset, many=True)
+        return Response(serializer.data)
 
-@api_view(['GET'])
-@renderer_classes((JSONRenderer,))
-def most_recent_dispatch(request):
-    """
-    Most Recent Dispatch in GeoJSON
-    """
-    recent = Incident.objects.all().order_by("-dispatch_time")[0]
-    serializer = IncidentGeoSerializer(recent)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-@renderer_classes((JSONRenderer,))
-def get_geoincidents(request, venue=None):
-    """
-    FeatureCollection list of all Incidents in GeoJSON
-
-    {"type":"FeatureCollection","features":[]}
-
-    """
-    if venue is None:
-        geoincidents = Incident.objects.all().order_by('-dispatch_time')
-    else:
-        geoincidents = Incident.objects.all().filter(meta__venue__icontains=venue).order_by('-dispatch_time')
-
-    serializer = IncidentGeoSerializer(geoincidents, many=True)
-
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    @list_route(renderer_classes=[JSONRenderer])
+    def recent(self, request, *args, **kwargs):
+        queryset = Incident.objects.all().order_by('-dispatch_time')[0]
+        serializer = IncidentListSerializer(queryset)
+        return Response(serializer.data)
 
 
 def compile_incident_location_string(incident_dict):
@@ -171,5 +150,3 @@ def geocode(incident_location_string, from_sensor=False, strict=True, round=1):
         # Do Something!
 
     return latitude, longitude
-
-

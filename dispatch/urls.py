@@ -11,9 +11,20 @@ import apps.people.views
 
 
 router = routers.DefaultRouter()
-router.register(r'^accounts', apps.people.views.AccountView, 'list')
-
+router.register(r'accounts', apps.people.views.AccountView, 'list')
+router.register(r'incidents', apps.map.views.IncidentViewSet, 'list')
 admin.autodiscover()
+
+# The API URLs are now determined automatically by the router.
+# Additionally, we include the login URLs for the browsable API.
+urlpatterns = [
+    url(r'^api/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^admin/', include(admin.site.urls)),
+    ]
+
+
+'''
 
 urlpatterns = [
     # Admin and Auth URLs
@@ -25,10 +36,15 @@ urlpatterns = [
     url(r'^dispatches/(?P<venue>.*)$', apps.map.views.map_view),
     url(r'^incidents/search/$', apps.collect.views.search_incidents),
     url(r'^incidents/filter/daterange/$', apps.collect.views.filter_incidents_daterange),
-    url(r'^graph/$', apps.map.views.bubble_view),
+    url(r'^get_incidents/$', apps.map.views.get_incide),
     url(r'^get_geoincidents/$', apps.map.views.get_geoincidents),
     url(r'^get_geoincidents/(?P<venue>.*)$', apps.map.views.get_geoincidents),
     #url(r'^get_streetview/(?P<location_string>.*)/$', apps.map.views.get_streetview),
     url(r'^most_recent/$', apps.map.views.most_recent_dispatch),
 ]
 
+<<<<<<< Updated upstream
+=======
+# Do once on Django startup. Is there a better place for this to live?
+#stream_twitter()
+'''
