@@ -1,0 +1,43 @@
+<head>
+  {% load sass_tags %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.css" rel='stylesheet' />
+  <link href="{% sass_src '/static/client/stylesheets/main.scss' %}" rel='stylesheet' />
+  <link href="{% sass_src '/static/client/stylesheets/mixins.scss' %}" rel='stylesheet' />
+  <script src="/static/public/js/custom-tags.js"></script>
+  <script src="/static/public/js/animations.js"></script>
+
+  <title>responder-zero</title>
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li class="title">
+        <span class="fix0">O</span>PEN-D<span class="fix3">I</span>SP<span class="fix1">A</span>T<span class="fix2">C</span>H
+      </li>
+      <li class="nav-item">Login / Sign-Up</li>
+      <li class="nav-item">About</li>
+    </ul>
+  </nav>
+  <app-container>
+    <incident-reports>
+      <input id="search-incidents" type="text" placeholder="Search recent incidents..." />
+      <incident-report report-id="12">
+        <div class="status">
+          Status: <span class="type crit">Crit</span>
+        </div>
+        <address><b>94 Downs St. Kingston NY</b></address>
+        <div class="date">
+          Tuesday, March 8, 2016 6:07:00am
+        </div>
+      </incident-report>
+    </incident-reports>
+    <map-container>
+      <incident-map></incident-map>
+    </map-container>
+  </app-container>
+</body>

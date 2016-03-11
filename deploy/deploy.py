@@ -21,7 +21,7 @@ logger.info("Starting Hendrix at %s" % str(datetime.datetime.now()))
 
 
 from apps.collect.views import stream_twitter
-# Do once on Django startup. Is there a better place for this to live?
+# Do once on Django startup. Let's do Auth here too?
 stream_twitter()
 
 deployer.run()

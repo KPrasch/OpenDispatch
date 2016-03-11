@@ -16,15 +16,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from django.http import HttpResponse
 import simplejson
-from rest_framework.response import Response
 import requests
 from requests_oauthlib import OAuth1
 from hendrix.contrib.async.messaging import hxdispatcher
 from hendrix.experience import crosstown_traffic
-from rest_framework.renderers import JSONRenderer
-from rest_framework.decorators import api_view, renderer_classes
-from rest_framework import status
-from django.db.models import Q
 
 from apps.map.models import Incident, IncidentMeta, FixedLocation, WeatherSnapshot
 from apps.map.views import compile_incident_location_string, geocode
@@ -110,56 +105,6 @@ def stream_twitter():
     return HttpResponse(status=200)
 
 
-@api_view(['GET'])
-@renderer_classes((JSONRenderer,))
-def search_incidents(request):
-    """
-    Autocomplete
-    """
-    #import pdb; pdb.set_trace()
-    q = request.GET.get('term')
-
-    if q == '':
-        matches = Incident.objects.all().order_by("-dispatch_time")
-    else:
-        matches = Incident.objects.all().filter(Q(meta__dispatch__icontains=q) |
-                                                Q(meta__venue__icontains=q) |
-                                                Q(location__street_address__icontains=q)) \
-                                                .order_by("-dispatch_time")
-
-    serializer = IncidentGeoSerializer(matches, many=True)
-
-    if bool(matches) is True:
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    else:
-        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-
-
-@api_view(['GET'])
-@renderer_classes((JSONRenderer,))
-def filter_incidents_daterange(request):
-    """
-    filter by dateranges
-    """
-
-    start_datetime = request.GET.get("min")
-    min_dt = datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M:%S.%fZ')
-    end_datetime = request.GET.get("max")
-    max_dt = datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M:%S.%fZ')
-
-    if not bool(start_datetime or end_datetime):
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    else:
-        matches = Incident.objects.all().order_by('-dispatch_time').filter(dispatch_time__range=[min_dt, max_dt])
-
-    serializer = IncidentGeoSerializer(matches, many=True)
-
-    if bool(matches) is True:
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    else:
-        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-
-
 def parse_incident(payload, twitter=False):
     """
     Using configurable incident data fields, parse the data into incident models with all of the information required.
@@ -170,28 +115,31 @@ def parse_incident(payload, twitter=False):
     key_locations = key_re.split(payload)[1:]
     incident_dict = {k: v.strip() for k, v in zip(key_locations[::2], key_locations[1::2])}
 
-    if twitter is False:
-        regex = re.compile('[^a-zA-Z]')
-        incident_dict['Venue'] = str.rstrip(regex.sub(" ", incident_dict['Venue']))
-
-    elif twitter is True:
-        regex = re.compile("([a-zA-Z_ ]*)([^a-zA-Z]*)$")
-        s = regex.search(incident_dict["Venue"])
-
-        if s.groups()[1] is not '':
-            # Adding a key to the dictionary here.
-            incident_dict['dispatch_time'] = parser.parse(s.groups()[1])
-            incident_dict['Venue'] = str.rstrip(s.groups()[0])
-
-            if "king" in incident_dict['Venue'].lower():
-                incident_dict["Venue"] = "Kingston"
-            elif "out of" in incident_dict["Venue"].lower():
-                incident_dict["Venue"] = ""
-                # Handle out of City Dispatches here.
-
-        else:
+    try:
+        if twitter is False:
             regex = re.compile('[^a-zA-Z]')
             incident_dict['Venue'] = str.rstrip(regex.sub(" ", incident_dict['Venue']))
+
+        elif twitter is True:
+            regex = re.compile("([a-zA-Z_ ]*)([^a-zA-Z]*)$")
+            s = regex.search(incident_dict["Venue"])
+
+            if s.groups()[1] is not '':
+                # Adding a key to the dictionary here (dispatch time).
+                incident_dict['dispatch_time'] = parser.parse(s.groups()[1])
+                incident_dict['Venue'] = str.rstrip(s.groups()[0])
+
+                if "king" in incident_dict['Venue'].lower():
+                    incident_dict["Venue"] = "Kingston"
+                elif "out of" in incident_dict["Venue"].lower():
+                    incident_dict["Venue"] = ""
+                    # Handle out of City Dispatches here.
+
+            else:
+                regex = re.compile('[^a-zA-Z]')
+                incident_dict['Venue'] = str.rstrip(regex.sub(" ", incident_dict['Venue']))
+    except KeyError as e:
+        default_logger.warn("Can not manipulate dictionary {0} - {1}".format(incident_dict, e))
 
     return incident_dict
 
@@ -231,7 +179,7 @@ def get_weather_snapshot(lon, lat):
                                              clouds=r["clouds"]["all"])
 
     import pdb; pdb.set_trace()
-    return response
+    pass
 
 
 def map_intelligence_filter(incident_dict):
