@@ -3,106 +3,27 @@ from datetime import datetime
 import getpass
 import email
 import time
-import json
 import imaplib
 import unicodedata
 import urllib
-from urlparse import parse_qs
 import logging
 
 import re
 from dateutil import parser
-from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from django.http import HttpResponse
 import simplejson
-import requests
-from requests_oauthlib import OAuth1
 from hendrix.contrib.async.messaging import hxdispatcher
-from hendrix.experience import crosstown_traffic
 
 from apps.map.models import Incident, IncidentMeta, FixedLocation, WeatherSnapshot
 from apps.map.views import compile_incident_location_string, geocode
 from apps.map.serializers import IncidentGeoSerializer
-from private.secret_settings import *
 from private.dispatch_settings import *
 from apps.people.views import notify_users_in_radius
 
 default_logger = logging.getLogger('django')
 auth_logger = logging.getLogger('auth')
 telephony_logger = logging.getLogger('telephony')
-
-
-def setup_oauth():
-    """Authorize your app via identifier."""
-    # Request token
-    oauth = OAuth1(TWITTER_CONSUMER_KEY, client_secret=TWITTER_CONSUMER_SECRET)
-    r = requests.post(url=TWITTER_REQUEST_TOKEN_URL, auth=oauth)
-    credentials = parse_qs(r.content)
-
-    resource_owner_key = credentials.get('oauth_token')[0]
-    resource_owner_secret = credentials.get('oauth_token_secret')[0]
-
-    # Authorize
-    authorize_url = TWITTER_AUTHORIZE_URL + resource_owner_key
-    auth_logger.error('Please go here and authorize: ' + authorize_url)
-
-    verifier = raw_input('Please input the verifier: ')
-    oauth = OAuth1(TWITTER_CONSUMER_KEY,
-                   client_secret=TWITTER_CONSUMER_SECRET,
-                   resource_owner_key=resource_owner_key,
-                   resource_owner_secret=resource_owner_secret,
-                   verifier=verifier)
-
-    # Finally, Obtain the Access Token
-    r = requests.post(url=TWITTER_ACCESS_TOKEN_URL, auth=oauth)
-    credentials = parse_qs(r.content)
-    token = credentials.get('oauth_token')[0]
-    secret = credentials.get('oauth_token_secret')[0]
-
-    return token, secret
-
-
-def get_oauth():
-    oauth = OAuth1(TWITTER_CONSUMER_KEY,
-                client_secret=TWITTER_CONSUMER_SECRET,
-                resource_owner_key=TWITTER_OAUTH_TOKEN,
-                resource_owner_secret=TWITTER_OAUTH_TOKEN_SECRET)
-    return oauth
-
-
-@csrf_exempt
-def stream_twitter():
-
-    @crosstown_traffic()
-    def stream():
-        if not TWITTER_OAUTH_TOKEN:
-            token, secret = setup_oauth()
-            auth_logger.info("OAUTH_TOKEN: " + token)
-            auth_logger.info("OAUTH_TOKEN_SECRET: " + secret)
-
-        else:
-            oauth = get_oauth()
-            r = requests.get(url="https://stream.twitter.com/1.1/statuses/filter.json?follow=951808694", auth=oauth, stream=True)
-
-            for line in r.iter_lines():
-
-                # filter out keep-alive new lines
-                if line:
-                    #try:
-                    incident_dict = json.loads(line)
-                    payload = incident_dict["text"]
-                    twitter_time = incident_dict["created_at"]
-                    # Get twitter's tweet-received time.
-                    received_datetime = parser.parse(twitter_time)
-                    # Now, do it.
-                    process_import(payload, received_datetime)
-
-                    #except ValueError:
-                    #    print(line)
-                        #hxdispatcher.send("twitter-dispatches", line)
-    default_logger.info("Crosstown Traffic Thread Listening for Tweets ...")
-    return HttpResponse(status=200)
 
 
 def parse_incident(payload, twitter=False):

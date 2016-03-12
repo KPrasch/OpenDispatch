@@ -20,9 +20,10 @@ deployer.resources.append(message_resource)
 logger.info("Starting Hendrix at %s" % str(datetime.datetime.now()))
 
 
-from apps.collect.views import stream_twitter
+from apps.collect.client import stream_twitter
+from twisted.internet import reactor
 # Do once on Django startup. Let's do Auth here too?
-stream_twitter()
+stream_twitter(reactor)
 
 deployer.run()
 
