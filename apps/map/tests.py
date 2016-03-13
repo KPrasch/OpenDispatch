@@ -1,5 +1,6 @@
 import json
 
+import datetime
 import mock
 from twisted.trial.unittest import TestCase
 from twisted.internet import reactor
@@ -14,10 +15,12 @@ class FakeTwitterStream(object):
 
     def iter_lines(self):
         if self.condition is 'bad':
-            yield json.dumps({"text": "incident dict", "created_at": "July 2nd, 1983."})
+            self.last_stream_item = json.dumps({"text": "incident dict", "created_at": "July 2nd, 1983."})
         elif self.condition is 'good':
             with open('../sample_twitter_stream.txt', 'r') as f:
-                yield f.readline()
+                self.last_stream_item = f.readline()
+
+        yield self.last_stream_item
 
 
 class TwitterAPITestCase(TestCase):
@@ -28,6 +31,15 @@ class TwitterAPITestCase(TestCase):
         self.assertRaises(ValueError, process_import, payload, dt)
 
     def test_stream_opens(self):
-        sd = stream_deferrer(reactor, FakeTwitterStream())
+        fts = FakeTwitterStream()
+        sd = stream_deferrer(reactor, fts)
         d = sd.next()
+
+        def analyze_stream(stream_data, test_case, fts):
+            payload, dt = stream_data
+            event = json.loads(fts.last_stream_item)
+            test_case.assertEqual(event['text'], payload)
+            test_case.assertIsInstance(dt, datetime.datetime)
+
+        d.addCallback(analyze_stream, self, fts)
         return d
