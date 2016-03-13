@@ -1,11 +1,9 @@
-from apps.collect.client import handle_twitter_stream_event, stream_twitter
-from apps.map.sample_twitter_stream_data import sample_twitter_stream_string
-from twisted.internet import defer
-import mock
 import json
-from apps.collect.client import main
-from twisted.internet import reactor
+
+import mock
 from twisted.trial.unittest import TestCase
+from twisted.internet import reactor
+from apps.collect.client import handle_twitter_stream_event, stream_deferrer, process_import
 
 
 class FakeTwitterStream(object):
@@ -26,11 +24,10 @@ class TwitterAPITestCase(TestCase):
 
     def test_incidentless_tweet_raises_geocoding_error(self):
         mock_tweet = FakeTwitterStream('bad').iter_lines().next()
-        self.assertRaises(ValueError, handle_twitter_stream_event, mock_tweet)
+        payload, dt = handle_twitter_stream_event(mock_tweet)
+        self.assertRaises(ValueError, process_import, payload, dt)
 
-    @mock.patch('requests.get')
-    def test_stream_opens(self, mock_request):
-        mock_request.return_value = FakeTwitterStream()
-        stream_iterator = main(reactor)
-        d = stream_iterator.next()
+    def test_stream_opens(self):
+        sd = stream_deferrer(reactor, FakeTwitterStream())
+        d = sd.next()
         return d

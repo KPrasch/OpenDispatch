@@ -30,10 +30,10 @@ def stream_twitter():
     twitter_follow_id = "951808694"
     url = "https://stream.twitter.com/1.1/statuses/filter.json?follow={0}".format(twitter_follow_id)
 
-    r = requests.get(url=url, auth=oauth, stream=True)
+    response = requests.get(url=url, auth=oauth, stream=True)
 
     default_logger.info("Crosstown Traffic Thread Listening for Tweets ...")
-    return r.iter_lines
+    return response
 
 
 def handle_twitter_stream_event(event):
@@ -43,19 +43,21 @@ def handle_twitter_stream_event(event):
     # Get twitter's tweet-received time.
     received_datetime = parser.parse(twitter_time)
     # Now, do it.
-    process_import(payload, received_datetime)
     return payload, received_datetime
 
 
+def stream_deferrer(theReactor, stream_response):
+    for tweet in stream_response.iter_lines():
+        d = deferToThreadPool(theReactor, API_CLIENT_THREADPOOL, handle_twitter_stream_event, tweet)
+        yield d
+
+
 def main(theReactor):
-    stream_iterator = stream_twitter()
+    stream_response = stream_twitter()
 
     # Blocks Thread
-    for tweet in stream_iterator():
-
-        d = deferToThreadPool(theReactor, API_CLIENT_THREADPOOL, handle_twitter_stream_event, tweet)
+    for d in stream_deferrer(theReactor, stream_response):
         d.addCallback(process_import)
-        yield d
 
 if __name__ == "__main__":
     main(reactor)
