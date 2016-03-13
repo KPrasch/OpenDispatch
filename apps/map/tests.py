@@ -30,7 +30,7 @@ class TwitterAPITestCase(TestCase):
         payload, dt = handle_twitter_stream_event(mock_tweet)
         self.assertRaises(ValueError, process_import, payload, dt)
 
-    def test_stream_opens(self):
+    def test_twitter_stream_handler(self):
         fts = FakeTwitterStream()
         sd = stream_deferrer(reactor, fts)
         d = sd.next()

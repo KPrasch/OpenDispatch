@@ -23,7 +23,7 @@ logger.info("Starting Hendrix at %s" % str(datetime.datetime.now()))
 from apps.collect.client import stream_twitter
 from twisted.internet import reactor
 # Do once on Django startup. Let's do Auth here too?
-stream_twitter(reactor)
+stream_twitter()
 
 deployer.run()
 

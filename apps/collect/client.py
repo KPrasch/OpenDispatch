@@ -46,7 +46,7 @@ def handle_twitter_stream_event(event):
     return payload, received_datetime
 
 
-def  stream_deferrer(theReactor, stream_response):
+def stream_deferrer(theReactor, stream_response):
     for tweet in stream_response.iter_lines():
         d = deferToThreadPool(theReactor, API_CLIENT_THREADPOOL, handle_twitter_stream_event, tweet)
         yield d
