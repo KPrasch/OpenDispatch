@@ -71,7 +71,7 @@ def normalize_incident_data(payload):
     """
     payload = payload.replace('\n', '').replace('\r', '')
     try:
-        payload =  unicodedata.normalize('NFKD', payload).encode('ascii', 'ignore') 
+        payload = unicodedata.normalize('NFKD', payload).encode('ascii', 'ignore')
     except TypeError:
         # If this isn't unicode, and already a string
         pass
@@ -99,11 +99,11 @@ def get_weather_snapshot(lon, lat):
                                              temperature=r["main"]["temp"],
                                              clouds=r["clouds"]["all"])
 
-    import pdb; pdb.set_trace()
-    pass
+    return weathersnapshot
 
 
 def map_intelligence_filter(incident_dict):
+    # NLTK
     # Proximity to User Set Locations
     # Thruway Detection
     # Mutual Aid Detection
@@ -139,7 +139,6 @@ def process_import(incident_str, received_datetime):
         default_logger.warn("Duplicate Incident. (Probably the the Twitter Streaming API back filling from a recent reconnection.)")
         return HttpResponse(status=200)
 
-    # weathersnapshot = WeatherSnapshot.objects.create()
     incidentmeta = IncidentMeta.objects.create(incident=incident)
 
     for key, value in incident_dict.items():
@@ -159,19 +158,20 @@ def process_import(incident_str, received_datetime):
             # Got something else....?
             pass
 
+    '''
     # @crosstown_traffic()
     def notify():
         notify_users_in_radius(incident, firehose=True)
         telephony_logger.info("Finished Notifying Users.")
+        return
+    '''
 
-    incidentmeta.save()
     incident.save()
     default_logger.info("Created %d" % incident.id)
-    # hxdispatcher.send("twitter-dispatches", "Created %d" % incident.id)
 
-    serializer = IncidentGeoSerializer(incident)
-    hxdispatcher.send("twitter-dispatches", serializer.data)
-    return HttpResponse(status=201)
+    # Broadcast that the data is stale to everyone
+    hxdispatcher.send("twitter-dispatches", {"status": "stale"})
+    return incident
 
 
 def get_email_incidents(request, username):
