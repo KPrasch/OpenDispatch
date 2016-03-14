@@ -1,7 +1,6 @@
 import json
 
 import datetime
-import mock
 from twisted.trial.unittest import TestCase
 from twisted.internet import reactor
 from apps.collect.client import handle_twitter_stream_event, stream_deferrer, process_import

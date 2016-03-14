@@ -24,3 +24,4 @@ $(function() {
     });
   });
 });
+$('incident-reports').perfectScrollbar();

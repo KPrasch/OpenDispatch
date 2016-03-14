@@ -108,7 +108,7 @@ incident-reports {
   border-right: 1px solid #3e4655;
   flex-grow: 0;
   width: 26rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.25);
   z-index: 1;
@@ -237,4 +237,5 @@ map-container incident-map #toggle-incidents-view {
   position: absolute;
   top: 47%;
   z-index: 2;
+  cursor: pointer !important;
 }
