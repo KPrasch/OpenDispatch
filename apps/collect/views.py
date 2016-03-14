@@ -115,12 +115,12 @@ def map_intelligence_filter(incident_dict):
     pass
 
 
-def process_import(incident_str, received_datetime):
+def process_import(bulletin):
     """
     Manages the overall process of importing incidents.
     """
 
-    normalize = normalize_incident_data(incident_str)
+    normalize = normalize_incident_data(bulletin.payload)
     incident_dict = parse_incident(normalize, twitter=True)
     loc_str = compile_incident_location_string(incident_dict)
     geo = geocode(loc_str)
@@ -131,7 +131,7 @@ def process_import(incident_str, received_datetime):
     fixed_loc = FixedLocation.objects.get_or_create(lat=lat, lng=lng, street_address=loc_str)
 
     try:
-        incident = Incident.objects.create(payload=incident_str, location=fixed_loc[0], received_time=received_datetime,
+        incident = Incident.objects.create(payload=bulletin.payload, location=fixed_loc[0], received_time=bulletin.received_dt,
                                            dispatch_time=incident_dict["dispatch_time"])
 
     # Explore if incidents are validated for duplicates well enough.  Twitter Stream API does in fact send dupes.
