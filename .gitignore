@@ -1,7 +1,6 @@
 .idea/*
 .gitignore
 *.xml
-*migrations*
 secret-settings.py
 secret_settings.py
 dispatch_settings.py
@@ -23,5 +22,4 @@ coverage.xml
 *.log
 docs/_build/
 *.xml
-*migrations*
 _trial_temp.lock

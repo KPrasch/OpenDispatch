@@ -1,11 +1,17 @@
 import json
 
 import datetime
-import mock
-from twisted.trial.unittest import TestCase
+from twisted.trial.unittest import TestCase as TwistedTestCase
+from django.test import TestCase
 from twisted.internet import reactor
 from apps.collect.client import handle_twitter_stream_event, stream_deferrer, process_import
 
+from rest_framework.reverse import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase, APIClient
+
+from apps.map.models import *
+from apps.people.models import Account
 
 class FakeTwitterStream(object):
 
@@ -35,10 +41,10 @@ class FakeBulliten(object):
         return FakeTwitterStream(self.bulliten)
 
     def generic(self):
-        return json.loads(self.bulliten)
+        return json.loads(self.bulliten)['text']
 
 
-class TwitterAPITestCase(TestCase):
+class TwitterAPITestCase(TwistedTestCase):
 
     def setUp(self):
         self.fake_bulliten = FakeBulliten('good').twitter()
@@ -64,18 +70,25 @@ class TwitterAPITestCase(TestCase):
         d.addCallback(analyze_stream, self, fts)
         return d
 
-'''
+
 class AccountTests(APITestCase):
+    client = APIClient()
 
     def test_create_account(self):
         """
         Ensure we can create a new account object.
         """
-        url = reverse('account-list')
-        data = {'name': 'DabApps'}
+        url = '/api/accounts/'
+        data = {'email': 'test@test.com', 'first_name': 'Test', 'last_name': 'Testerson', 'username': 'TestTesterson', 'password': 'insecure'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Account.objects.count(), 1)
-        self.assertEqual(Account.objects.get().name, 'DabApps')
+        self.assertEqual(Account.objects.get().email, 'test@test.com')
 
-'''
+
+class IncidentTests(TestCase):
+    def setUp(self):
+        self.incident = process_import(FakeBulliten('good').generic(), datetime.datetime.now())
+
+    def test_weather_snapshot_on_incident_meta_save(self):
+        self.assertIsInstance(self.incident.meta.weather, WeatherSnapshot, 'Incident.meta does not contain weather object.')

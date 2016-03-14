@@ -79,14 +79,14 @@ def normalize_incident_data(payload):
     return payload
 
 
-def get_weather_snapshot(lon, lat):
+def get_weather_snapshot(lng, lat):
     """
     Uses the unauthenticated Google Maps API V3.  using passed incident location string, return a latitude and logitude for an incident.
     """
     openWeatherMapsUrl = 'http://api.openweathermap.org/data/2.5/weather?'
     params = {
         'lat': lat,
-        'lon': lon,
+        'lon': lnn,
         'APPID': '9b147b4afb5679767ae2c445e841da60'
     }
     url = openWeatherMapsUrl + urllib.urlencode(params)

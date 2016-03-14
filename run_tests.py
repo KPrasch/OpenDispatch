@@ -22,6 +22,7 @@ def run_django_settings():
         ROOT_URLCONF='dispatch.urls',
         INSTALLED_APPS=[
             'django.contrib.auth',
+            'django.contrib.admin',
             'django.contrib.contenttypes',
             'apps.collect',
             'apps.map',
@@ -32,8 +33,12 @@ def run_django_settings():
 
         DATABASES={
             'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+                'ENGINE': 'django.contrib.gis.db.backends.postgis',
+                'NAME': 'test_opendispatch_dev_db',
+                'USER': 'geodjango',
+                'PASSWORD': 'moneybirdjumpspurple',
+                'HOST': 'opendispatch-dev-db.ccrdwgi0qgql.us-west-2.rds.amazonaws.com',
+                'PORT': '5432',
             }
         },
         ALLOWED_HOSTS="*",
