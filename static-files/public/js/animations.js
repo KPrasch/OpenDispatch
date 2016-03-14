@@ -17,6 +17,9 @@ $(function() {
       step: function() {
         map.resize();
       },
+      complete: function() {
+        map.resize();
+      },
       duration: 300
     });
   });
