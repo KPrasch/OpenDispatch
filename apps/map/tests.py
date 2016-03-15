@@ -7,7 +7,8 @@ from twisted.trial.unittest import TestCase
 from apps.collect.views import process_import
 from apps.map.models import *
 from apps.people.models import Account
-from collector.test_utils import FakeBulletin
+from collector.bulletin import BulletinTweet
+from collector.test_utils import FakeBulletinFactory
 
 
 class AccountTests(APITestCase):
@@ -27,7 +28,7 @@ class AccountTests(APITestCase):
 
 class IncidentTests(TestCase):
     def setUp(self):
-        self.incident = process_import(FakeBulletin('good').generic(), datetime.datetime.now())
+        self.incident = process_import(FakeBulletinFactory(condition='good', bulletin_class=BulletinTweet).next())
 
     def test_weather_snapshot_on_incident_meta_save(self):
         self.assertIsInstance(self.incident.meta.weather, WeatherSnapshot, 'Incident.meta does not contain weather object.')

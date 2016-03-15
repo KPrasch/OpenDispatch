@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'rest_framework_gis',
     'private',
     'twilio',
-    'sass_processor'
+    'sass_processor',
 )
 
 

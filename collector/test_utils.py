@@ -1,32 +1,41 @@
 import json
+import os
+from settings import BASE_DIR
+from collector.bulletin import BulletinTweet, StringBulletin
 
 
-class FakeTwitterStream(object):
+class FakeBulletinStream(object):
 
-    def __init__(self, bulliten, condition='good'):
+    def __init__(self, condition='good'):
         self.condition = condition
         self.status_code = 200
-        self.last_stream_item = bulliten
 
     def iter_lines(self):
+
+        if self.condition is 'good':
+            with open(os.path.join(BASE_DIR, 'sample_twitter_stream.txt'), 'r') as f:
+                self.last_stream_item = f.readline()
+
+        elif self.condition is 'bad':
+            self.last_stream_item = '{"text": "incident dict", "created_at": "July 2nd, 1983."}'
+
         yield self.last_stream_item
 
 
-class FakeBulletin(object):
+class FakeBulletinFactory(object):
+    """
+    Yields a bulletin
+    """
+    def __init__(self, bulletin_class=StringBulletin, condition='good'):
+        self.stream = FakeBulletinStream(condition)
+        self.bulletin_class = bulletin_class
+        self._iterator = self.stream.iter_lines()
 
-    def __init__(self, condition='good'):
-        if condition is 'good':
-            with open('../sample_twitter_stream.txt', 'r') as f:
-                self.bulletin = f.readline()
+    def __iter__(self):
+        for line in self._iterator:
+            yield self.bulletin_class(line)
 
-        elif condition is 'bad':
-            self.bulletin = json.dumps({"text": "incident dict", "created_at": "July 2nd, 1983."})
+    def next(self):
+        return self.bulletin_class(self._iterator.next())
 
-        elif condition is 'alright':
-            self.bulletin = json.dumps({"text": "incident dict", "created_at": "November, 8th, 1990"})
 
-    def twitter(self):
-        return FakeTwitterStream(self.bulletin)
-
-    def generic(self):
-        return json.loads(self.bulliten)['text']
