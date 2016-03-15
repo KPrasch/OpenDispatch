@@ -16,7 +16,7 @@ import simplejson
 from hendrix.contrib.async.messaging import hxdispatcher
 
 from apps.map.models import Incident, IncidentMeta, FixedLocation, WeatherSnapshot
-from apps.map.views import compile_incident_location_string, geocode
+from apps.map.geo import compile_incident_location_string, geocode
 from apps.map.serializers import IncidentGeoSerializer
 from private.dispatch_settings import *
 from apps.people.views import notify_users_in_radius
@@ -24,59 +24,6 @@ from apps.people.views import notify_users_in_radius
 default_logger = logging.getLogger('django')
 auth_logger = logging.getLogger('auth')
 telephony_logger = logging.getLogger('telephony')
-
-
-def parse_incident(payload, twitter=False):
-    """
-    Using configurable incident data fields, parse the data into incident models with all of the information required.
-    """
-
-    keys = set(ESCAPE_KEYS)
-    key_re = re.compile('(' + '|'.join(re.escape(key) for key in keys) + '):', re.IGNORECASE)
-    key_locations = key_re.split(payload)[1:]
-    incident_dict = {k: v.strip() for k, v in zip(key_locations[::2], key_locations[1::2])}
-
-    try:
-        if twitter is False:
-            regex = re.compile('[^a-zA-Z]')
-            incident_dict['Venue'] = str.rstrip(regex.sub(" ", incident_dict['Venue']))
-
-        elif twitter is True:
-            regex = re.compile("([a-zA-Z_ ]*)([^a-zA-Z]*)$")
-            s = regex.search(incident_dict["Venue"])
-
-            if s.groups()[1] is not '':
-                # Adding a key to the dictionary here (dispatch time).
-                incident_dict['dispatch_time'] = parser.parse(s.groups()[1])
-                incident_dict['Venue'] = str.rstrip(s.groups()[0])
-
-                if "king" in incident_dict['Venue'].lower():
-                    incident_dict["Venue"] = "Kingston"
-                elif "out of" in incident_dict["Venue"].lower():
-                    incident_dict["Venue"] = ""
-                    # Handle out of City Dispatches here.
-
-            else:
-                regex = re.compile('[^a-zA-Z]')
-                incident_dict['Venue'] = str.rstrip(regex.sub(" ", incident_dict['Venue']))
-    except KeyError as e:
-        default_logger.warn("Can not manipulate dictionary {0} - {1}".format(incident_dict, e))
-
-    return incident_dict
-
-
-def normalize_incident_data(payload):
-    """
-    Converts unicode data to a python string.
-    """
-    payload = payload.replace('\n', '').replace('\r', '')
-    try:
-        payload = unicodedata.normalize('NFKD', payload).encode('ascii', 'ignore')
-    except TypeError:
-        # If this isn't unicode, and already a string
-        pass
-    
-    return payload
 
 
 def get_weather_snapshot(lng, lat):

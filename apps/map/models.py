@@ -1,13 +1,17 @@
 import urllib
+import random
+import hashlib
+import requests
+import logging
 
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.db import models
-
 from apps.people.models import Account
+from apps.people.auth import get_oauth
+from collector.object_store_backend import COLLECTOR_BACKEND
 
-import random
-import hashlib
+logger = logging.getLogger('django')
 
 
 # Areas
@@ -182,9 +186,6 @@ class Incident(models.Model):
         message = greeting + self.meta.dispatch + "\nwas dispatched to " + self.location.street_address + " \n" + boilerplate
 
         return message
-
-    def raw(self):
-        return self.payload
    
     def received_delay(self):
         if self.dispatch_time != self.received_time:
@@ -212,14 +213,17 @@ class Incident(models.Model):
 
 class IncidentMeta(models.Model):
     incident = models.OneToOneField(Incident, related_name="meta")
-    location = models.CharField(max_length=250)
-    venue = models.CharField(max_length=250)
-    dispatch = models.CharField(max_length=250)
-    intersection = models.CharField(max_length=250)
-    unit = models.CharField(max_length=250)
+    location = models.CharField(max_length=250, null=True)
+    venue = models.CharField(max_length=250, null=True)
+    dispatch = models.CharField(max_length=250, null=True)
+    intersection = models.CharField(max_length=250, null=True)
+    unit = models.CharField(max_length=250, null=True)
 
     def __unicode__(self):
         return str(self.incident.id)
+
+    def parse(self):
+        pass
 
 
 class WeatherSnapshot(models.Model):
@@ -426,3 +430,59 @@ class UserLocation(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class Fountain(models.Model):
+    account = models.ForeignKey(Account, null=True, related_name="fountains")
+    running = models.BooleanField(default=False)
+    name = models.CharField(max_length=256, null=True)
+
+    def store_stream(self, theReactor, stream_response):
+        for post in stream_response.iter_lines():
+            COLLECTOR_BACKEND.push(post)
+
+
+class TwitterFountain(Fountain):
+    twitter_username = models.CharField(max_length=256, null=True)
+    twitter_id = models.CharField(max_length=256, null=True)
+    url = models.URLField(null=True)
+    stream = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ["twitter_username", "twitter_id"]
+
+    def __str__(self):
+        return self.twitter_username
+
+    def start(self):
+        # Check if the Server is Authenticated with Twitter, and get oauth token.
+        oauth = get_oauth()
+        response = requests.get(url=self.url + self.twitter_id, auth=oauth, stream=self.stream)
+        logger.info("Twitter Streaming API Connection Established.")
+        self.response = response
+        self.running = True
+        return self.response
+
+    def stop(self):
+        self.response.close()
+        logger.info("Twitter Fountain {0} Closed.".format(self.twitter_username))
+
+
+"""
+class TwitterFountain(Fountain):
+    def start(self, tweeter_id="951808694"):
+        # Check if the Server is Authenticated with Twitter, and get oauth token.
+        oauth = get_oauth()
+
+        url = "https://stream.twitter.com/1.1/statuses/filter.json?follow={0}".format(tweeter_id)
+
+        response = requests.get(url=url, auth=oauth, stream=True)
+
+        #response = requests.get(url=self.url, auth=oauth, stream=self.stream)t
+        log.info("Twitter Streaming API Connection Established.")
+        self.running = True
+        self.response = response
+
+        return response
+"""
+

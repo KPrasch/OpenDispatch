@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from twisted.trial.unittest import TestCase
 
-from apps.collect.views import process_import
+from apps.collect.incident import process_import
 from apps.map.models import *
 from apps.people.models import Account
 from collector.bulletin import BulletinTweet

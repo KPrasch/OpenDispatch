@@ -4,7 +4,7 @@ import json
 from twisted.internet import reactor
 from twisted.trial.unittest import TestCase
 
-from apps.collect.views import process_import
+from apps.collect.incident import process_import
 from collector.bulletin import BulletinTweet
 from collector.client import store_stream
 from collector.object_store_backend import COLLECTOR_BACKEND
