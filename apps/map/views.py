@@ -128,9 +128,8 @@ def map_view(request):
     """
     Return the Template
     """
-    past_incidents = Incident.objects.all().order_by("-dispatch_time")
 
-    return render(request, 'map.html', {"incidents": past_incidents})
+    return render(request, 'map.html')
 
 
 def compile_incident_location_string(incident_dict):

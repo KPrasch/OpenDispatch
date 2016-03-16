@@ -25,3 +25,4 @@ docs/_build/
 *.xml
 *migrations*
 _trial_temp.lock
+_trial_temp*
