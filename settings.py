@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'rest_framework_gis',
     'private',
     'twilio',
-    'sass_processor'
 )
 
 
@@ -242,8 +241,3 @@ LOGGING = {
         },
     }
 }
-
-SASS_PROCESSOR_INCLUDE_DIRS = (
-    '/home/k/Git/Dispatch.py/static-files/client/stylesheets/',
-)
-
