@@ -1,6 +1,13 @@
 openDispatch = angular.module('openDispatch', []);
 
 openDispatch.controller('incidentsController', function($scope, $http) {
+    function updateMapMarkers() {
+        if ($scope.incidents.length) {
+            for(var i=0; i< $scope.incidents.length; i++) {
+                $scope.incidents[i];
+            }
+        }
+    }
     function getRecentIncidents(venueQuery) {
         venueQuery = venueQuery || '';
         if(venueQuery === '') {
