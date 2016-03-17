@@ -13,7 +13,7 @@ import hashlib
 # Areas
 class WorldBorder(models.Model):
     # Regular Django fields corresponding to the attributes in the
-    # world borders shapefile.
+    # world borders shape file.
     name = models.CharField(max_length=50)
     area = models.IntegerField()
     pop2005 = models.IntegerField('Population 2005')
@@ -43,7 +43,7 @@ class Country(models.Model):
     poly = models.PolygonField()
     center = models.PointField()
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -55,7 +55,7 @@ class State(models.Model):
     poly = models.PolygonField()
     center = models.PointField()
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -66,7 +66,7 @@ class County(models.Model):
     poly = models.PolygonField()
     center = models.PointField()
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -77,7 +77,7 @@ class Zipcode(models.Model):
     poly = models.PolygonField()
     center = models.PointField()
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -87,7 +87,7 @@ class District(models.Model):
     name = models.CharField(max_length=24)
     poly = models.PolygonField()
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -98,7 +98,7 @@ class PrimaryResponseArea(models.Model):
     center = models.PointField()
     poly = models.PolygonField()
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -113,7 +113,7 @@ class TargetHazard(models.Model):
     description = models.CharField(max_length=400)
     hazmat = models.IntegerField()
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -126,7 +126,7 @@ class HeliSpot(models.Model):
     pts_of_interest = models.MultiPointField()
     description = models.CharField(max_length=100)
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -142,10 +142,10 @@ class FixedLocation(models.Model):
 
     def __str__(self):
         return "%.8f, %.8f, %s" % (self.lng, self.lat, self.street_address)
-    
+
     def nearest_points(self):
         input_point = self.location
-        distance = 2000 
+        distance = 2000
         points = FixedLocation.objects.filter(location__distance_lte=(input_point, D(m=distance)))
         nearest_points = points.distance(input_point).order_by('distance')
         return nearest_points
@@ -153,10 +153,10 @@ class FixedLocation(models.Model):
     def save(self, *args, **kwargs):
         self.point = GEOSGeometry('{ "type": "Point", "coordinates": [%.8f, %.8f ]}' % (self.lng, self.lat))
 
-        googleStreetviewUrl = 'https://maps.googleapis.com/maps/api/streetview?'
+        google_streetview_url = 'https://maps.googleapis.com/maps/api/streetview?'
         params = {'location': self.street_address, 'sensor': "false",
                   'key': 'AIzaSyAY6BVObrWlkVMTYo5AqzlYcZf7SXChhg0', 'size': '600x300'}
-        streetview_url = googleStreetviewUrl + urllib.urlencode(params)
+        streetview_url = google_streetview_url + urllib.urlencode(params)
 
         self.streetview_url = streetview_url
         super(FixedLocation, self).save(*args, **kwargs)
@@ -175,7 +175,7 @@ class Incident(models.Model):
     class Meta:
         unique_together = ["payload", "dispatch_time"]
         ordering = ["received_time"]
-        
+
     def sms_str(self, user_location):
         greeting = "OpenDispatch Notification:"
         boilerplate = "near your %s at %s" % (user_location.category, user_location.poi.street_address)
@@ -185,24 +185,24 @@ class Incident(models.Model):
 
     def raw(self):
         return self.payload
-   
+
     def received_delay(self):
         if self.dispatch_time != self.received_time:
-           delay = (self.dispatch_time-self.received_time).total_seconds()
-           return delay
+            delay = (self.dispatch_time-self.received_time).total_seconds()
+            return delay
         else:
-           return None
-       
+            return None
+
     def created_delay(self):
         if self.recieved_time != self.created_time:
             delay = (self.recieved_time-self.created_time).total_seconds()
             return delay
         else:
             return None
-       
+
     def delay(self):
-        rd = self.recieved_delay(self)
-        cd = self.created_delay(self)
+        rd = self.recieved_delay()
+        cd = self.created_delay()
         if rd or cd is not None:
             print "delay detected %s %s" % rd, cd
             return rd, cd
@@ -289,7 +289,7 @@ class FixedFireAppliance(models.Model):
     appliance = models.IntegerField(choices=FIXED_APPLIANCES)
     description = models.CharField(max_length=100)
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -312,7 +312,7 @@ class Structure(models.Model):
 
 
 def createUniqueKey():
-        return hashlib.md5(str(random.randrange(1000000))).hexdigest()[0:7]
+    return hashlib.md5(str(random.randrange(1000000))).hexdigest()[0:7]
 
 
 class Agency(models.Model):
@@ -375,7 +375,7 @@ class StructureUtility(models.Model):
 class Station(Structure):
     description = models.CharField(max_length=100)
     agency = models.ForeignKey(Agency, related_name="stations")
-    #primary_response_area = models.ForeignKey(PrimaryResponseArea)
+    # primary_response_area = models.ForeignKey(PrimaryResponseArea)
 
     def __unicode__(self):
         return self.name
@@ -396,7 +396,7 @@ class Hydrant(models.Model):
     static_pressure = models.FloatField()
     flow_pressure = models.FloatField()
     resid_pressure = models.FloatField()
-  
+
     def __unicode__(self):
         return self.name
 

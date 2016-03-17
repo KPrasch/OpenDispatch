@@ -53,14 +53,14 @@ class IncidentGeoSerializer(GeoFeatureModelSerializer):
 
     class Meta:
         model = Incident
-        geo_field = "point"
+        geo_field = 'point'
 
         # you can also explicitly declare which fields you want to include
         # as with a ModelSerializer.
         fields = ('id', 'location', 'meta', 'active', 'dispatch_time', 'received_time', 'created_time')
 
 
-class IncidentListSerializer(serializers.Serializer):
+class IncidentSerializer(serializers.Serializer):
     """ A class to serialize locations as JSON compatible data """
     location = FixedLocationModelSerializer()
     meta = IncidentMetaSerializer()

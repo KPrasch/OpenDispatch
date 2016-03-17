@@ -12,7 +12,7 @@ from rest_framework.renderers import JSONRenderer
 from django.db.models import Q
 
 from apps.map.models import *
-from apps.map.serializers import IncidentGeoSerializer, IncidentListSerializer
+from apps.map.serializers import IncidentGeoSerializer, IncidentSerializer
 from private.dispatch_settings import *
 from private.secret_settings import *
 from itertools import islice
@@ -22,7 +22,7 @@ logger = logging.getLogger('geocoder')
 
 class InsightViewSet(viewsets.GenericViewSet):
     queryset = Incident.objects.order_by('-dispatch_time')
-    serializer_class = IncidentListSerializer
+    serializer_class = IncidentSerializer
 
     @list_route(renderer_classes=[JSONRenderer])
     def top_dispatches(self, request, *args, **kwargs):
@@ -59,7 +59,7 @@ class IncidentViewSet(viewsets.ReadOnlyModelViewSet):
     This viewset automatically provides `list` and `detail` actions.
     """
     queryset = Incident.objects.order_by('-dispatch_time')
-    serializer_class = IncidentListSerializer
+    serializer_class = IncidentSerializer
 
     def list(self, request):
         active = request.GET.get('active')
@@ -79,7 +79,7 @@ class IncidentViewSet(viewsets.ReadOnlyModelViewSet):
         if venue:
             self.queryset.filter(meta__venue__icontains=venue)
 
-        serializer = IncidentListSerializer(self.queryset, many=True)
+        serializer = IncidentSerializer(self.queryset, many=True)
         return Response(serializer.data)
 
     @list_route(renderer_classes=[JSONRenderer])
@@ -98,13 +98,13 @@ class IncidentViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = self.queryset[0]
             many = False
 
-        serializer = IncidentListSerializer(queryset, many=many)
+        serializer = IncidentSerializer(queryset, many=many)
         return Response(serializer.data)
 
     @list_route(renderer_classes=[JSONRenderer], url_path='venue/(?P<venue>.*)')
     def venue(self, request, venue):
         queryset = self.queryset.filter(meta__venue__icontains=venue)
-        serializer = IncidentListSerializer(queryset, many=True)
+        serializer = IncidentSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @list_route(renderer_classes=[JSONRenderer])
