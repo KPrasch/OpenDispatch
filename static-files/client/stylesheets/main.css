@@ -235,7 +235,7 @@ map-container incident-map #toggle-incidents-view {
   font-size: 28px;
   background: #535f72;
   position: absolute;
-  top: 47%;
+  top: 50%;
   z-index: 2;
   cursor: pointer !important;
 }

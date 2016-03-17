@@ -41,7 +41,7 @@
                ng-model-options="{ debounce: 500 }" />
         <div class="no-incidents" ng-show="!incidents.length"><i>No incidents to show</i></div>
         {% verbatim incident-block %}
-        <incident-report id="incident_{{ incident.id }}" ng-repeat="incident in incidents | orderBy: incident.id">
+        <incident-report id="incident_{{ incident.id }}" ng-repeat="incident in incidents | orderBy: incident.received_time">
             <div class="status">
                 Status: <span class="type crit">{{ incident.meta.dispatch }}</span>
             </div>
