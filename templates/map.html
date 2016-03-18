@@ -6,7 +6,12 @@
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.js"></script>
 
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.15.0/mapbox-gl.css" rel='stylesheet'/>
-    <link href="/static/client/stylesheets/main.css" rel='stylesheet'/>
+
+    {% load compress %}
+
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="/static/stylesheets/main.scss" />
+    {% endcompress %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/document-register-element/0.5.3/document-register-element.js"></script>
 
@@ -14,10 +19,12 @@
           rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.10/js/min/perfect-scrollbar.jquery.min.js"></script>
 
-    <script src="/static/public/js/custom-tags.js"></script>
-    <script src="/static/public/js/animations.js"></script>
-    <script src="/static/public/js/angular.js"></script>
-    <script src="/static/public/js/openDispatch.js"></script>
+    {% compress js %}
+        <script src="/static/js/custom-tags.js"></script>
+        <script src="/static/js/animations.js"></script>
+        <script src="/static/js/angular.js"></script>
+        <script src="/static/js/openDispatch.js"></script>
+    {% endcompress %}
 
     <title>responder-zero</title>
 </head>
@@ -39,15 +46,15 @@
                placeholder="Search recent incidents..."
                ng-model="searchIncidents"
                ng-model-options="{ debounce: 500 }" />
-        <div class="no-incidents" ng-show="!incidents.length"><i>No incidents to show</i></div>
+        <div class="no-incidents" ng-show="!incidents.features.length"><i>No incidents to show</i></div>
         {% verbatim incident-block %}
-        <incident-report id="incident_{{ incident.id }}" ng-repeat="incident in incidents | orderBy: incident.received_time">
+        <incident-report id="incident_{{ incident.id }}" ng-repeat="incident in incidents.features | orderBy: incident.properties.received_time">
             <div class="status">
-                Status: <span class="type crit">{{ incident.meta.dispatch }}</span>
+               <span class="type crit">{{ incident.properties.meta.dispatch }}</span>
             </div>
-            <address><b>{{ incident.meta.street_address }} NY</b></address>
+            <address><b>{{ incident.properties.meta.street_address }} NY</b></address>
             <div class="date">
-                {{ incident.dispatch_time | date:"MM/dd/yyyy 'at' h:mma" }}
+                {{ incident.properties.dispatch_time | date:"MM/dd/yyyy 'at' h:mma" }}
             </div>
         </incident-report>
         {% endverbatim incident-block %}

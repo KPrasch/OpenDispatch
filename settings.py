@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'rest_framework_gis',
     'private',
     'twilio',
+    'compressor',
 )
 
 
@@ -143,9 +144,8 @@ STATIC_URL = '/static/'
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-    'sass_processor.finders.CssFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 COMPRESS_PRECOMPILERS = (

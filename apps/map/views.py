@@ -79,7 +79,7 @@ class IncidentViewSet(viewsets.ReadOnlyModelViewSet):
         if venue:
             self.queryset.filter(meta__venue__icontains=venue)
 
-        serializer = IncidentSerializer(self.queryset, many=True)
+        serializer = IncidentGeoSerializer(self.queryset, many=True)
         return Response(serializer.data)
 
     @list_route(renderer_classes=[JSONRenderer])

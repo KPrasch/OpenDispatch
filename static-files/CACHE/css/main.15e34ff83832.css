@@ -1,15 +1,19 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css");
+@import url('https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css');
 @font-face {
   font-family: 'Urban Elegance';
-  src: url("/fonts/Urban Elegance Bold.ttf"); }
+  src: url('/fonts/Urban Elegance Bold.ttf?69778118b069'); }
+
+/* line 25, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
 html, body, app-container {
   width: 100%;
   height: 100%; }
 
+/* line 30, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
 app-container {
   display: flex;
   flex-direction: row; }
 
+/* line 35, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
 nav {
   position: absolute;
   top: 0;
@@ -22,12 +26,15 @@ nav {
   border-right: none;
   color: #FFF;
   z-index: 10; }
+  /* line 47, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
   nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0; }
+    /* line 52, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
     nav ul > li {
       display: inline-block; }
+    /* line 56, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
     nav ul .nav-item {
       float: right;
       margin-top: -4px;
@@ -41,10 +48,13 @@ nav {
       display: inline;
       cursor: pointer;
       margin-right: 0.8rem; }
+      /* line 68, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
       nav ul .nav-item:nth-child(2) {
         margin-right: 0px; }
+      /* line 71, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
       nav ul .nav-item:hover {
         background: #6f7b89; }
+    /* line 75, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
     nav ul .title {
       display: none;
       font-family: 'Urban Elegance';
@@ -53,17 +63,22 @@ nav {
       text-decoration: none;
       margin-right: 1.5rem;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); }
+      /* line 84, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
       nav ul .title .fix0 {
         margin-right: -1px; }
+      /* line 87, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
       nav ul .title .fix1 {
         margin-left: -3px;
         margin-right: -3px; }
+      /* line 91, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
       nav ul .title .fix2 {
         margin-left: -2px;
         margin-right: 1px; }
+      /* line 95, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
       nav ul .title .fix3 {
         margin-right: 1px; }
 
+/* line 102, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
 incident-reports {
   background: #646c7b;
   border-right: 1px solid #424751;
@@ -73,9 +88,10 @@ incident-reports {
   overflow-x: hidden;
   box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.25);
   z-index: 1; }
+  /* line 112, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
   incident-reports #search-incidents {
     background: #8094ab;
-    background-image: url(http://findicons.com/files/icons/1389/g5_system/32/toolbar_find.png);
+    background-image: url('http://findicons.com/files/icons/1389/g5_system/32/toolbar_find.png');
     background-repeat: no-repeat;
     background-position: 98.75% 3px;
     border: none;
@@ -87,73 +103,48 @@ incident-reports {
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     transition: all 0.5s ease; }
+    /* line 2, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/mixins.scss */
     incident-reports #search-incidents::-webkit-input-placeholder {
       color: rgba(255, 255, 255, 0.8);
       font-size: inherit; }
+    /* line 8, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/mixins.scss */
     incident-reports #search-incidents:-moz-placeholder {
       color: rgba(255, 255, 255, 0.8);
       font-size: inherit; }
+    /* line 14, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/mixins.scss */
     incident-reports #search-incidents::-moz-placeholder {
       color: rgba(255, 255, 255, 0.8);
       font-size: inherit; }
+    /* line 20, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/mixins.scss */
     incident-reports #search-incidents:-ms-input-placeholder {
       color: rgba(255, 255, 255, 0.8);
       font-size: inherit; }
+    /* line 126, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
     incident-reports #search-incidents:focus {
       outline: none;
       color: #FFF !important; }
+    /* line 131, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
     incident-reports #search-incidents.focused {
       padding: 1.5rem 0.75rem;
       font-size: 12pt;
       background-position: 98.75% 18px; }
 
+/* line 139, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
 incident-report {
   display: block;
-  padding: 0.5rem;
-  padding-top: 0.75rem;
-  overflow: hidden;
-  text-overflow: clip;
-  width: 26rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  color: #FFF;
-  cursor: pointer;
-  -webkit-transition: all 0.1s ease;
-  -moz-transition: all 0.1s ease;
-  transition: all 0.1s ease; }
-  incident-report .status {
-    padding-bottom: 0.375rem;
-    font-size: 8.5pt; }
-    incident-report .status .type {
-      text-transform: uppercase;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 2px 25px 2px 25px;
-      margin-left: 0.131rem;
-      border-radius: 5px;
-      position: relative;
-      font-size: 8pt;
-      margin-top: 4p; }
-    incident-report .status .crit {
-      background: rgba(255, 0, 0, 0.4); }
-  incident-report .date {
-    margin-top: 5px;
-    font-size: 7.5pt;
-    font-style: italic;
-    color: rgba(255, 255, 255, 0.7); }
-
-incident-report:hover {
-  display: block;
   padding: 1rem;
-  padding-top: 1.5rem;
   overflow: hidden;
   text-overflow: clip;
   width: 26rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   color: #FFF;
   cursor: pointer; }
-  incident-report:hover .status {
+  /* line 149, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+  incident-report .status {
     padding-bottom: 0.75rem;
     font-size: 15pt; }
-    incident-report:hover .status .type {
+    /* line 152, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+    incident-report .status .type {
       text-transform: uppercase;
       border: 1px solid rgba(255, 255, 255, 0.3);
       padding: 5px 45px 5px 45px;
@@ -162,31 +153,69 @@ incident-report:hover {
       position: relative;
       top: -2px;
       font-size: 10pt; }
-    incident-report:hover .status .crit {
+    /* line 162, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+    incident-report .status .crit {
       background: rgba(255, 0, 0, 0.4); }
-  incident-report:hover .date {
+  /* line 166, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+  incident-report .date {
     margin-top: 10px;
     font-size: 9pt;
     font-style: italic;
     color: rgba(255, 255, 255, 0.7); }
 
-incident-report address {
-  text-shadow: 1px 1px 0px #000; }
+/* line 174, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+.small {
+  display: block;
+  padding: 0.5rem;
+  overflow: hidden;
+  text-overflow: clip;
+  width: 26rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFF;
+  cursor: pointer; }
+  /* line 184, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+  .small .status {
+    padding-bottom: 0.375rem;
+    font-size: 8.5pt; }
+    /* line 187, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+    .small .status .type {
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 2px 25px 2px 25px;
+      margin-left: 0.131rem;
+      border-radius: 5px;
+      position: relative;
+      font-size: 8pt;
+      margin-top: 4p; }
+    /* line 197, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+    .small .status .crit {
+      background: rgba(255, 0, 0, 0.4); }
+  /* line 201, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
+  .small .date {
+    margin-top: 5px;
+    font-size: 7.5pt;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7); }
 
+/* line 210, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
 map-container {
   position: relative;
   flex-grow: 1; }
+  /* line 214, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
   map-container #incident-map-view {
     position: absolute;
     top: 0;
     bottom: 0;
     width: 100%; }
+  /* line 216, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
   map-container incident-map {
     width: 100%;
     height: 100%; }
+    /* line 219, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
     map-container incident-map > *:focus {
       border: none;
       outline: none; }
+    /* line 223, /Users/zack/Programming/python/git/Dispatch.py/static-files/stylesheets/main.scss */
     map-container incident-map #toggle-incidents-view {
       border: 1px solid #424751;
       border-top-right-radius: 5px;
@@ -204,5 +233,3 @@ map-container {
       top: 47%;
       z-index: 2;
       cursor: pointer; }
-
-/*# sourceMappingURL=main.css.map */

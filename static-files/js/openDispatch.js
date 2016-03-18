@@ -10,6 +10,7 @@ openDispatch.controller('incidentsController', function($scope, $http) {
     }
     function getRecentIncidents(venueQuery) {
         venueQuery = venueQuery || '';
+        console.log("Getting incidents with q='"+venueQuery+"'!");
         if(venueQuery === '') {
             $http.get('http://localhost:8000/api/incidents')
                 .then(function(response) {
@@ -17,7 +18,7 @@ openDispatch.controller('incidentsController', function($scope, $http) {
                     console.log(response);
                 });
         } else {
-            $http.get('http://localhost:8000/api/incidents/venue/'+ venueQuery)
+            $http.get('http://localhost:8000/api/incidents/contains/?term='+ venueQuery)
                 .then(function(response) {
                     $scope.incidents = response.data;
                     console.log(response);
