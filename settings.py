@@ -148,12 +148,14 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-SASS_PRECISION = 8
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
 
 HENDRIX_CHILD_RESOURCES = (
   'hendrix.contrib.resources.static.DefaultDjangoStaticResource',
   'hendrix.contrib.resources.static.DjangoAdminStaticResource',
-  )
+)
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
