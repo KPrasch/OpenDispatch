@@ -15,22 +15,27 @@ openDispatch.controller('incidentsController', function($scope, $http) {
             $http.get('http://localhost:8000/api/incidents')
                 .then(function(response) {
                     $scope.incidents = response.data;
+
                     console.log(response);
                 });
         } else {
-            $http.get('http://localhost:8000/api/incidents/contains/?term='+ venueQuery)
-                .then(function(response) {
+            $http.get('http://localhost:8000/api/incidents/venue/' + venueQuery)
+                .then(function (response) {
                     $scope.incidents = response.data;
+
                     console.log(response);
                 });
         }
     }
-    $scope.$watch('$viewContentLoaded', function() {
+    map.on('style.load', function() {
         getRecentIncidents();
     });
     $scope.$watch('searchIncidents', function(newValue, oldValue) {
         if(newValue !== oldValue) {
             getRecentIncidents($scope.searchIncidents);
+            //map.layers.forEach(function (value, i) {
+            //   map.setFilter('cluster-'+i, ['in', 'meta.street_address', $scope.searchIncidents])
+            //});
         }
     });
 });

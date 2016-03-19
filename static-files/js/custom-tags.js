@@ -37,19 +37,75 @@ $(function() {
     map = new mapboxgl.Map({
         container: 'incident-map-view',
         style: 'mapbox://styles/zackkollar/cilih2w2500bc9pkvxeiv54mv',
-        center: [-74.2585695256215, 41.8881456255846],
-        zoom: 7.5,
+        center: [-74.16567075875092, 41.865629817916016],
+
+        zoom: 9.563293778598588,
         trackResize: true
     });
-    map.once('load', function() {
+
+
+    map.on('style.load', function() {
         map.addSource('incidents', {
-            "type": 'geojson',
-            "data": angular.element('[ng-controller="incidentsController"]').scope().incidents
+            type: 'geojson',
+            data: 'http://localhost:8000/api/incidents/geo/',
+            cluster: true,
+            clusterRadius: 35,
+            clusterMaxZoom: 14
         });
+
+        map.addLayer({
+            "id": "non-cluster-markers",
+            "type": "symbol",
+            "source": "incidents",
+            "layout": {
+                "icon-image": "marker-15"
+            }
+        });
+
+        // Display the earthquake data in three layers, each filtered to a range of
+        // count values. Each range gets a different fill color.
+        var layers = [
+            [150, '#f28cb1'],
+            [20, '#f1f075'],
+            [0, '#51bbd6']
+        ];
+
+        layers.forEach(function (layer, i) {
+            map.addLayer({
+                "id": "cluster-" + i,
+                "type": "circle",
+                "source": "incidents",
+                "paint": {
+                    "circle-color": layer[1],
+                    "circle-radius": 12 / ( (i+1) * 0.25 )
+                },
+                "filter": i == 0 ?
+                    [">=", "point_count", layer[0]] :
+                    ["all",
+                        [">=", "point_count", layer[0]],
+                        ["<", "point_count", layers[i - 1][0]]]
+            });
+        });
+
+        // Add a layer for the clusters' count labels
+        map.addLayer({
+            "id": "cluster-count",
+            "type": "symbol",
+            "source": "incidents",
+            "layout": {
+                "text-field": "{point_count}",
+                "text-font": [
+                        "DIN Offc Pro Medium",
+                        "Arial Unicode MS Bold"
+                    ],
+                "text-size": 11
+            }
+        });
+
     });
 });
 $(function() {
-    $('incident-map').prepend('<div id="toggle-incidents-view">ll</div>');
+    $('incident-map').prepend("<div id='toggle-incidents-view'>ll</div>");
 });
 //
 // </incident-map>

@@ -37,9 +37,9 @@ nav {
   top: 0;
   right: 0;
   padding: 1rem 0.85rem;
-  background: $incidents-background-color;
+  background: none; //$incidents-background-color;
   border-bottom-left-radius: 5px;
-  border: 1px solid darken($incidents-background-color, 15%);
+  //border: 1px solid darken($incidents-background-color, 15%);
   border-top: none;
   border-right: none;
   color: #FFF;
