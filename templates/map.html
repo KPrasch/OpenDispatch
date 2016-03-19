@@ -46,9 +46,9 @@
                placeholder="Search recent incidents..."
                ng-model="searchIncidents"
                ng-model-options="{ debounce: 500 }" />
-        <div class="no-incidents" ng-show="!incidents.length"><i>No incidents to show</i></div>
+        <incident-report ng-show="!incidents.length"><address>No incident(s) found for that query.</address></incident-report>
         {% verbatim incident-block %}
-        <incident-report id="incident_{{ incident.id }}" ng-repeat="incident in incidents | orderBy: incident.received_time">
+        <incident-report id="incident_{{ incident.id }}" ng-click="showIncidentPopUp(incident)" ng-repeat="incident in incidents | orderBy: incident.dispatch_time">
             <div class="status">
                <span class="type crit">{{ incident.meta.dispatch }}</span>
             </div>

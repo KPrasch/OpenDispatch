@@ -55,10 +55,11 @@ $(function() {
 
         map.addLayer({
             "id": "non-cluster-markers",
-            "type": "symbol",
+            "type": "circle",
             "source": "incidents",
-            "layout": {
-                "icon-image": "marker-15"
+            "paint": {
+                "circle-color": '#BB0000',
+                "circle-radius": 3
             }
         });
 
@@ -67,7 +68,7 @@ $(function() {
         var layers = [
             [150, '#f28cb1'],
             [20, '#f1f075'],
-            [0, '#51bbd6']
+            [2, '#71aaba']
         ];
 
         layers.forEach(function (layer, i) {
@@ -77,13 +78,30 @@ $(function() {
                 "source": "incidents",
                 "paint": {
                     "circle-color": layer[1],
-                    "circle-radius": 12 / ( (i+1) * 0.25 )
+                    "circle-radius": 10 / ( (i+1) * 0.25 )
                 },
                 "filter": i == 0 ?
                     [">=", "point_count", layer[0]] :
                     ["all",
                         [">=", "point_count", layer[0]],
                         ["<", "point_count", layers[i - 1][0]]]
+            });
+            map.on('click', function (e) {
+                map.featuresAt(e.point, {layer: 'cluster-'+i, radius: 5, includeGeometry: true}, function (err, features) {
+                    if (err) throw err;
+                    // if there are features within the given radius of the click event,
+                    // fly to the location of the click event
+                    if (features.length) {
+                        // Get coordinates from the symbol and center the map on those coordinates
+                        map.flyTo({center: features[0].geometry.coordinates});
+                    }
+                });
+            });
+            map.on('mousemove', function (e) {
+                map.featuresAt(e.point, {layer: 'cluster-'+i, radius: 10}, function (err, features) {
+                    if (err) throw err;
+                    map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+                });
             });
         });
 
@@ -95,9 +113,9 @@ $(function() {
             "layout": {
                 "text-field": "{point_count}",
                 "text-font": [
-                        "DIN Offc Pro Medium",
-                        "Arial Unicode MS Bold"
-                    ],
+                    "DIN Offc Pro Medium",
+                    "Arial Unicode MS Bold"
+                ],
                 "text-size": 11
             }
         });
