@@ -1,0 +1,80 @@
+#date-range-container {
+  width: 60%;
+  padding: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500;
+  display: none; // TODO: Get this thing working... Not good looking enough!
+}
+date-range-slider {
+    display: block;
+    position: relative;
+    height: 14px;
+
+    line-height: 0.8;
+    background: rgba(120, 200, 200, 0.8); // 120, 200, 200
+
+    slider {
+        position: absolute;
+
+        width: 10px;
+        height: 22px;
+
+
+        background: rgba(80, 160, 160, 1);
+
+        .slide-date-view {
+            display: none;
+            font-size: 9pt;
+            width: 150px;
+            height: 1rem;
+            margin-left: -74px;
+            margin-top: 28px;
+            padding: 2px;
+            padding-top: 10px;
+            background-color:#FAFAFA;
+            box-shadow: 0px 1px 2px rgba(100,100,100, 0.5);
+            border-radius: 2px;
+            color:#666;
+            text-align: center;
+            text-overflow: clip;
+            overflow: hidden;
+            &:hover {
+                cursor: default;
+            }
+        }
+    }
+
+    slider:after {
+        display: block;
+        width: 26px;
+        content: " ";
+        height: 40px;
+        position: absolute;
+        top: -9px;
+        left: -8px;
+    }
+
+    .rangeDivision {
+        box-sizing: border-box;
+        display: inline-block;
+        border-right: 1px solid rgba(100,100,100, 0.6);
+        height: 100%;
+        font-size: 8pt;
+        text-align:center;
+        color: rgba(255,255,255, 0.8);
+        text-overflow: clip;
+        float: left;
+        padding-top:3px;
+        text-shadow: 0px 0px 2px #999;
+    }
+}
+#stop {
+    top:-4px;
+    right: 0;
+}
+#start {
+    top:-4px;
+    left: 0;
+}

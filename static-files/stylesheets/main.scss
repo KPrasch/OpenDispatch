@@ -1,14 +1,5 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css");
 
-@import "bourbon/_bourbon.scss";
-
-@import "mixins.scss";
-
-@font-face {
-  font-family: 'Urban Elegance';
-  src: url('/fonts/Urban Elegance Bold.ttf');
-}
-
 $base-color: adjust-hue(desaturate(#53688C, 5%), 340);
 // $base-color: desaturate(#53688C, 15%);
 
@@ -17,6 +8,17 @@ $incidents-background-color: $base-color;
 $incidents-search-color: lighten(adjust-hue($incidents-background-color, -5), 15%);
 
 $incident-reports-width: 26rem;
+
+@import "bourbon/_bourbon.scss";
+
+@import "mixins.scss";
+
+@import "dateRangeSlider.scss";
+
+@font-face {
+  font-family: 'Urban Elegance';
+  src: url('/fonts/Urban Elegance Bold.ttf');
+}
 
 //
 // Aww, yeah. Here come that bullshit!
