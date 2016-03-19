@@ -26,4 +26,3 @@ docs/_build/
 *migrations*
 _trial_temp.lock
 _trial_temp*
-static-files/CACHE/
