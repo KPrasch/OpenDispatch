@@ -12,13 +12,13 @@ $(function() {
       width: 'toggle'
     }, {
       start: function() {
-        map.resize();
+        map.invalidateSize();
       },
       step: function() {
-        map.resize();
+        map.invalidateSize();
       },
       complete: function() {
-        map.resize();
+        map.invalidateSize();
       },
       duration: 300
     });
