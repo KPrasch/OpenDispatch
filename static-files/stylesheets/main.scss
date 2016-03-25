@@ -26,7 +26,9 @@ $incident-reports-width: 26rem;
 
 html, body, app-container {
   width: 100%;
+  min-width: 1060px;
   height: 100%;
+  min-height: 900px;
 }
 
 app-container {
@@ -38,7 +40,7 @@ nav {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 1rem 0.85rem;
+  padding: 1rem 0rem;
   background: none; //$incidents-background-color;
   border-bottom-left-radius: 5px;
   //border: 1px solid darken($incidents-background-color, 15%);
@@ -57,21 +59,33 @@ nav {
 
     .nav-item {
       float: right;
-      margin-top: -4px;
-      border-radius: 5px;
-      background: $incidents-search-color;
-      padding: 0.5rem 0.75rem;
-      @include transition(all 0.1s ease);
-      border: 1px solid rgba(0,0,0,0.4);
+      margin-top: -17px;
+      background: darken($incidents-search-color, 10%);
+      padding: 1rem 1.5rem;
+      border-top-width: 0px;
+      box-shadow: 0px 2px 0px rgba(0,0,0,0.15);
+      border-left-width: 0px;
+
+      @include transition(all 0.2s ease);
+      border: 1px solid rgba(0,0,0,0.2);
       display: inline;
       cursor: pointer;
-      margin-right: 0.8rem;
 
-      &:nth-child(2) {
-        margin-right: 0px;
+      &:first-child {
+        margin-right: 0px !important;
+        border-left-width: 1px;
       }
+
+      &:last-child {
+        border-bottom-left-radius: 3px;
+        border-right-width: 0px;
+      }
+
       &:hover {
-        background: darken($incidents-search-color, 10%);
+        background: $incidents-search-color;
+        box-shadow: 0px 2px 1px rgba(0,0,0,0.2);
+        padding: 1rem 1.85rem;
+        text-decoration: underline;
       }
     }
     .title {
@@ -178,6 +192,7 @@ incident-report:hover {
   display: block;
   padding: 1rem;
   padding-top: 1.5rem;
+  padding-left: 0.5rem;
   overflow: hidden;
   text-overflow: clip;
   width: $incident-reports-width;
@@ -211,6 +226,13 @@ incident-report:hover {
 }
 
 incident-report address {
+  text-shadow: 1px 1px 0px #000;
+}
+
+no-incidents {
+  display: block;
+  padding: 0.75rem;
+  color: #EEE;
   text-shadow: 1px 1px 0px #000;
 }
 
@@ -257,5 +279,11 @@ map-container {
     .status {
       @extend .status;
     }
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  incident-reports {
+    width: 24rem;
   }
 }

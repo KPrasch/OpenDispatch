@@ -1,11 +1,10 @@
 #date-range-container {
   width: 60%;
-  padding: 16px;
-  position: absolute;
   top: 0;
   left: 0;
   z-index: 500;
   display: none; // TODO: Get this thing working... Not good looking enough!
+  visibility: hidden;
 }
 date-range-slider {
     display: block;

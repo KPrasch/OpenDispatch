@@ -1,8 +1,6 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css");
 #date-range-container {
   width: 60%;
-  padding: 16px;
-  position: absolute;
   top: 0;
   left: 0;
   z-index: 500;
@@ -71,7 +69,9 @@ date-range-slider {
   src: url("/fonts/Urban Elegance Bold.ttf"); }
 html, body, app-container {
   width: 100%;
-  height: 100%; }
+  min-width: 1060px;
+  height: 100%;
+  min-height: 1250px; }
 
 app-container {
   display: flex;
@@ -241,6 +241,12 @@ incident-report:hover {
 incident-report address {
   text-shadow: 1px 1px 0px #000; }
 
+no-incidents {
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #EEE;
+  text-shadow: 1px 1px 0px #000; }
+
 map-container {
   position: relative;
   flex-grow: 1; }
@@ -277,5 +283,9 @@ map-container {
   list-style: none;
   margin: 0;
   padding: 0; }
+
+@media screen and (max-width: 1280px) {
+  incident-reports {
+    width: 24rem; } }
 
 /*# sourceMappingURL=main.css.map */

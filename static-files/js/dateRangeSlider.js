@@ -97,12 +97,12 @@ $(function() {
                                 }
                             }
 
-                            offsetX = Number(Math.clamp(x + $(e.target).parents().position().left, 16, $(e.target).parents().position().left + $('date-range-slider').width())).toFixed(0);
+                            offsetX = Number(Math.clamp(x, 16, $('date-range-slider').width())).toFixed(0);
 
                             $dragged
                                 .css({'z-index': stack, 'transform': 'scale(1.06)', 'transition': 'transform .3s', 'bottom': 'auto', 'right': 'auto'})
                                 .offset({
-                                    left: offsetX
+                                    left: x
                                 })
                                 .find('a').one('click.draggable', function(e) {
                                 e.preventDefault();

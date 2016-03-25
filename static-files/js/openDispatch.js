@@ -51,11 +51,11 @@ openDispatch.controller('incidentsController', function($scope, $http) {
 
         map.flyTo({
             center: [incident.location.lng, incident.location.lat],
-            zoom: 15.813832357478109,
+            zoom: 13.813832357478109,
             bearing: 0,
 
             speed: 3.5,
-            curve: 1,
+            curve: 0.7,
 
             easing: function(t) {
                 return t;
