@@ -4,7 +4,8 @@
   top: 0;
   left: 0;
   z-index: 500;
-  display: none; }
+  display: none;
+  visibility: hidden; }
 
 date-range-slider {
   display: block;
@@ -71,7 +72,7 @@ html, body, app-container {
   width: 100%;
   min-width: 1060px;
   height: 100%;
-  min-height: 1250px; }
+  min-height: 900px; }
 
 app-container {
   display: flex;
@@ -81,7 +82,7 @@ nav {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 1rem 0.85rem;
+  padding: 1rem 0rem;
   background: none;
   border-bottom-left-radius: 5px;
   border-top: none;
@@ -96,21 +97,29 @@ nav {
       display: inline-block; }
     nav ul .nav-item {
       float: right;
-      margin-top: -4px;
-      border-radius: 5px;
-      background: #80a2ab;
-      padding: 0.5rem 0.75rem;
-      -webkit-transition: all 0.1s ease;
-      -moz-transition: all 0.1s ease;
-      transition: all 0.1s ease;
-      border: 1px solid rgba(0, 0, 0, 0.4);
+      margin-top: -17px;
+      background: #638b96;
+      padding: 1rem 1.5rem;
+      border-top-width: 0px;
+      box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.15);
+      border-left-width: 0px;
+      -webkit-transition: all 0.2s ease;
+      -moz-transition: all 0.2s ease;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(0, 0, 0, 0.2);
       display: inline;
-      cursor: pointer;
-      margin-right: 0.8rem; }
-      nav ul .nav-item:nth-child(2) {
-        margin-right: 0px; }
+      cursor: pointer; }
+      nav ul .nav-item:first-child {
+        margin-right: 0px !important;
+        border-left-width: 1px; }
+      nav ul .nav-item:last-child {
+        border-bottom-left-radius: 3px;
+        border-right-width: 0px; }
       nav ul .nav-item:hover {
-        background: #638b96; }
+        background: #80a2ab;
+        box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.2);
+        padding: 1rem 1.85rem;
+        text-decoration: underline; }
     nav ul .title {
       display: none;
       font-family: 'Urban Elegance';
@@ -212,6 +221,7 @@ incident-report:hover {
   display: block;
   padding: 1rem;
   padding-top: 1.5rem;
+  padding-left: 0.5rem;
   overflow: hidden;
   text-overflow: clip;
   width: 26rem;
@@ -242,8 +252,8 @@ incident-report address {
   text-shadow: 1px 1px 0px #000; }
 
 no-incidents {
-  padding: 1rem;
-  margin-top: 1rem;
+  display: block;
+  padding: 0.75rem;
   color: #EEE;
   text-shadow: 1px 1px 0px #000; }
 
@@ -266,8 +276,8 @@ map-container {
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
       border-left: none;
-      width: 18px;
-      height: 28px;
+      width: 25px;
+      height: 40px;
       left: -1px;
       color: rgba(255, 255, 255, 0.4);
       padding-left: 6px;

@@ -30,6 +30,21 @@ IncidentMapProto.createdCallback = function() {
 var IncidentMapTag = document.registerElement('incident-map', {
   prototype: IncidentMapProto
 });
+
+$(function() {
+  L.mapbox.accessToken =
+    'pk.eyJ1IjoiemFja2tvbGxhciIsImEiOiJjaWxjcWw5aG0zZmcydHVseGI3NWRqYno4In0.HO_q5jmiFLtRnG71hOqG4w';
+  map = L.mapbox.map('incident-map-view', 'mapbox.streets')
+    .setView(new L.LatLng(41.89001042401825, -74.22500610351561), 10);
+
+  incidentsLayer = L.mapbox.featureLayer()
+    .loadURL('http://localhost:8000/api/incidents/geo/')
+    .addTo(map);
+});
+
+// ------------------------------------------------------------------ //
+
+/*
 $(function() {
   mapboxgl.accessToken =
     'pk.eyJ1IjoiemFja2tvbGxhciIsImEiOiJjaWxjcWw5aG0zZmcydHVseGI3NWRqYno4In0.HO_q5jmiFLtRnG71hOqG4w';
@@ -85,32 +100,39 @@ $(function() {
           ["<", "point_count", layers[i - 1][0]]
         ]
       });
-      map.on('click', function(e) {
-        map.featuresAt(e.point, {
-          layer: 'cluster-' + i,
-          radius: 5,
-          includeGeometry: true
-        }, function(err, features) {
-          if (err) throw err;
-          // if there are features within the given radius of the click event,
-          // fly to the location of the click event
-          if (features.length) {
-            // Get coordinates from the symbol and center the map on those coordinates
-            map.flyTo({
-              center: features[0].geometry.coordinates
-            });
-          }
-        });
+    });
+
+    map.on('click', function(e) {
+      console.log('she succ me')
+      map.featuresAt(e.point, {
+        layers: ['non-cluster-markers', 'cluster-0',
+          'cluster-1', 'cluster-2'
+        ],
+        radius: 5,
+        includeGeometry: true
+      }, function(err, features) {
+        console.log(features);
+        if (err) throw err;
+        // if there are features within the given radius of the click event,
+        // fly to the location of the click events
+        if (features.geometry.coordinates.length) {
+          // Get coordinates from the symbol and center the map on those coordinates
+          map.flyTo({
+            center: features[0].geometry.coordinates[0][0]
+          });
+        }
       });
-      map.on('mousemove', function(e) {
-        map.featuresAt(e.point, {
-          layer: 'cluster-' + i,
-          radius: 10
-        }, function(err, features) {
-          if (err) throw err;
-          map.getCanvas().style.cursor = features.length ?
-            'pointer' : '';
-        });
+    });
+    map.on('mousemove', function(e) {
+      map.featuresAt(e.point, {
+        layers: ['non-cluster-markers', 'cluster-0',
+          'cluster-1', 'cluster-2'
+        ],
+        radius: 0.02
+      }, function(err, features) {
+        if (err) throw err;
+        map.getCanvas().style.cursor = features.length ?
+          'pointer' : '';
       });
     });
 
@@ -131,6 +153,13 @@ $(function() {
 
   });
 });
+*/
+
+
+
+// ------------------------------------------------------------------ //
+
+
 $(function() {
   $('incident-map').prepend("<div id='toggle-incidents-view'>ll</div>");
 });
